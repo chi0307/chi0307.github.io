@@ -121,7 +121,7 @@ async function pushRoute(routePath: Route): Promise<void> {
 
 function handleBodyScroll(event: Event): void {
   if (event.target instanceof HTMLDivElement) {
-    showHeaderShadow.value = event.target.scrollTop !== 0
+    showHeaderShadow.value = event.target.scrollTop <= 0
   }
 }
 </script>
