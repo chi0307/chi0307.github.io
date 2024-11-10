@@ -1,10 +1,14 @@
 <template>
-  <div class="bg-deep-primary relative w-100vw overflow-x-hidden h-100vh text-16px">
+  <div
+    class="bg-deep-primary relative w-100vw overflow-x-hidden h-100vh text-16px"
+    @scroll="handleBodyScroll"
+  >
     <header
       class="bg-white w-full flex items-center justify-between top-0 left-0 z-100 sticky"
       :class="{
         'px-64px': isDesktop,
-        'px-16px': isMobile
+        'px-16px': isMobile,
+        'shadow-header': showHeaderShadow
       }"
       :style="{
         height: `${headerHeight}px`
@@ -74,6 +78,7 @@ const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 
 const headerHeight = computed(() => (isDesktop.value ? 80 : 64))
 const openMenu = ref(false)
+const showHeaderShadow = ref(false)
 
 interface PageItem {
   title: string
@@ -101,5 +106,11 @@ function checkIsCurrentPage(routePath: Route): boolean {
 async function pushRoute(routePath: Route): Promise<void> {
   await router.push(routePath)
   openMenu.value = false
+}
+
+function handleBodyScroll(event: Event): void {
+  if (event.target instanceof HTMLDivElement) {
+    showHeaderShadow.value = event.target.scrollTop !== 0
+  }
 }
 </script>
