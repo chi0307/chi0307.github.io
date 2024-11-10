@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="body"
     class="bg-deep-primary relative w-100vw overflow-x-hidden h-100vh text-16px"
     @scroll="handleBodyScroll"
   >
@@ -21,7 +22,7 @@
           :key="index"
           class="cursor-pointer"
           :class="{
-            'text-emphasis': checkIsCurrentPage(item.route)
+            'text-emphasis': checkIsParentPage(item.route)
           }"
           @click="pushRoute(item.route)"
         >
@@ -65,7 +66,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 
 import { Route } from '@/router/route'
@@ -79,6 +80,7 @@ const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 const headerHeight = computed(() => (isDesktop.value ? 80 : 64))
 const openMenu = ref(false)
 const showHeaderShadow = ref(false)
+const bodyElement = useTemplateRef<HTMLElement>('body')
 
 interface PageItem {
   title: string
@@ -100,11 +102,20 @@ const pageList: PageItem[] = [
 ]
 
 function checkIsCurrentPage(routePath: Route): boolean {
+  return route.path === routePath.toString()
+}
+
+function checkIsParentPage(routePath: Route): boolean {
   return route.path.includes(routePath)
 }
 
 async function pushRoute(routePath: Route): Promise<void> {
-  await router.push(routePath)
+  if (checkIsCurrentPage(routePath)) {
+    bodyElement.value?.scrollTo({ top: 0, behavior: 'smooth' })
+  } else {
+    await router.push(routePath)
+    bodyElement.value?.scrollTo({ top: 0 })
+  }
   openMenu.value = false
 }
 
