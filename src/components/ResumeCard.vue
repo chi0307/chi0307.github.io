@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="w-600px min-h-300px bg-white p-24px flex"
-    style="box-shadow: -12px 12px 20px 0 rgba(0, 0, 0, 0.2)"
-  >
+  <div class="min-h-300px bg-white p-24px flex w-600px shadow-resume-card">
     <div class="w-40% flex-col py-32px gap-16px">
       <p class="text-emphasis text-24px">{{ startMonth }} ~ {{ endMonth ?? '' }}</p>
       <p class="text-16px">{{ title }}</p>
