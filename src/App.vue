@@ -1,7 +1,7 @@
 <template>
   <div
     ref="body"
-    class="bg-deep-primary relative w-100vw overflow-x-hidden h-100vh text-16px"
+    class="bg-deep-primary relative w-100dvw overflow-x-hidden h-100dvh text-16px"
     @scroll="handleBodyScroll"
   >
     <header
@@ -33,7 +33,7 @@
         <i class="fa-solid fa-bars text-1.5rem" />
       </p>
     </header>
-    <div v-if="openMenu" class="fixed left-0 top-0 w-100vw h-100vh bg-white z-100 px-16px">
+    <div v-if="openMenu" class="fixed left-0 top-0 w-100dvw h-100dvh bg-white z-100 px-16px">
       <div class="w-full h-64px flex items-center justify-end">
         <p class="w-32px h-32px flex-center" @click="openMenu = false">
           <i class="fa-solid fa-xmark text-1.5rem" />
@@ -121,7 +121,7 @@ async function pushRoute(routePath: Route): Promise<void> {
 
 function handleBodyScroll(event: Event): void {
   if (event.target instanceof HTMLDivElement) {
-    showHeaderShadow.value = event.target.scrollTop <= 0
+    showHeaderShadow.value = event.target.scrollTop > 0
   }
 }
 </script>
