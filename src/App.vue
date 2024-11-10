@@ -24,7 +24,7 @@
     <RouterView
       class="w-full"
       :style="{
-        height: `calc(100% - ${headerHeight})`
+        'min-height': `calc(100% - ${headerHeight})`
       }"
     />
   </div>
