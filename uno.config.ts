@@ -9,7 +9,7 @@ export default defineConfig({
       emphasis: '#5288FE'
     },
     boxShadow: {
-      'home-card': '-10px 10px 18px 0 rgba(0, 0, 0, .2)'
+      'profile-card': '-10px 10px 18px 0 rgba(0, 0, 0, .2)'
     }
   },
   shortcuts: {

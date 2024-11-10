@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col bg-primary w-360px h-600px shadow-home-card">
+  <div class="flex-col bg-primary w-360px h-600px shadow-profile-card">
     <div class="w-360px flex-center h-360px">
       <img
         src="/profile.jpeg"
