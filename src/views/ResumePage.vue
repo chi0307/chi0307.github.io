@@ -1,6 +1,6 @@
 <template>
-  <main class="relative flex-center flex-col py-64px">
-    <div class="flex-col flex-center gap-24px">
+  <main class="relative flex-center flex-col py-32px">
+    <div class="flex-col flex-center gap-24px px-24px w-full">
       <p class="card-title">Experience</p>
       <ResumeCard
         v-for="(resume, index) of sortResumes(experienceList)"
@@ -119,6 +119,6 @@ function sortResumes(list: ResumeItem[]): ResumeItem[] {
   @apply text-1.5rem font-700;
 }
 .card {
-  @apply bg-white p-24px flex w-600px shadow-resume-card;
+  @apply bg-white p-24px flex shadow-resume-card max-w-600px;
 }
 </style>
