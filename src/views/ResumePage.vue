@@ -116,7 +116,7 @@ function sortResumes(list: ResumeItem[]): ResumeItem[] {
 </script>
 <style scoped>
 .card-title {
-  @apply text-1.5rem font-500;
+  @apply text-1.5rem font-700;
 }
 .card {
   @apply bg-white p-24px flex w-600px shadow-resume-card;
