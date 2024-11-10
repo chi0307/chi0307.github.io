@@ -13,7 +13,8 @@ export default defineConfig({
     }
   },
   shortcuts: {
-    'flex-center': 'flex items-center justify-center'
+    'flex-center': 'flex items-center justify-center',
+    'flex-col': 'flex flex-col'
   },
   transformers: [transformerDirectives()]
 })

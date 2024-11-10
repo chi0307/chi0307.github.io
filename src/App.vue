@@ -66,8 +66,3 @@ function checkIsCurrentPage(r: Route): boolean {
   return route.path.includes(r)
 }
 </script>
-<style>
-.flex-col {
-  @apply flex;
-}
-</style>
