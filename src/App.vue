@@ -7,7 +7,7 @@
       }"
     >
       <p class="text-2rem font-bold">Website</p>
-      <div class="gap-16px flex-center">
+      <div v-if="isDesktop" class="gap-16px flex-center">
         <p
           v-for="(item, index) of pageList"
           :key="index"
@@ -31,11 +31,15 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { RouterView, useRoute } from 'vue-router'
 
 import { Route } from '@/router/route'
 
+import { useLayoutStore } from './stores/layoutStore'
+
 const route = useRoute()
+const { isDesktop } = storeToRefs(useLayoutStore())
 
 const headerHeight = '80px'
 
