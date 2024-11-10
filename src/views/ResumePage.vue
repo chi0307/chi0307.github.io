@@ -1,5 +1,5 @@
 <template>
-  <main class="relative bg-deep-primary flex-center flex-col py-64px">
+  <main class="relative flex-center flex-col py-64px">
     <div class="flex-col flex-center gap-24px">
       <p class="text-36px">Experience</p>
       <ResumeCard

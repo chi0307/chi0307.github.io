@@ -1,12 +1,16 @@
 <template>
-  <div class="bg-white relative w-100vw h-100vh">
+  <div class="bg-deep-primary relative w-100vw overflow-x-hidden h-100vh">
     <header
-      class="bg-white w-full flex items-center justify-between top-0 left-0 z-100 sticky px-64px"
+      class="bg-white w-full flex items-center justify-between top-0 left-0 z-100 sticky"
+      :class="{
+        'px-64px': isDesktop,
+        'px-16px': isMobile
+      }"
       :style="{
         height: headerHeight
       }"
     >
-      <p class="text-2rem font-bold">Website</p>
+      <p class="font-bold text-1.5rem">Website</p>
       <div v-if="isDesktop" class="gap-16px flex-center">
         <p
           v-for="(item, index) of pageList"
@@ -39,7 +43,7 @@ import { Route } from '@/router/route'
 import { useLayoutStore } from './stores/layoutStore'
 
 const route = useRoute()
-const { isDesktop } = storeToRefs(useLayoutStore())
+const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 
 const headerHeight = '80px'
 

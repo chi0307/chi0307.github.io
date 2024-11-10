@@ -1,6 +1,6 @@
 <template>
   <main class="relative flex-center">
-    <div class="top-0 left-0 h-full absolute w-35% bg-deep-primary"></div>
+    <div v-if="isDesktop" class="top-0 h-full absolute w-65% bg-white right-0" />
     <div class="h-600px flex z-1 w-720px">
       <ProfileCard class="flex-1" />
       <div class="flex-1 h-full flex-col px-36px py-60px">
@@ -15,8 +15,13 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+
 import ProfileCard from '@/components/ProfileCard.vue'
 import { Route } from '@/router/route'
+import { useLayoutStore } from '@/stores/layoutStore'
+
+const { isDesktop } = storeToRefs(useLayoutStore())
 </script>
 <style scoped>
 .profile-button {
