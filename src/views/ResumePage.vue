@@ -1,7 +1,7 @@
 <template>
   <main class="relative flex-center flex-col py-64px">
     <div class="flex-col flex-center gap-24px">
-      <p class="text-36px">Experience</p>
+      <p class="card-title">Experience</p>
       <ResumeCard
         v-for="(resume, index) of sortResumes(experienceList)"
         :key="index"
@@ -10,8 +10,9 @@
         :title="resume.title"
         :sub-title="resume.subTitle"
         :description="resume.description"
+        class="card"
       />
-      <p class="text-36px">Education</p>
+      <p class="card-title">Education</p>
       <ResumeCard
         v-for="(resume, index) of sortResumes(educationList)"
         :key="index"
@@ -20,6 +21,7 @@
         :title="resume.title"
         :sub-title="resume.subTitle"
         :description="resume.description"
+        class="card"
       />
     </div>
   </main>
@@ -69,3 +71,11 @@ function sortResumes(list: ResumeItem[]): ResumeItem[] {
   return list.sort((aItem, bItem) => (aItem.startMonth > bItem.startMonth ? -1 : 1))
 }
 </script>
+<style scoped>
+.card-title {
+  @apply text-1.5rem font-500;
+}
+.card {
+  @apply bg-white p-24px flex w-600px shadow-resume-card;
+}
+</style>
