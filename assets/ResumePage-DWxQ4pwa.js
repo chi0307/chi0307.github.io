@@ -1,1 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{o as c,c as t}from"./main-Xgz60jGv.js";const o={},r={class:"relative flex-center"};function s(n,a){return c(),t("main",r,"Resume")}const f=e(o,[["render",s]]);export{f as default};
