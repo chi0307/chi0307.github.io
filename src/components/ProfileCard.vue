@@ -12,7 +12,7 @@
       <p class="font-bold text-1rem">Full-Stack Engineer</p>
       <p></p>
     </div>
-    <div class="items-center bg-white w-full flex h-60px justify-around px-32px text-32px">
+    <div class="items-center bg-white w-full flex h-60px justify-around px-32px text-1.5rem">
       <div
         v-for="(item, index) of socialMediaList"
         :key="index"

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-deep-primary relative w-100vw overflow-x-hidden h-100vh">
+  <div class="bg-deep-primary relative w-100vw overflow-x-hidden h-100vh text-16px">
     <header
       class="bg-white w-full flex items-center justify-between top-0 left-0 z-100 sticky"
       :class="{
@@ -7,7 +7,7 @@
         'px-16px': isMobile
       }"
       :style="{
-        height: headerHeight
+        height: `${headerHeight}px`
       }"
     >
       <p class="font-bold text-1.5rem">Website</p>
@@ -19,16 +19,41 @@
           :class="{
             'text-emphasis': checkIsCurrentPage(item.route)
           }"
-          @click="$router.push(item.route)"
+          @click="pushRoute(item.route)"
         >
           {{ item.title }}
         </p>
       </div>
+      <p v-else class="w-32px h-32px flex-center" @click="openMenu = true">
+        <i class="fa-solid fa-bars text-1.5rem" />
+      </p>
     </header>
+    <div v-if="openMenu" class="fixed left-0 top-0 w-100vw h-100vh bg-white z-100 px-16px">
+      <div class="w-full h-64px flex items-center justify-end">
+        <p class="w-32px h-32px flex-center" @click="openMenu = false">
+          <i class="fa-solid fa-xmark text-1.5rem" />
+        </p>
+      </div>
+      <div
+        v-for="(item, index) of pageList"
+        :key="index"
+        class="h-64px w-full flex-center"
+        @click="pushRoute(item.route)"
+      >
+        <p
+          class="text-1.3rem"
+          :class="{
+            'text-emphasis': checkIsCurrentPage(item.route)
+          }"
+        >
+          {{ item.title }}
+        </p>
+      </div>
+    </div>
     <RouterView
       class="w-full"
       :style="{
-        'min-height': `calc(100% - ${headerHeight})`
+        'min-height': `calc(100% - ${headerHeight}px)`
       }"
     />
   </div>
@@ -36,16 +61,19 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { RouterView, useRoute } from 'vue-router'
+import { computed, ref } from 'vue'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 
 import { Route } from '@/router/route'
 
 import { useLayoutStore } from './stores/layoutStore'
 
 const route = useRoute()
+const router = useRouter()
 const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 
-const headerHeight = '80px'
+const headerHeight = computed(() => (isDesktop.value ? 80 : 64))
+const openMenu = ref(false)
 
 interface PageItem {
   title: string
@@ -66,7 +94,12 @@ const pageList: PageItem[] = [
   }
 ]
 
-function checkIsCurrentPage(r: Route): boolean {
-  return route.path.includes(r)
+function checkIsCurrentPage(routePath: Route): boolean {
+  return route.path.includes(routePath)
+}
+
+async function pushRoute(routePath: Route): Promise<void> {
+  await router.push(routePath)
+  openMenu.value = false
 }
 </script>
