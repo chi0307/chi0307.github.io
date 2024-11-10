@@ -5,3 +5,8 @@ export interface ResumeItem {
   subTitle: string
   description: string
 }
+
+export interface SkillGroup {
+  title: string
+  skills: string[]
+}
