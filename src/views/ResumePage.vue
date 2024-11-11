@@ -119,6 +119,6 @@ function sortResumes(list: ResumeItem[]): ResumeItem[] {
   @apply text-1.5rem font-700;
 }
 .card {
-  @apply bg-white p-24px flex shadow-resume-card max-w-600px;
+  @apply w-full max-w-600px bg-white p-24px flex shadow-resume-card;
 }
 </style>

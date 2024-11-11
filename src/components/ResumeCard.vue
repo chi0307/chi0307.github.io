@@ -1,8 +1,8 @@
 <template>
   <div
     :class="{
-      'w-600px min-h-300px': isDesktop,
-      'w-full flex-col gap-8px': isMobile
+      'min-h-300px': isDesktop,
+      'flex-col gap-8px': isMobile
     }"
   >
     <div
