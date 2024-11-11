@@ -25,7 +25,7 @@
           {{ item.title }}
         </p>
       </div>
-      <p v-else class="flex-center w-32px h-32px" @click="showMenu = true">
+      <p v-else class="flex-center w-32px h-32px cursor-pointer" @click="showMenu = true">
         <i class="text-1.5rem fa-solid fa-bars" />
       </p>
     </header>
@@ -40,14 +40,14 @@
     </main>
     <div v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed px-16px">
       <div class="w-full flex items-center h-64px justify-end">
-        <p class="w-32px h-32px flex-center" @click="showMenu = false">
+        <p class="w-32px h-32px flex-center cursor-pointer" @click="showMenu = false">
           <i class="fa-solid text-1.5rem fa-xmark" />
         </p>
       </div>
       <div
         v-for="(item, index) of pageList"
         :key="index"
-        class="h-64px w-full flex-center"
+        class="h-64px w-full flex-center cursor-pointer"
         @click="pushRoute(item.route)"
       >
         <p
