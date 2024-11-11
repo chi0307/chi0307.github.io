@@ -1,31 +1,29 @@
 <template>
-  <section class="relative flex-center flex-col py-32px">
-    <div class="flex-col flex-center w-full px-24px gap-24px">
-      <p class="card-title">Experience</p>
-      <ResumeCard
-        v-for="(resume, index) of sortResumes(experienceList)"
-        :key="index"
-        :start-month="resume.startMonth"
-        :end-month="resume.endMonth"
-        :title="resume.title"
-        :sub-title="resume.subTitle"
-        :description="resume.description"
-        class="card"
-      />
-      <p class="card-title">Education</p>
-      <ResumeCard
-        v-for="(resume, index) of sortResumes(educationList)"
-        :key="index"
-        :start-month="resume.startMonth"
-        :end-month="resume.endMonth"
-        :title="resume.title"
-        :sub-title="resume.subTitle"
-        :description="resume.description"
-        class="card"
-      />
-      <p class="card-title">Professional skillSet</p>
-      <SkillGroupCard :list="skillGroupList" class="card" />
-    </div>
+  <section class="relative flex-center flex-col px-24px gap-24px py-32px">
+    <p class="card-title">Experience</p>
+    <ResumeCard
+      v-for="(resume, index) of sortResumes(experienceList)"
+      :key="index"
+      :start-month="resume.startMonth"
+      :end-month="resume.endMonth"
+      :title="resume.title"
+      :sub-title="resume.subTitle"
+      :description="resume.description"
+      class="card"
+    />
+    <p class="card-title">Education</p>
+    <ResumeCard
+      v-for="(resume, index) of sortResumes(educationList)"
+      :key="index"
+      :start-month="resume.startMonth"
+      :end-month="resume.endMonth"
+      :title="resume.title"
+      :sub-title="resume.subTitle"
+      :description="resume.description"
+      class="card"
+    />
+    <p class="card-title">Professional skillSet</p>
+    <SkillGroupCard :list="skillGroupList" class="card" />
   </section>
 </template>
 <script lang="ts" setup>
