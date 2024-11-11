@@ -31,7 +31,7 @@
     </header>
     <main
       ref="main"
-      class="w-full overflow-x-hidden overflow-y-scroll"
+      class="w-full overflow-x-hidden overflow-y-auto"
       :style="{
         height: `calc(100% - ${headerHeight}px)`
       }"
