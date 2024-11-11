@@ -19,7 +19,7 @@ const projectList: ProjectItem[] = [
   {
     description: '開發一個 FB、Line 訊息共用的套件，<br/>搭配使用畫面產生 JSON 結構',
     image: '/chatbot-json-toolbox-preview.png',
-    previewUrl: 'https://chi0307.github.io/projects/chatbot-json-toolbox',
+    previewUrl: 'https://chi0307.github.io/website-legacy-by-2024-10/side/chatbot-json-toolbox/',
     link: {
       title: '套件',
       url: 'https://www.npmjs.com/package/@chi0307/transform-chatbot-message'
