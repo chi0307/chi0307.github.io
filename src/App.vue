@@ -1,9 +1,5 @@
 <template>
-  <div
-    ref="body"
-    class="bg-deep-primary relative w-100dvw overflow-x-hidden h-100dvh text-16px"
-    @scroll="handleBodyScroll"
-  >
+  <div class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
     <header
       class="bg-white w-full flex items-center justify-between top-0 left-0 z-100 sticky"
       :class="{
@@ -56,10 +52,12 @@
       </div>
     </div>
     <main
+      ref="main"
       class="w-full overflow-x-hidden overflow-y-scroll"
       :style="{
         height: `calc(100% - ${headerHeight}px)`
       }"
+      @scroll="handleBodyScroll"
     >
       <RouterView />
     </main>
@@ -82,7 +80,7 @@ const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 const headerHeight = computed(() => (isDesktop.value ? 80 : 64))
 const openMenu = ref(false)
 const showHeaderShadow = ref(false)
-const bodyElement = useTemplateRef<HTMLElement>('body')
+const mainElement = useTemplateRef<HTMLElement>('main')
 
 interface PageItem {
   title: string
@@ -113,16 +111,16 @@ function checkIsParentPage(routePath: Route): boolean {
 
 async function pushRoute(routePath: Route): Promise<void> {
   if (checkIsCurrentPage(routePath)) {
-    bodyElement.value?.scrollTo({ top: 0, behavior: 'smooth' })
+    mainElement.value?.scrollTo({ top: 0, behavior: 'smooth' })
   } else {
     await router.push(routePath)
-    bodyElement.value?.scrollTo({ top: 0 })
+    mainElement.value?.scrollTo({ top: 0 })
   }
   openMenu.value = false
 }
 
 function handleBodyScroll(event: Event): void {
-  if (event.target instanceof HTMLDivElement) {
+  if (event.target instanceof HTMLElement) {
     showHeaderShadow.value = event.target.scrollTop > 0
   }
 }
