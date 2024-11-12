@@ -55,12 +55,14 @@
         </p>
       </div>
     </div>
-    <RouterView
+    <main
       class="w-full"
       :style="{
         'min-height': `calc(100% - ${headerHeight}px)`
       }"
-    />
+    >
+      <RouterView />
+    </main>
   </div>
 </template>
 

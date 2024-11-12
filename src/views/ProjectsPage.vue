@@ -1,3 +1,3 @@
 <template>
-  <main class="relative flex-center">Project</main>
+  <section class="relative flex-center">Project</section>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <main class="relative flex-center bg-white">
+  <section class="relative flex-center bg-white">
     <div
       class="absolute left-0 bg-deep-primary top-0"
       :class="{
@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-  </main>
+  </section>
 </template>
 
 <script setup lang="ts">

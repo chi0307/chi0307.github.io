@@ -1,5 +1,5 @@
 <template>
-  <main class="relative flex-center flex-col py-32px">
+  <section class="relative flex-center flex-col py-32px">
     <div class="flex-col flex-center gap-24px px-24px w-full">
       <p class="card-title">Experience</p>
       <ResumeCard
@@ -26,7 +26,7 @@
       <p class="card-title">Professional skillSet</p>
       <SkillGroupCard :list="skillGroupList" class="card" />
     </div>
-  </main>
+  </section>
 </template>
 <script lang="ts" setup>
 import ResumeCard from '@/components/ResumeCard.vue'
