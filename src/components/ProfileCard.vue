@@ -19,7 +19,7 @@
         class="flex-center cursor-pointer w-48px h-48px hover:text-emphasis"
         @click="() => redirectNewWindow(item.redirectUrl)"
       >
-        <i :class="item.iconClass" />
+        <i :class="item.iconClass" class="text-30px" />
       </div>
     </div>
   </div>
