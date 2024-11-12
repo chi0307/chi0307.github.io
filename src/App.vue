@@ -29,14 +29,14 @@
           {{ item.title }}
         </p>
       </div>
-      <p v-else class="w-32px h-32px flex-center" @click="openMenu = true">
-        <i class="fa-solid fa-bars text-1.5rem" />
+      <p v-else class="flex-center w-32px h-32px" @click="openMenu = true">
+        <i class="text-1.5rem fa-solid fa-bars" />
       </p>
     </header>
-    <div v-if="openMenu" class="fixed left-0 top-0 w-100dvw h-100dvh bg-white z-100 px-16px">
-      <div class="w-full h-64px flex items-center justify-end">
+    <div v-if="openMenu" class="left-0 top-0 w-100dvw h-100dvh bg-white z-100 fixed px-16px">
+      <div class="w-full flex items-center h-64px justify-end">
         <p class="w-32px h-32px flex-center" @click="openMenu = false">
-          <i class="fa-solid fa-xmark text-1.5rem" />
+          <i class="fa-solid text-1.5rem fa-xmark" />
         </p>
       </div>
       <div

@@ -1,7 +1,7 @@
 <template>
   <section class="relative flex-center bg-white">
     <div
-      class="absolute left-0 bg-deep-primary top-0"
+      class="left-0 bg-deep-primary top-0 absolute"
       :class="{
         'h-full w-35%': isDesktop,
         'h-300px w-full': isMobile
@@ -14,7 +14,7 @@
       }"
     >
       <ProfileCard class="item-card" />
-      <div class="item-card h-full flex-col px-36px py-60px">
+      <div class="item-card flex-col h-full px-36px py-60px">
         <div class="flex-grow"></div>
         <div class="w-full flex items-center justify-around h-40px">
           <div class="profile-button" @click="$router.push(Route.resume)">Resume</div>

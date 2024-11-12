@@ -8,11 +8,11 @@
       />
     </div>
     <div class="flex-col items-center justify-between flex-grow">
-      <p class="text-2rem font-bold">Benson Wang</p>
+      <p class="font-bold text-2rem">Benson Wang</p>
       <p class="font-bold text-1rem">Full-Stack Engineer</p>
       <p></p>
     </div>
-    <div class="items-center bg-white w-full flex h-60px justify-around px-32px text-1.5rem">
+    <div class="items-center bg-white w-full flex text-1.5rem h-60px justify-around px-32px">
       <div
         v-for="(item, index) of socialMediaList"
         :key="index"

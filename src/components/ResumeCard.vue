@@ -12,7 +12,7 @@
         'gap-4px': isMobile
       }"
     >
-      <p class="text-emphasis text-1.5rem">{{ startMonth }} ~ {{ endMonth ?? '' }}</p>
+      <p class="text-1.5rem text-emphasis">{{ startMonth }} ~ {{ endMonth ?? '' }}</p>
       <p>{{ title }}</p>
       <p style="color: #666">{{ subTitle }}</p>
     </div>
