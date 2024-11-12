@@ -36,7 +36,7 @@
         height: `calc(100% - ${headerHeight}px)`
       }"
     >
-      <RouterView />
+      <RouterView class="min-h-full" />
     </main>
     <MenuList v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed" />
   </div>
