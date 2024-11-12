@@ -38,28 +38,7 @@
     >
       <RouterView />
     </main>
-    <div v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed">
-      <div class="w-full flex items-center h-64px justify-end border-b-1px px-16px">
-        <p class="w-32px h-32px flex-center cursor-pointer" @click="showMenu = false">
-          <i class="fa-solid text-1.5rem fa-xmark" />
-        </p>
-      </div>
-      <div
-        v-for="(item, index) of pageList"
-        :key="index"
-        class="h-64px w-full flex-center cursor-pointer border-b-1px px-16px"
-        @click="pushRoute(item.route)"
-      >
-        <p
-          class="text-1.3rem"
-          :class="{
-            'text-emphasis': checkIsCurrentPage(item.route)
-          }"
-        >
-          {{ item.title }}
-        </p>
-      </div>
-    </div>
+    <MenuList v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed" />
   </div>
 </template>
 
@@ -68,32 +47,14 @@ import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 import { RouterView } from 'vue-router'
 
-import { Route } from '@/router/route'
+import MenuList from '@/components/MenuList.vue'
+import { pageList } from '@/utils/pageList'
 
 import { useLayoutStore } from './stores/layoutStore'
 
 const layoutStore = useLayoutStore()
-const { checkIsCurrentPage, pushRoute, checkIsParentPage } = layoutStore
+const { pushRoute, checkIsParentPage } = layoutStore
 const { isDesktop, isMobile, showMenu, headerShadow } = storeToRefs(layoutStore)
 
 const headerHeight = computed(() => (isDesktop.value ? 80 : 64))
-
-interface PageItem {
-  title: string
-  route: Route
-}
-const pageList: PageItem[] = [
-  {
-    title: 'About Me',
-    route: Route.aboutMe
-  },
-  {
-    title: 'Resume',
-    route: Route.resume
-  },
-  {
-    title: 'Projects',
-    route: Route.projects
-  }
-]
 </script>
