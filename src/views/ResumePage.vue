@@ -22,7 +22,7 @@
       :description="resume.description"
       class="card"
     />
-    <p class="card-title">Professional skillSet</p>
+    <p class="card-title">Professional Skills</p>
     <SkillGroupCard :list="skillGroupList" class="card" />
   </section>
 </template>
