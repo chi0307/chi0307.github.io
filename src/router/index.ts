@@ -26,6 +26,10 @@ const router = createRouter({
       component: () => import('@/views/ResumePage.vue'),
       name: Route.resume,
       path: Route.resume
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: Route.home
     }
   ]
 })
