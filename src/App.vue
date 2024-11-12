@@ -1,7 +1,7 @@
 <template>
   <div class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
     <header
-      class="bg-white w-full flex items-center justify-between top-0 left-0 z-100 sticky"
+      class="bg-white w-full flex items-center justify-between"
       :class="{
         'px-64px': isDesktop,
         'px-16px': isMobile,
@@ -29,6 +29,15 @@
         <i class="text-1.5rem fa-solid fa-bars" />
       </p>
     </header>
+    <main
+      ref="main"
+      class="w-full overflow-x-hidden overflow-y-scroll"
+      :style="{
+        height: `calc(100% - ${headerHeight}px)`
+      }"
+    >
+      <RouterView />
+    </main>
     <div v-if="showMenu" class="left-0 top-0 w-100dvw h-100dvh bg-white z-100 fixed px-16px">
       <div class="w-full flex items-center h-64px justify-end">
         <p class="w-32px h-32px flex-center" @click="showMenu = false">
@@ -51,15 +60,6 @@
         </p>
       </div>
     </div>
-    <main
-      ref="main"
-      class="w-full overflow-x-hidden overflow-y-scroll"
-      :style="{
-        height: `calc(100% - ${headerHeight}px)`
-      }"
-    >
-      <RouterView />
-    </main>
   </div>
 </template>
 
