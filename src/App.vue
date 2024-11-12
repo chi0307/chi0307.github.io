@@ -1,7 +1,7 @@
 <template>
   <div class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
     <header
-      class="w-full flex items-center bg-white justify-between"
+      class="w-full flex items-center relative z-100 bg-white justify-between"
       :class="{
         'px-64px': isDesktop,
         'px-16px': isMobile,
