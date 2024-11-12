@@ -56,9 +56,9 @@
       </div>
     </div>
     <main
-      class="w-full"
+      class="w-full overflow-x-hidden overflow-y-scroll"
       :style="{
-        'min-height': `calc(100% - ${headerHeight}px)`
+        height: `calc(100% - ${headerHeight}px)`
       }"
     >
       <RouterView />
