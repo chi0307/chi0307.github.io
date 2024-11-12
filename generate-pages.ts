@@ -1,4 +1,7 @@
+// eslint-disable-next-line @eslint-community/eslint-comments/disable-enable-pair
+/* eslint-disable security/detect-non-literal-fs-filename */
 import * as fs from 'fs'
+import * as path from 'path'
 
 import { Route } from './src/router/route'
 
@@ -9,6 +12,10 @@ for (const route of Object.values(Route)) {
   if (fileName === '') {
     continue
   }
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
+  if (fileName.includes('/')) {
+    const folderPath = path.dirname(fileName)
+    fs.mkdirSync(folderPath, { recursive: true })
+  }
+  console.log(`success copy index.html to ${fileName}.html`)
   fs.writeFileSync(`${fileName}.html`, template, 'utf-8')
 }
