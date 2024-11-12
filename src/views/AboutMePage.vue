@@ -14,7 +14,7 @@
       }"
     >
       <ProfileCard class="item-card" />
-      <div class="item-card flex-col h-full px-24px py-60px">
+      <div class="item-card flex-col px-24px h-full py-60px">
         <div class="flex-grow"></div>
         <div class="w-full flex items-center justify-around h-40px">
           <div class="profile-button" @click="pushRoute(Route.resume)">Resume</div>

@@ -1,7 +1,7 @@
 <template>
   <div class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
     <header
-      class="bg-white w-full flex items-center justify-between"
+      class="w-full flex items-center bg-white justify-between"
       :class="{
         'px-64px': isDesktop,
         'px-16px': isMobile,
@@ -12,7 +12,7 @@
       }"
     >
       <p class="font-bold text-1.5rem">Website</p>
-      <div v-if="isDesktop" class="flex-center gap-16px">
+      <div v-if="isDesktop" class="gap-16px flex-center">
         <p
           v-for="(item, index) of pageList"
           :key="index"
@@ -38,7 +38,7 @@
     >
       <RouterView />
     </main>
-    <div v-if="showMenu" class="left-0 top-0 w-100dvw h-100dvh bg-white z-100 fixed px-16px">
+    <div v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed px-16px">
       <div class="w-full flex items-center h-64px justify-end">
         <p class="w-32px h-32px flex-center" @click="showMenu = false">
           <i class="fa-solid text-1.5rem fa-xmark" />
