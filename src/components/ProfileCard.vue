@@ -1,6 +1,6 @@
 <template>
-  <div class="flex-col bg-primary shadow-profile-card">
-    <div class="flex-center w-full my-30%">
+  <div class="bg-primary shadow-profile-card flex-col">
+    <div class="w-full my-30% flex-center">
       <img
         src="/profile.jpeg"
         alt="profile-card"
@@ -12,7 +12,7 @@
       <p class="font-bold text-1rem">Full-Stack Engineer</p>
       <p></p>
     </div>
-    <div class="items-center bg-white w-full flex text-1.5rem h-60px justify-around px-32px">
+    <div class="items-center w-full bg-white flex text-1.5rem h-60px justify-around px-32px">
       <div
         v-for="(item, index) of socialMediaList"
         :key="index"

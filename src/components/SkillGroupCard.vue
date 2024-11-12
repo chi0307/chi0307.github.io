@@ -18,7 +18,7 @@
         }"
       >
         <div v-for="(skill, index2) of skills" :key="index2" class="flex items-center">
-          <i class="text-emphasis fas fa-chevron-right text-1rem mr-16px" />
+          <i class="text-emphasis text-1rem fas fa-chevron-right mr-16px" />
           <p class="text-1.2rem inline">
             {{ skill }}
           </p>

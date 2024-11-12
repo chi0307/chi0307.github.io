@@ -17,8 +17,8 @@
       <div class="item-card flex-col h-full px-24px py-60px">
         <div class="flex-grow"></div>
         <div class="w-full flex items-center justify-around h-40px">
-          <div class="profile-button" @click="$router.push(Route.resume)">Resume</div>
-          <div class="profile-button" @click="$router.push(Route.projects)">Projects</div>
+          <div class="profile-button" @click="pushRoute(Route.resume)">Resume</div>
+          <div class="profile-button" @click="pushRoute(Route.projects)">Projects</div>
         </div>
       </div>
     </div>
@@ -32,7 +32,9 @@ import ProfileCard from '@/components/ProfileCard.vue'
 import { Route } from '@/router/route'
 import { useLayoutStore } from '@/stores/layoutStore'
 
-const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
+const layoutStore = useLayoutStore()
+const { pushRoute } = layoutStore
+const { isDesktop, isMobile } = storeToRefs(layoutStore)
 </script>
 <style scoped>
 .item-card {

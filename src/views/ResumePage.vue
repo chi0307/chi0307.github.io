@@ -1,6 +1,6 @@
 <template>
   <section class="relative flex-center flex-col py-32px">
-    <div class="flex-col flex-center w-full gap-24px px-24px">
+    <div class="flex-col flex-center w-full px-24px gap-24px">
       <p class="card-title">Experience</p>
       <ResumeCard
         v-for="(resume, index) of sortResumes(experienceList)"
