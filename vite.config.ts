@@ -7,7 +7,7 @@ import { defineConfig } from 'vite'
 import { Route } from './src/router/route'
 
 const input = Object.fromEntries([
-  ['main', 'index.html'],
+  ['main', 'index.html'] as const,
   ...Object.values(Route)
     .filter((route) => route !== Route.home)
     .map((route) => {
