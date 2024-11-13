@@ -10,7 +10,7 @@
     >
       <RouterView class="min-h-full" />
     </main>
-    <MenuList v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed" />
+    <MenuBlock v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed" />
   </div>
 </template>
 
@@ -20,7 +20,7 @@ import { computed } from 'vue'
 import { RouterView } from 'vue-router'
 
 import HeaderBlock from '@/components/HeaderBlock.vue'
-import MenuList from '@/components/MenuList.vue'
+import MenuBlock from '@/components/MenuBlock.vue'
 import { useLayoutStore } from '@/stores/layoutStore'
 
 const layoutStore = useLayoutStore()
