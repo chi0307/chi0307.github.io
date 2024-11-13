@@ -82,6 +82,6 @@ export default tsEslint.config(
     }
   },
   {
-    ignores: ['**/dist/*', '**/dist-generate-html/*', 'eslint.config.js']
+    ignores: ['**/dist/*', '**/dist-generate-html/*', 'eslint.config.js', '*.timestamp-*.mjs']
   }
 )
