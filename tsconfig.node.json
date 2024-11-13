@@ -9,6 +9,7 @@
     "uno.config.ts",
     "src/router/route.ts"
   ],
+  "exclude": ["*.timestamp-*.mjs"],
   "compilerOptions": {
     "composite": true,
     "noEmit": true,
