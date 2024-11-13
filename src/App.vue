@@ -1,5 +1,6 @@
 <template>
-  <div class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
+  <RouterView v-if="isSideProjectsPage" />
+  <div v-else class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
     <HeaderBlock />
     <main
       ref="main"
@@ -24,7 +25,7 @@ import MenuBlock from '@/components/MenuBlock.vue'
 import { useLayoutStore } from '@/stores/layoutStore'
 
 const layoutStore = useLayoutStore()
-const { isDesktop, showMenu } = storeToRefs(layoutStore)
+const { isDesktop, showMenu, isSideProjectsPage } = storeToRefs(layoutStore)
 
 const headerHeight = computed(() => (isDesktop.value ? 80 : 64))
 </script>

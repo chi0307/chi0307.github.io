@@ -47,6 +47,8 @@ export const useLayoutStore = defineStore('layout', () => {
     showMenu.value = false
   }
 
+  const isSideProjectsPage = computed(() => route.path.startsWith('/projects/'))
+
   return {
     headerShadow: readonly(headerShadow),
     showMenu,
@@ -54,6 +56,7 @@ export const useLayoutStore = defineStore('layout', () => {
     isDesktop,
     checkIsCurrentPage,
     checkIsParentPage,
-    pushRoute
+    pushRoute,
+    isSideProjectsPage
   }
 })
