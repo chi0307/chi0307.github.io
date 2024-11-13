@@ -70,7 +70,14 @@ export default tsEslint.config(
           internalPattern: ['@/**']
         }
       ],
-      'import-x/no-cycle': 'error'
+      'import-x/no-cycle': 'error',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'enumMember',
+          format: ['PascalCase']
+        }
+      ]
     }
   },
   {

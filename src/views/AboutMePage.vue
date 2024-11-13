@@ -17,8 +17,8 @@
       <div class="item-card flex-col px-24px h-full py-60px">
         <div class="flex-grow"></div>
         <div class="w-full flex items-center justify-around h-40px">
-          <div class="profile-button" @click="pushRoute(Route.resume)">Resume</div>
-          <div class="profile-button" @click="pushRoute(Route.projects)">Projects</div>
+          <div class="profile-button" @click="pushRoute(Route.Resume)">Resume</div>
+          <div class="profile-button" @click="pushRoute(Route.Projects)">Projects</div>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ import { Route } from './src/router/route'
 const input = Object.fromEntries([
   ['main', 'index.html'] as const,
   ...Object.values(Route)
-    .filter((route) => route !== Route.home)
+    .filter((route) => route !== Route.Home)
     .map((route) => {
       const pageName = route.replace(/^\//, '')
       return [pageName, `${pageName}.html`] as const
