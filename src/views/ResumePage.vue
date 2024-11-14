@@ -4,22 +4,14 @@
     <ResumeCard
       v-for="(resume, index) of sortResumes(workExperiences)"
       :key="index"
-      :start-month="resume.startMonth"
-      :end-month="resume.endMonth"
-      :title="resume.title"
-      :sub-title="resume.subTitle"
-      :description="resume.description"
+      :data="resume"
       class="card"
     />
     <p class="card-title">Educations</p>
     <ResumeCard
       v-for="(resume, index) of sortResumes(educations)"
       :key="index"
-      :start-month="resume.startMonth"
-      :end-month="resume.endMonth"
-      :title="resume.title"
-      :sub-title="resume.subTitle"
-      :description="resume.description"
+      :data="resume"
       class="card"
     />
     <p class="card-title">Professional Skills</p>

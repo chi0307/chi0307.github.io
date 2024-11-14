@@ -1,14 +1,6 @@
 <template>
   <section class="relative flex-center flex-col px-24px gap-24px py-32px">
-    <ProjectCard
-      v-for="(item, index) of projects"
-      :key="index"
-      class="card"
-      :description="item.description"
-      :image="item.image"
-      :preview-url="item.previewUrl"
-      :link="item.link"
-    />
+    <ProjectCard v-for="(item, index) of projects" :key="index" class="card" :data="item" />
   </section>
 </template>
 <script lang="ts" setup>

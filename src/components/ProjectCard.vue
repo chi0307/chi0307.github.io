@@ -4,6 +4,9 @@
       <!-- eslint-disable vue/no-v-html -->
       <div v-html="description" />
       <!-- eslint-enable vue/no-v-html -->
+      <a v-if="previewUrl !== null" :href="previewUrl" class="text-emphasis decoration-underline">
+        Preview
+      </a>
       <a v-if="link !== null" :href="link.url" class="text-emphasis decoration-underline">
         {{ link.title }}
       </a>
@@ -12,7 +15,10 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { toRefs } from 'vue'
+
 import type { ProjectItem } from '@/utils/types'
 
-const { description, image, previewUrl: _previewUrl, link } = defineProps<ProjectItem>()
+const { data } = defineProps<{ data: ProjectItem }>()
+const { description, previewUrl, link, image } = toRefs(data)
 </script>

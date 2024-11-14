@@ -30,11 +30,13 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { toRefs } from 'vue'
 
 import { useLayoutStore } from '@/stores/layoutStore'
 import type { ResumeItem } from '@/utils/types'
 
-const { startMonth, endMonth = null, title, subTitle } = defineProps<ResumeItem>()
+const { data } = defineProps<{ data: ResumeItem }>()
+const { startMonth, endMonth, title, subTitle, description } = toRefs(data)
 
 const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 </script>
