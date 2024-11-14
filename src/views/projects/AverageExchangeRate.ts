@@ -1,6 +1,7 @@
 import typia from 'typia'
 
 import type { UUID } from '@/utils/types'
+import { errorEvent } from '@/utils/utils'
 
 export interface AverageExchangeRateItem {
   date: string
@@ -47,12 +48,7 @@ export function formatCurrency(
         minimumFractionDigits: 0
       })
     } catch (error) {
-      if (error instanceof Error) {
-        console.error(`parse locale and currency failed, ${error.message}`)
-      } else {
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        console.error(`parse locale and currency failed, ${error}`)
-      }
+      errorEvent('parse currency and locale failed', error)
     }
   }
   try {
@@ -60,12 +56,7 @@ export function formatCurrency(
       return amount.toLocaleString(locale)
     }
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(`parse locale failed, ${error.message}`)
-    } else {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      console.error(`parse locale failed, ${error}`)
-    }
+    errorEvent('parse locale failed', error)
   }
   return amount.toLocaleString()
 }

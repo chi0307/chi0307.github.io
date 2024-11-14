@@ -45,3 +45,12 @@ export function generateUuid(): UUID {
   }
   return id
 }
+
+export function errorEvent(message: string, error: unknown): void {
+  if (error instanceof Error) {
+    alert(`${message}, error: ${error.message}`)
+  } else {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    alert(`${message}, unknown: ${error}`)
+  }
+}

@@ -1,3 +1,4 @@
+import { errorEvent } from '@/utils/utils'
 import {
   isAverageExchangeRateGroup,
   type AverageExchangeRateGroup
@@ -25,13 +26,8 @@ class StorageManager<StorageTyping extends Record<string, unknown>> {
         return data
       }
       console.error(`storage ${key} check typing failed`)
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(`storage ${key} parse error: ${error.message}`)
-      } else {
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        console.error(`storage ${key} parse error: ${error}`)
-      }
+    } catch (error) {
+      errorEvent(`storage ${key} parse failed`, error)
     }
     return null
   }
