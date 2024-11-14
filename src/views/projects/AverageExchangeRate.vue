@@ -24,7 +24,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 
 import { isNumber } from '@/utils/checkTyping'
 import { localStorageManager } from '@/utils/StorageManager'
-import { roundNumber } from '@/utils/utils'
+import { roundNumber, sortListByDate } from '@/utils/utils'
 
 import type { AverageExchangeRateItem } from './AverageExchangeRate'
 
@@ -37,9 +37,7 @@ interface TableColumns {
 }
 
 const columns = computed((): TableColumns[] => {
-  const dataList = [...transactionList.value].sort((aItem, bItem) =>
-    aItem.date > bItem.date ? -1 : 1
-  )
+  const dataList = sortListByDate(transactionList.value, 'date', 'desc')
   let totalAmount = currentAmount.value
   const list = dataList.map((item) => {
     const balance = totalAmount > item.buy ? item.buy : totalAmount
@@ -83,7 +81,7 @@ watch(
 onMounted(() => {
   const restoreData = localStorageManager.get('averageExchangeRate')
   if (restoreData !== null) {
-    transactionList.value = restoreData.transactionList
+    transactionList.value = sortListByDate(restoreData.transactionList, 'date', 'desc')
     currentAmount.value = restoreData.amount
   }
 })

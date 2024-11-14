@@ -2,14 +2,14 @@
   <section class="relative flex-center flex-col px-24px gap-24px py-32px">
     <p class="card-title">Work Experiences</p>
     <ResumeCard
-      v-for="(resume, index) of sortResumes(workExperiences)"
+      v-for="(resume, index) of sortListByDate(workExperiences, 'startMonth', 'desc')"
       :key="index"
       :data="resume"
       class="card"
     />
     <p class="card-title">Educations</p>
     <ResumeCard
-      v-for="(resume, index) of sortResumes(educations)"
+      v-for="(resume, index) of sortListByDate(educations, 'startMonth', 'desc')"
       :key="index"
       :data="resume"
       class="card"
@@ -24,11 +24,7 @@ import SkillGroupCard from '@/components/SkillGroupCard.vue'
 import { educations } from '@/configs/educations'
 import { skillGroups } from '@/configs/skillGroups'
 import { workExperiences } from '@/configs/workExperiences'
-import type { ResumeItem } from '@/utils/types'
-
-function sortResumes(list: ResumeItem[]): ResumeItem[] {
-  return list.sort((aItem, bItem) => (aItem.startMonth > bItem.startMonth ? -1 : 1))
-}
+import { sortListByDate } from '@/utils/utils'
 </script>
 <style scoped>
 .card-title {
