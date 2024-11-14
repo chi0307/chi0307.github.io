@@ -1,8 +1,19 @@
 <template>
   <main class="m-24px flex-col gap-8px">
     <v-tabs v-model="selectedTab" align-tabs="center" color="deep-purple-accent-4">
-      <v-tab v-for="({ id, title }, index) of tabs" :key="index" :value="id">{{ title }}</v-tab>
-      <v-tab @click="addTab"> + </v-tab>
+      <v-tab v-for="({ id, title }, index) of tabs" :key="index" :value="id">
+        {{ title }}
+        <p
+          v-if="id === selectedTab"
+          class="w-24px h-24px flex-center"
+          @click="showEditTabDialog = true"
+        >
+          <i class="fa-solid fa-pen ml-4px" />
+        </p>
+      </v-tab>
+      <v-tab @click="addTab">
+        <i class="fas fa-plus text-16px" />
+      </v-tab>
     </v-tabs>
     <div class="flex-center w-full gap-4px">
       <div class="flex-1">
@@ -16,9 +27,7 @@
           @update:model-value="
             (newValue: string) => {
               const newAmount = parseInt(newValue)
-              if (!isNaN(newAmount)) {
-                update('amount', newAmount)
-              }
+              update('amount', isNaN(newAmount) ? 0 : newAmount)
             }
           "
         />
@@ -27,7 +36,7 @@
         <v-text-field :model-value="averageRate" hide-details="auto" label="平均匯率" disabled />
       </div>
     </div>
-    <v-data-table :items="columns"> </v-data-table>
+    <v-data-table :items="rows"> </v-data-table>
     <div class="fixed bottom-24px right-24px" @click="showAddItemDialog = true">
       <v-btn icon>
         <i class="fas fa-plus" />
@@ -67,6 +76,26 @@
       </template>
     </v-card>
   </v-dialog>
+  <v-dialog v-model="showEditTabDialog">
+    <v-card v-if="editTab !== null" prepend-icon="mdi-update" title="Edit Tab">
+      <template #text>
+        <v-text-field v-model="editTab.title" hide-details="auto" label="標籤名稱" />
+        <v-text-field
+          v-model="editTab.localCurrencyCode"
+          hide-details="auto"
+          label="本幣代碼 (TWD)"
+        />
+        <v-text-field
+          v-model="editTab.foreignCurrencyCode"
+          hide-details="auto"
+          label="外幣代碼 (USD)"
+        />
+      </template>
+      <template #actions>
+        <v-btn class="ms-auto" text="Submit" @click="editTabEvent" />
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
 import { format } from 'date-fns'
@@ -77,24 +106,40 @@ import { localStorageManager } from '@/utils/StorageManager'
 import type { UUID } from '@/utils/types'
 import { generateUuid, roundNumber, sortListByDate } from '@/utils/utils'
 
-import type {
-  AverageExchangeRateItem,
-  AverageExchangeRateData,
-  AverageExchangeRateGroup
+import {
+  type AverageExchangeRateItem,
+  type AverageExchangeRateData,
+  type AverageExchangeRateGroup,
+  initAverageExchangeRateData,
+  formatCurrency
 } from './AverageExchangeRate'
 
-interface TableColumns {
+interface DataRow {
   date: string
   sell: number
   buy: number
   exchangeRate: number
   balance: number
 }
+interface TableRow {
+  date: string
+  sell: string
+  buy: string
+  exchangeRate: number
+  balance: string
+}
 
-const columns = computed((): TableColumns[] => {
-  const dataList = sortListByDate(transactionList.value, 'date', 'desc')
+const rows = computed((): TableRow[] => {
+  return dataRows.value.map((item) => ({
+    ...item,
+    sell: formatCurrency(item.sell, currentData.value?.localCurrencyCode),
+    buy: formatCurrency(item.buy, currentData.value?.foreignCurrencyCode),
+    balance: formatCurrency(item.balance, currentData.value?.foreignCurrencyCode)
+  }))
+})
+const dataRows = computed((): DataRow[] => {
   let totalAmount = currentAmount.value
-  const list = dataList.map((item) => {
+  return sortListByDate(currentList.value, 'date', 'desc').map((item) => {
     const balance = totalAmount > item.buy ? item.buy : totalAmount
     totalAmount -= balance
     return {
@@ -105,12 +150,11 @@ const columns = computed((): TableColumns[] => {
       balance
     }
   })
-  return list
 })
 const averageRate = computed((): number => {
   let sellTotal = 0
   let buyTotal = 0
-  for (const item of columns.value) {
+  for (const item of dataRows.value) {
     if (item.balance > 0) {
       buyTotal += item.balance
       sellTotal += item.balance * item.exchangeRate
@@ -120,12 +164,13 @@ const averageRate = computed((): number => {
 })
 
 const showAddItemDialog = ref(false)
+const showEditTabDialog = ref(false)
 const selectedTab = ref<UUID | null>(null)
 const restoreData = ref<AverageExchangeRateGroup>({})
 const currentData = computed((): AverageExchangeRateData | null =>
   selectedTab.value !== null ? (restoreData.value[selectedTab.value] ?? null) : null
 )
-const transactionList = computed((): AverageExchangeRateItem[] => currentData.value?.list ?? [])
+const currentList = computed((): AverageExchangeRateItem[] => currentData.value?.list ?? [])
 const currentAmount = computed((): number => currentData.value?.amount ?? 0)
 const tabs = computed((): { id: string; title: string }[] => {
   return Object.entries(restoreData.value).map(([id, { title }]) => ({ id, title }))
@@ -154,21 +199,23 @@ function resetItem(): AverageExchangeRateItem {
 }
 
 const addItem = ref<AverageExchangeRateItem>(resetItem())
+interface EditTab {
+  title: string
+  localCurrencyCode: string
+  foreignCurrencyCode: string
+}
+const editTab = ref<EditTab | null>(null)
 
 function addItemEvent(): void {
   const { buy, sell } = addItem.value
   const date = new Date(addItem.value.date).toISOString()
-  transactionList.value.unshift({ buy, sell, date })
+  currentList.value.unshift({ buy, sell, date })
   showAddItemDialog.value = false
 }
 
 function addTab(): void {
   const id = generateUuid()
-  restoreData.value[id] = {
-    title: '新標籤',
-    list: [],
-    amount: 0
-  }
+  restoreData.value[id] = initAverageExchangeRateData()
   selectedTab.value = id
   localStorageManager.set('averageExchangeRate', restoreData.value)
 }
@@ -180,12 +227,30 @@ function update<Key extends keyof AverageExchangeRateData>(
   if (selectedTab.value === null) {
     return
   }
-  const data: AverageExchangeRateData = restoreData.value[selectedTab.value] ?? {
-    title: '',
-    list: [],
-    amount: 0
-  }
+  const data: AverageExchangeRateData =
+    restoreData.value[selectedTab.value] ?? initAverageExchangeRateData()
   data[key] = value
   localStorageManager.set('averageExchangeRate', restoreData.value)
+}
+
+watch(showEditTabDialog, () => {
+  if (currentData.value !== null) {
+    editTab.value = {
+      title: currentData.value.title,
+      localCurrencyCode: currentData.value.localCurrencyCode ?? '',
+      foreignCurrencyCode: currentData.value.foreignCurrencyCode ?? ''
+    }
+  }
+})
+
+function editTabEvent(): void {
+  if (editTab.value === null) {
+    return
+  }
+  const { title, localCurrencyCode, foreignCurrencyCode } = editTab.value
+  update('title', title)
+  update('localCurrencyCode', localCurrencyCode === '' ? null : localCurrencyCode)
+  update('foreignCurrencyCode', foreignCurrencyCode === '' ? null : foreignCurrencyCode)
+  showEditTabDialog.value = false
 }
 </script>
