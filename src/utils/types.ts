@@ -1,4 +1,5 @@
 export type URL = `https://${string}`
+export type UUID = `${string}-${string}-${string}-${string}-${string}`
 
 export interface ResumeItem {
   startMonth: `${number}/${number}`

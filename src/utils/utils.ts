@@ -1,3 +1,8 @@
+import { v7 as uuidv7 } from 'uuid'
+
+import { isUuid } from '@/utils/checkTyping'
+import type { UUID } from '@/utils/types'
+
 export function redirect(url: `https://${string}`): void {
   window.open(url, '_self')
 }
@@ -31,4 +36,12 @@ export function sortListByDate<T extends object>(
       aItem[sortBy] > bItem[sortBy] ? -1 : 1
   }
   return [...list].sort(sortEvent)
+}
+
+export function generateUuid(): UUID {
+  const id = uuidv7()
+  if (!isUuid(id)) {
+    throw new Error(`generate uuid is not UUID, ${id}`)
+  }
+  return id
 }
