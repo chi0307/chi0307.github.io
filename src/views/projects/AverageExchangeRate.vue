@@ -58,7 +58,7 @@
         <v-text-field
           hide-details="auto"
           label="平均匯率"
-          :model-value="addItem.buy === 0 ? 0 : addItem.sell / addItem.buy"
+          :model-value="addItem.buy === 0 ? 0 : roundNumber(addItem.sell / addItem.buy, 4)"
           disabled
         />
       </template>
