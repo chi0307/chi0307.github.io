@@ -29,12 +29,21 @@ export const isAverageExchangeRateGroup = typia.createIs<AverageExchangeRateGrou
 
 export function formatCurrency(amount: number, currency: string | null | undefined): string {
   const locale = 'zh-TW'
-  if (typeof currency !== 'string' || currency === '') {
-    return amount.toLocaleString(locale)
+  if (typeof currency === 'string' && currency !== '') {
+    try {
+      return amount.toLocaleString(locale, {
+        style: 'currency',
+        currency,
+        minimumFractionDigits: 0
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(`parse currency failed, ${error.message}`)
+      } else {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        console.error(`parse currency failed, ${error}`)
+      }
+    }
   }
-  return amount.toLocaleString(locale, {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 0
-  })
+  return amount.toLocaleString(locale)
 }
