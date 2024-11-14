@@ -19,7 +19,7 @@
       <div class="flex-1">
         <v-text-field
           :model-value="currentAmount"
-          label="剩餘外幣"
+          :label="`剩餘${foreignCurrencyString}`"
           validate-on="invalid-input"
           :rules="[isNumber]"
           type="number"
@@ -36,7 +36,7 @@
         <v-text-field :model-value="averageRate" hide-details="auto" label="平均匯率" disabled />
       </div>
     </div>
-    <v-data-table :items="rows"> </v-data-table>
+    <v-data-table :headers="headers" :items="rows"> </v-data-table>
     <div class="fixed bottom-24px right-24px" @click="showAddItemDialog = true">
       <v-btn icon>
         <i class="fas fa-plus" />
@@ -56,13 +56,13 @@
           v-model.number="addItem.sell"
           type="number"
           hide-details="auto"
-          label="賣出台幣"
+          :label="`賣出${localCurrencyString}`"
         />
         <v-text-field
           v-model.number="addItem.buy"
           type="number"
           hide-details="auto"
-          label="買入外幣"
+          :label="`買入${foreignCurrencyString}`"
         />
         <v-text-field
           hide-details="auto"
@@ -81,16 +81,23 @@
       <template #text>
         <div class="flex-col gap-8px">
           <v-text-field v-model="editTab.title" hide-details="auto" label="標籤名稱" />
-          <v-text-field v-model="editTab.locale" hide-details="auto" label="語系代碼 (zh-TW)" />
+          <v-text-field
+            v-model="editTab.locale"
+            hide-details="auto"
+            label="語系代碼"
+            placeholder="zh-TW"
+          />
           <v-text-field
             v-model="editTab.localCurrencyCode"
             hide-details="auto"
-            label="本幣代碼 (TWD)"
+            label="本幣代碼"
+            placeholder="TWD"
           />
           <v-text-field
             v-model="editTab.foreignCurrencyCode"
             hide-details="auto"
-            label="外幣代碼 (JPY)"
+            label="外幣代碼"
+            placeholder="JPY"
           />
         </div>
       </template>
@@ -107,7 +114,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { isNumber, isUuid } from '@/utils/checkTyping'
 import { localStorageManager } from '@/utils/StorageManager'
 import type { UUID } from '@/utils/types'
-import { generateUuid, roundNumber, sortListByDate } from '@/utils/utils'
+import { generateUuid, isTruthyString, roundNumber, sortListByDate } from '@/utils/utils'
 
 import {
   type AverageExchangeRateItem,
@@ -131,6 +138,35 @@ interface TableRow {
   exchangeRate: number
   balance: string
 }
+
+const headers = computed(
+  () =>
+    [
+      { title: '日期', key: 'date', nowrap: true, sortable: false },
+      {
+        title: `賣出${localCurrencyString.value}`,
+        key: 'sell',
+        nowrap: true,
+        sortable: false,
+        align: 'end'
+      },
+      {
+        title: `買入${foreignCurrencyString.value}`,
+        key: 'buy',
+        nowrap: true,
+        sortable: false,
+        align: 'end'
+      },
+      { title: '匯率', key: 'exchangeRate', nowrap: true, sortable: false },
+      {
+        title: `剩餘${foreignCurrencyString.value}`,
+        key: 'balance',
+        nowrap: true,
+        sortable: false,
+        align: 'end'
+      }
+    ] as const
+)
 
 const rows = computed((): TableRow[] => {
   return dataRows.value.map((item) => ({
@@ -190,6 +226,16 @@ const currentAmount = computed((): number => currentData.value?.amount ?? 0)
 const tabs = computed((): { id: string; title: string }[] => {
   return Object.entries(restoreData.value).map(([id, { title }]) => ({ id, title }))
 })
+const localCurrencyString = computed(() =>
+  isTruthyString(currentData.value?.localCurrencyCode)
+    ? ` ${currentData.value.localCurrencyCode}`
+    : '本幣'
+)
+const foreignCurrencyString = computed(() =>
+  isTruthyString(currentData.value?.foreignCurrencyCode)
+    ? ` ${currentData.value.foreignCurrencyCode}`
+    : '外幣'
+)
 
 onMounted(() => {
   restoreData.value = localStorageManager.get('averageExchangeRate') ?? {}
