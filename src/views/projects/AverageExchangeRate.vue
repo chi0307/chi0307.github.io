@@ -312,9 +312,9 @@ function editTabEvent(): void {
   }
   const { title, localCurrencyCode, foreignCurrencyCode, locale } = editTab.value
   update('title', title)
-  update('localCurrencyCode', localCurrencyCode === '' ? null : localCurrencyCode)
-  update('foreignCurrencyCode', foreignCurrencyCode === '' ? null : foreignCurrencyCode)
-  update('locale', locale === '' ? null : locale)
+  update('localCurrencyCode', isTruthyString(localCurrencyCode) ? localCurrencyCode : null)
+  update('foreignCurrencyCode', isTruthyString(foreignCurrencyCode) ? foreignCurrencyCode : null)
+  update('locale', isTruthyString(locale) ? locale : null)
   showEditTabDialog.value = false
 }
 </script>

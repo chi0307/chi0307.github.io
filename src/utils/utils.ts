@@ -55,6 +55,6 @@ export function errorEvent(message: string, error: unknown): void {
   }
 }
 
-export function isTruthyString(text: unknown): text is string {
-  return typeof text === 'string' && text !== ''
+export function isTruthyString<T extends string>(text: T | null | undefined): text is T {
+  return isNotNullishValue(text) && text !== ''
 }
