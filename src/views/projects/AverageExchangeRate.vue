@@ -39,7 +39,7 @@
     <v-data-table :headers="headers" :items="rows">
       <!-- eslint-disable-next-line vue/valid-v-slot -->
       <template #item.actions="{ item }">
-        <i class="fa-solid fa-trash" @click="deleteItem(item)" />
+        <i class="fa-solid fa-trash" @click="deleteItemEvent(item)" />
       </template>
     </v-data-table>
     <div class="fixed bottom-24px right-24px" @click="showAddItemDialog = true">
@@ -108,6 +108,15 @@
       </template>
       <template #actions>
         <v-btn class="ms-auto" text="Submit" @click="editTabEvent" />
+      </template>
+    </v-card>
+  </v-dialog>
+  <v-dialog :model-value="Boolean(deleteData)" @update:model-value="deleteData = null">
+    <v-card class="mx-auto" max-width="320" title="Update Field">
+      <template #text> {{ deleteData?.message ?? '' }} </template>
+      <template #actions>
+        <v-btn class="ms-auto" text="Cancel" @click="deleteData = null" />
+        <v-btn class="ms-auto" text="Delete" @click="deleteData?.event" />
       </template>
     </v-card>
   </v-dialog>
@@ -332,7 +341,17 @@ function editTabEvent(): void {
   showEditTabDialog.value = false
 }
 
-function deleteItem(data: TableRow): void {
-  alert(data.id)
+const deleteData = ref<{ message: string; event: () => void } | null>(null)
+function deleteItemEvent({ id }: TableRow): void {
+  deleteData.value = {
+    message: '確定要刪除這筆資料嗎？',
+    event: (): void => {
+      update(
+        'list',
+        [...currentList.value].filter((item) => item.id === id)
+      )
+      deleteData.value = null
+    }
+  }
 }
 </script>
