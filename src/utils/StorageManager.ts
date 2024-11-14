@@ -40,6 +40,9 @@ class StorageManager<StorageTyping extends Record<string, unknown>> {
     key: Key,
     value: StorageTyping[Key]
   ): void {
+    if (!this.typeChecker[key](value)) {
+      throw new Error(`Type error: Invalid data type for key "${key}"`)
+    }
     this.storage.setItem(key, JSON.stringify(value))
   }
 
