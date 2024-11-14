@@ -22,6 +22,7 @@ export const projects: ProjectItem[] = [
       '一個簡單的娛樂用 line bot<br/>嘗試串接 Google TTS、Google STT、Google Map<br/>部署在 heroku',
     image: '/linebot-preview.png',
     previewUrl: 'https://line.me/R/ti/p/%40tyo2763z',
-    link: null
+    link: null,
+    deprecated: true
   }
 ]

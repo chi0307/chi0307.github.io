@@ -16,9 +16,10 @@ export interface SkillGroup {
 export interface ProjectItem {
   description: string
   image: string
-  previewUrl: URL
+  previewUrl: URL | null
   link: {
     title: string
     url: URL
   } | null
+  deprecated?: true
 }
