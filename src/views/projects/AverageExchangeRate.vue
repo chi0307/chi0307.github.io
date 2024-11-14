@@ -107,7 +107,10 @@
         </div>
       </template>
       <template #actions>
-        <v-btn class="ms-auto" text="Submit" @click="editTabEvent" />
+        <div class="flex items-center justify-between w-full">
+          <v-btn text="Delete" @click="deleteTabEvent(selectedTab)" />
+          <v-btn text="Save" @click="editTabEvent" />
+        </div>
       </template>
     </v-card>
   </v-dialog>
@@ -260,6 +263,9 @@ const foreignCurrencyString = computed(() =>
 
 onMounted(() => {
   restoreData.value = localStorageManager.get('averageExchangeRate') ?? {}
+  checkAndResetTab()
+})
+function checkAndResetTab(): void {
   if (Object.keys(restoreData.value).length === 0) {
     addTab()
   }
@@ -268,7 +274,7 @@ onMounted(() => {
   if (isUuid(tabId)) {
     selectedTab.value = tabId
   }
-})
+}
 
 watch(showAddItemDialog, () => {
   addItem.value = resetItem()
@@ -351,6 +357,21 @@ function deleteItemEvent({ id }: TableRow): void {
         [...currentList.value].filter((item) => item.id === id)
       )
       deleteData.value = null
+    }
+  }
+}
+function deleteTabEvent(id: UUID | null): void {
+  if (id === null) {
+    return
+  }
+  deleteData.value = {
+    message: '確定要刪除這張表嗎？',
+    event: (): void => {
+      // eslint-disable-next-line security/detect-object-injection, @typescript-eslint/no-dynamic-delete
+      delete restoreData.value[id]
+      checkAndResetTab()
+      deleteData.value = null
+      showEditTabDialog.value = false
     }
   }
 }
