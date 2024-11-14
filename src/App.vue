@@ -1,17 +1,19 @@
 <template>
-  <RouterView v-if="isSideProjectsPage" />
-  <div v-else class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
-    <HeaderBlock />
-    <main
-      ref="main"
-      class="w-full overflow-x-hidden overflow-y-auto"
-      :style="{
-        height: `calc(100% - ${headerHeight}px)`
-      }"
-    >
-      <RouterView class="min-h-full" />
-    </main>
-    <MenuBlock v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed" />
+  <div @dblclick.stop>
+    <RouterView v-if="isSideProjectsPage" />
+    <div v-else class="bg-deep-primary relative w-100dvw h-100dvh text-16px overflow-hidden">
+      <HeaderBlock />
+      <main
+        ref="main"
+        class="w-full overflow-x-hidden overflow-y-auto"
+        :style="{
+          height: `calc(100% - ${headerHeight}px)`
+        }"
+      >
+        <RouterView class="min-h-full" />
+      </main>
+      <MenuBlock v-if="showMenu" class="w-100dvw h-100dvh bg-white left-0 top-0 z-100 fixed" />
+    </div>
   </div>
 </template>
 
