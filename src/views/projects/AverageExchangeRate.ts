@@ -13,6 +13,7 @@ export interface AverageExchangeRateData {
   amount: number
   localCurrencyCode: string | null
   foreignCurrencyCode: string | null
+  locale: string | null
 }
 export function initAverageExchangeRateData(): AverageExchangeRateData {
   return {
@@ -20,16 +21,25 @@ export function initAverageExchangeRateData(): AverageExchangeRateData {
     list: [],
     amount: 0,
     localCurrencyCode: null,
-    foreignCurrencyCode: null
+    foreignCurrencyCode: null,
+    locale: null
   }
 }
 
 export type AverageExchangeRateGroup = Record<UUID, AverageExchangeRateData>
 export const isAverageExchangeRateGroup = typia.createIs<AverageExchangeRateGroup>()
 
-export function formatCurrency(amount: number, currency: string | null | undefined): string {
-  const locale = 'zh-TW'
-  if (typeof currency === 'string' && currency !== '') {
+export function formatCurrency(
+  amount: number,
+  locale: string | null | undefined,
+  currency: string | null | undefined
+): string {
+  if (
+    typeof currency === 'string' &&
+    currency !== '' &&
+    typeof locale === 'string' &&
+    locale !== ''
+  ) {
     try {
       return amount.toLocaleString(locale, {
         style: 'currency',
@@ -38,12 +48,24 @@ export function formatCurrency(amount: number, currency: string | null | undefin
       })
     } catch (error) {
       if (error instanceof Error) {
-        console.error(`parse currency failed, ${error.message}`)
+        console.error(`parse locale and currency failed, ${error.message}`)
       } else {
         // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        console.error(`parse currency failed, ${error}`)
+        console.error(`parse locale and currency failed, ${error}`)
       }
     }
   }
-  return amount.toLocaleString(locale)
+  try {
+    if (typeof locale === 'string' && locale !== '') {
+      return amount.toLocaleString(locale)
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`parse locale failed, ${error.message}`)
+    } else {
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      console.error(`parse locale failed, ${error}`)
+    }
+  }
+  return amount.toLocaleString()
 }

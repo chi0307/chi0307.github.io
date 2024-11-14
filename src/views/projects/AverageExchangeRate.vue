@@ -77,19 +77,22 @@
     </v-card>
   </v-dialog>
   <v-dialog v-model="showEditTabDialog">
-    <v-card v-if="editTab !== null" prepend-icon="mdi-update" title="Edit Tab">
+    <v-card v-if="editTab !== null" prepend-icon="mdi-update" title="Setting">
       <template #text>
-        <v-text-field v-model="editTab.title" hide-details="auto" label="標籤名稱" />
-        <v-text-field
-          v-model="editTab.localCurrencyCode"
-          hide-details="auto"
-          label="本幣代碼 (TWD)"
-        />
-        <v-text-field
-          v-model="editTab.foreignCurrencyCode"
-          hide-details="auto"
-          label="外幣代碼 (USD)"
-        />
+        <div class="flex-col gap-8px">
+          <v-text-field v-model="editTab.title" hide-details="auto" label="標籤名稱" />
+          <v-text-field v-model="editTab.locale" hide-details="auto" label="語系代碼 (zh-TW)" />
+          <v-text-field
+            v-model="editTab.localCurrencyCode"
+            hide-details="auto"
+            label="本幣代碼 (TWD)"
+          />
+          <v-text-field
+            v-model="editTab.foreignCurrencyCode"
+            hide-details="auto"
+            label="外幣代碼 (JPY)"
+          />
+        </div>
       </template>
       <template #actions>
         <v-btn class="ms-auto" text="Submit" @click="editTabEvent" />
@@ -132,9 +135,21 @@ interface TableRow {
 const rows = computed((): TableRow[] => {
   return dataRows.value.map((item) => ({
     ...item,
-    sell: formatCurrency(item.sell, currentData.value?.localCurrencyCode),
-    buy: formatCurrency(item.buy, currentData.value?.foreignCurrencyCode),
-    balance: formatCurrency(item.balance, currentData.value?.foreignCurrencyCode)
+    sell: formatCurrency(
+      item.sell,
+      currentData.value?.locale,
+      currentData.value?.localCurrencyCode
+    ),
+    buy: formatCurrency(
+      item.buy,
+      currentData.value?.locale,
+      currentData.value?.foreignCurrencyCode
+    ),
+    balance: formatCurrency(
+      item.balance,
+      currentData.value?.locale,
+      currentData.value?.foreignCurrencyCode
+    )
   }))
 })
 const dataRows = computed((): DataRow[] => {
@@ -203,6 +218,7 @@ interface EditTab {
   title: string
   localCurrencyCode: string
   foreignCurrencyCode: string
+  locale: string
 }
 const editTab = ref<EditTab | null>(null)
 
@@ -238,7 +254,8 @@ watch(showEditTabDialog, () => {
     editTab.value = {
       title: currentData.value.title,
       localCurrencyCode: currentData.value.localCurrencyCode ?? '',
-      foreignCurrencyCode: currentData.value.foreignCurrencyCode ?? ''
+      foreignCurrencyCode: currentData.value.foreignCurrencyCode ?? '',
+      locale: currentData.value.locale ?? ''
     }
   }
 })
@@ -247,10 +264,11 @@ function editTabEvent(): void {
   if (editTab.value === null) {
     return
   }
-  const { title, localCurrencyCode, foreignCurrencyCode } = editTab.value
+  const { title, localCurrencyCode, foreignCurrencyCode, locale } = editTab.value
   update('title', title)
   update('localCurrencyCode', localCurrencyCode === '' ? null : localCurrencyCode)
   update('foreignCurrencyCode', foreignCurrencyCode === '' ? null : foreignCurrencyCode)
+  update('locale', locale === '' ? null : locale)
   showEditTabDialog.value = false
 }
 </script>
