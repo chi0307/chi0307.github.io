@@ -4,6 +4,7 @@ import type { UUID } from '@/utils/types'
 import { errorEvent, isTruthyString } from '@/utils/utils'
 
 export interface AverageExchangeRateItem {
+  id: UUID
   date: string
   sell: number
   buy: number

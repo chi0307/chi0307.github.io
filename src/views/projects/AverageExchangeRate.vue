@@ -36,7 +36,12 @@
         <v-text-field :model-value="averageRate" hide-details="auto" label="平均匯率" disabled />
       </div>
     </div>
-    <v-data-table :headers="headers" :items="rows"> </v-data-table>
+    <v-data-table :headers="headers" :items="rows">
+      <!-- eslint-disable-next-line vue/valid-v-slot -->
+      <template #item.actions="{ item }">
+        <i class="fa-solid fa-trash" @click="deleteItem(item)" />
+      </template>
+    </v-data-table>
     <div class="fixed bottom-24px right-24px" @click="showAddItemDialog = true">
       <v-btn icon>
         <i class="fas fa-plus" />
@@ -125,6 +130,7 @@ import {
 } from './AverageExchangeRate'
 
 interface DataRow {
+  id: UUID
   date: string
   sell: number
   buy: number
@@ -132,6 +138,7 @@ interface DataRow {
   balance: number
 }
 interface TableRow {
+  id: UUID
   date: string
   sell: string
   buy: string
@@ -164,6 +171,10 @@ const headers = computed(
         nowrap: true,
         sortable: false,
         align: 'end'
+      },
+      {
+        key: 'actions',
+        sortable: false
       }
     ] as const
 )
@@ -194,6 +205,7 @@ const dataRows = computed((): DataRow[] => {
     const balance = totalAmount > item.buy ? item.buy : totalAmount
     totalAmount -= balance
     return {
+      id: item.id,
       date: format(item.date, 'yyyy/MM/dd'),
       sell: item.sell,
       buy: item.buy,
@@ -242,6 +254,7 @@ onMounted(() => {
   if (Object.keys(restoreData.value).length === 0) {
     addTab()
   }
+  localStorageManager.set('averageExchangeRate', restoreData.value)
   const tabId = Object.keys(restoreData.value)[0]
   if (isUuid(tabId)) {
     selectedTab.value = tabId
@@ -251,7 +264,7 @@ onMounted(() => {
 watch(showAddItemDialog, () => {
   addItem.value = resetItem()
 })
-function resetItem(): AverageExchangeRateItem {
+function resetItem(): Omit<AverageExchangeRateItem, 'id'> {
   return {
     sell: 0,
     buy: 0,
@@ -259,7 +272,7 @@ function resetItem(): AverageExchangeRateItem {
   }
 }
 
-const addItem = ref<AverageExchangeRateItem>(resetItem())
+const addItem = ref<Omit<AverageExchangeRateItem, 'id'>>(resetItem())
 interface EditTab {
   title: string
   localCurrencyCode: string
@@ -271,7 +284,8 @@ const editTab = ref<EditTab | null>(null)
 function addItemEvent(): void {
   const { buy, sell } = addItem.value
   const date = new Date(addItem.value.date).toISOString()
-  update('list', [{ buy, sell, date }, ...currentList.value])
+  const id = generateUuid()
+  update('list', [{ buy, sell, date, id }, ...currentList.value])
   showAddItemDialog.value = false
 }
 
@@ -316,5 +330,9 @@ function editTabEvent(): void {
   update('foreignCurrencyCode', isTruthyString(foreignCurrencyCode) ? foreignCurrencyCode : null)
   update('locale', isTruthyString(locale) ? locale : null)
   showEditTabDialog.value = false
+}
+
+function deleteItem(data: TableRow): void {
+  alert(data.id)
 }
 </script>
