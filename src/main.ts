@@ -1,6 +1,7 @@
 import '@unocss/reset/tailwind.css'
 import 'virtual:uno.css'
 import 'vuetify/styles'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
