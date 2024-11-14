@@ -54,3 +54,7 @@ export function errorEvent(message: string, error: unknown): void {
     alert(`${message}, unknown: ${error}`)
   }
 }
+
+export function isTruthyString(text: unknown): text is string {
+  return typeof text === 'string' && text !== ''
+}

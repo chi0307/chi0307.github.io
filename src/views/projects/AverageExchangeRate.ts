@@ -1,7 +1,7 @@
 import typia from 'typia'
 
 import type { UUID } from '@/utils/types'
-import { errorEvent } from '@/utils/utils'
+import { errorEvent, isTruthyString } from '@/utils/utils'
 
 export interface AverageExchangeRateItem {
   date: string
@@ -35,12 +35,7 @@ export function formatCurrency(
   locale: string | null | undefined,
   currency: string | null | undefined
 ): string {
-  if (
-    typeof currency === 'string' &&
-    currency !== '' &&
-    typeof locale === 'string' &&
-    locale !== ''
-  ) {
+  if (isTruthyString(currency) && isTruthyString(locale)) {
     try {
       return amount.toLocaleString(locale, {
         style: 'currency',
@@ -52,7 +47,7 @@ export function formatCurrency(
     }
   }
   try {
-    if (typeof locale === 'string' && locale !== '') {
+    if (isTruthyString(locale)) {
       return amount.toLocaleString(locale)
     }
   } catch (error) {
