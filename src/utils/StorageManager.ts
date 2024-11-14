@@ -1,3 +1,8 @@
+import {
+  isCacheAverageExchangeRateData,
+  type cacheAverageExchangeRateData
+} from '@/views/projects/AverageExchangeRate'
+
 class StorageManager<StorageTyping extends Record<string, unknown>> {
   private readonly storage: Storage
   private readonly typeChecker: TypeChecker<StorageTyping>
@@ -47,8 +52,11 @@ type TypeChecker<StorageTyping> = {
   [key in keyof StorageTyping]: (data: unknown) => data is StorageTyping[key]
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export const localStorageManager = new StorageManager<{}>(localStorage, {})
+export const localStorageManager = new StorageManager<{
+  averageExchangeRate: cacheAverageExchangeRateData
+}>(localStorage, {
+  averageExchangeRate: isCacheAverageExchangeRateData
+})
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export const sessionStorageManager = new StorageManager<{}>(sessionStorage, {})

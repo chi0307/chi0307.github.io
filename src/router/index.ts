@@ -28,6 +28,11 @@ const router = createRouter({
       path: Route.Resume
     },
     {
+      component: () => import('@/views/projects/AverageExchangeRate.vue'),
+      name: Route.ProjectsAverageExchangeRate,
+      path: Route.ProjectsAverageExchangeRate
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: Route.Home
     }

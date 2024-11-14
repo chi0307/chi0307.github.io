@@ -2,5 +2,7 @@ export enum Route {
   Home = '/',
   AboutMe = '/aboutMe',
   Projects = '/projects',
-  Resume = '/resume'
+  Resume = '/resume',
+
+  ProjectsAverageExchangeRate = '/projects/averageExchangeRate'
 }
