@@ -271,7 +271,7 @@ const editTab = ref<EditTab | null>(null)
 function addItemEvent(): void {
   const { buy, sell } = addItem.value
   const date = new Date(addItem.value.date).toISOString()
-  currentList.value.unshift({ buy, sell, date })
+  update('list', [{ buy, sell, date }, ...currentList.value])
   showAddItemDialog.value = false
 }
 
