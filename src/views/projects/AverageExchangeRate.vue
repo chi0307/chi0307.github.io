@@ -354,7 +354,7 @@ function deleteItemEvent({ id }: TableRow): void {
     event: (): void => {
       update(
         'list',
-        [...currentList.value].filter((item) => item.id === id)
+        [...currentList.value].filter((item) => item.id !== id)
       )
       deleteData.value = null
     }
