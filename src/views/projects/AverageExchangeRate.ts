@@ -1,12 +1,16 @@
 import typia from 'typia'
 
+import type { UUID } from '@/utils/types'
+
 export interface AverageExchangeRateItem {
   date: string
   sell: number
   buy: number
 }
-export interface cacheAverageExchangeRateData {
-  transactionList: AverageExchangeRateItem[]
+export interface AverageExchangeRateData {
+  title: string
+  list: AverageExchangeRateItem[]
   amount: number
 }
-export const isCacheAverageExchangeRateData = typia.createIs<cacheAverageExchangeRateData>()
+export type AverageExchangeRateGroup = Record<UUID, AverageExchangeRateData>
+export const isAverageExchangeRateGroup = typia.createIs<AverageExchangeRateGroup>()

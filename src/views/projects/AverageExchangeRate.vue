@@ -1,14 +1,31 @@
 <template>
   <main class="m-24px flex-col gap-8px">
+    <v-tabs v-model="selectedTab" align-tabs="center" color="deep-purple-accent-4">
+      <v-tab v-for="({ id, title }, index) of tabs" :key="index" :value="id">{{ title }}</v-tab>
+      <v-tab @click="addTab"> + </v-tab>
+    </v-tabs>
     <div class="flex-center w-full gap-4px">
-      <v-text-field
-        v-model.number="currentAmount"
-        label="剩餘金額"
-        validate-on="invalid-input"
-        :rules="[isNumber]"
-        hide-details="auto"
-      />
-      <v-text-field v-model="averageRate" hide-details="auto" label="平均匯率" disabled />
+      <div class="flex-1">
+        <v-text-field
+          :model-value="currentAmount"
+          label="剩餘外幣"
+          validate-on="invalid-input"
+          :rules="[isNumber]"
+          type="number"
+          hide-details="auto"
+          @update:model-value="
+            (newValue: string) => {
+              const newAmount = parseInt(newValue)
+              if (!isNaN(newAmount)) {
+                update('amount', newAmount)
+              }
+            }
+          "
+        />
+      </div>
+      <div class="flex-1">
+        <v-text-field :model-value="averageRate" hide-details="auto" label="平均匯率" disabled />
+      </div>
     </div>
     <v-data-table :items="columns"> </v-data-table>
     <div class="fixed bottom-24px right-24px" @click="showAddItemDialog = true">
@@ -55,11 +72,16 @@
 import { format } from 'date-fns'
 import { computed, onMounted, ref, watch } from 'vue'
 
-import { isNumber } from '@/utils/checkTyping'
+import { isNumber, isUuid } from '@/utils/checkTyping'
 import { localStorageManager } from '@/utils/StorageManager'
-import { roundNumber, sortListByDate } from '@/utils/utils'
+import type { UUID } from '@/utils/types'
+import { generateUuid, roundNumber, sortListByDate } from '@/utils/utils'
 
-import type { AverageExchangeRateItem } from './AverageExchangeRate'
+import type {
+  AverageExchangeRateItem,
+  AverageExchangeRateData,
+  AverageExchangeRateGroup
+} from './AverageExchangeRate'
 
 interface TableColumns {
   date: string
@@ -97,26 +119,26 @@ const averageRate = computed((): number => {
   return buyTotal === 0 ? 0 : roundNumber(sellTotal / buyTotal, 4)
 })
 
-const transactionList = ref<AverageExchangeRateItem[]>([])
-const currentAmount = ref<number>(0)
 const showAddItemDialog = ref(false)
-
-watch(
-  () => [transactionList, currentAmount],
-  () => {
-    localStorageManager.set('averageExchangeRate', {
-      transactionList: transactionList.value,
-      amount: currentAmount.value
-    })
-  },
-  { deep: true }
+const selectedTab = ref<UUID | null>(null)
+const restoreData = ref<AverageExchangeRateGroup>({})
+const currentData = computed((): AverageExchangeRateData | null =>
+  selectedTab.value !== null ? (restoreData.value[selectedTab.value] ?? null) : null
 )
+const transactionList = computed((): AverageExchangeRateItem[] => currentData.value?.list ?? [])
+const currentAmount = computed((): number => currentData.value?.amount ?? 0)
+const tabs = computed((): { id: string; title: string }[] => {
+  return Object.entries(restoreData.value).map(([id, { title }]) => ({ id, title }))
+})
 
 onMounted(() => {
-  const restoreData = localStorageManager.get('averageExchangeRate')
-  if (restoreData !== null) {
-    transactionList.value = sortListByDate(restoreData.transactionList, 'date', 'desc')
-    currentAmount.value = restoreData.amount
+  restoreData.value = localStorageManager.get('averageExchangeRate') ?? {}
+  if (Object.keys(restoreData.value).length === 0) {
+    addTab()
+  }
+  const tabId = Object.keys(restoreData.value)[0]
+  if (isUuid(tabId)) {
+    selectedTab.value = tabId
   }
 })
 
@@ -138,5 +160,32 @@ function addItemEvent(): void {
   const date = new Date(addItem.value.date).toISOString()
   transactionList.value.unshift({ buy, sell, date })
   showAddItemDialog.value = false
+}
+
+function addTab(): void {
+  const id = generateUuid()
+  restoreData.value[id] = {
+    title: '新標籤',
+    list: [],
+    amount: 0
+  }
+  selectedTab.value = id
+  localStorageManager.set('averageExchangeRate', restoreData.value)
+}
+
+function update<Key extends keyof AverageExchangeRateData>(
+  key: Key,
+  value: AverageExchangeRateData[Key]
+): void {
+  if (selectedTab.value === null) {
+    return
+  }
+  const data: AverageExchangeRateData = restoreData.value[selectedTab.value] ?? {
+    title: '',
+    list: [],
+    amount: 0
+  }
+  data[key] = value
+  localStorageManager.set('averageExchangeRate', restoreData.value)
 }
 </script>

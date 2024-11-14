@@ -1,6 +1,6 @@
 import {
-  isCacheAverageExchangeRateData,
-  type cacheAverageExchangeRateData
+  isAverageExchangeRateGroup,
+  type AverageExchangeRateGroup
 } from '@/views/projects/AverageExchangeRate'
 
 class StorageManager<StorageTyping extends Record<string, unknown>> {
@@ -53,9 +53,9 @@ type TypeChecker<StorageTyping> = {
 }
 
 export const localStorageManager = new StorageManager<{
-  averageExchangeRate: cacheAverageExchangeRateData
+  averageExchangeRate: AverageExchangeRateGroup
 }>(localStorage, {
-  averageExchangeRate: isCacheAverageExchangeRateData
+  averageExchangeRate: isAverageExchangeRateGroup
 })
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
