@@ -19,9 +19,14 @@ class StorageManager<StorageTyping extends Record<string, unknown>> {
       if (this.typeChecker[key](data)) {
         return data
       }
-    } catch {
-      // when JSON parse failed to remove local storage value
-      this.remove(key)
+      console.error(`storage ${key} check typing failed`)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`storage ${key} parse error: ${error.message}`)
+      } else {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        console.error(`storage ${key} parse error: ${error}`)
+      }
     }
     return null
   }
