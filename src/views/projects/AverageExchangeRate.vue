@@ -129,9 +129,11 @@ import { format } from 'date-fns'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import { isNumber, isUuid } from '@/utils/checkTyping'
+import { convertField, convertToDate } from '@/utils/converts'
+import { sortListByDate } from '@/utils/sorts'
 import { localStorageManager } from '@/utils/StorageManager'
 import type { UUID } from '@/utils/types'
-import { generateUuid, isTruthyString, roundNumber, sortListByDate } from '@/utils/utils'
+import { generateUuid, isTruthyString, roundNumber } from '@/utils/utils'
 
 import {
   type AverageExchangeRateItem,
@@ -213,18 +215,20 @@ const rows = computed((): TableRow[] => {
 })
 const dataRows = computed((): DataRow[] => {
   let totalAmount = currentAmount.value
-  return sortListByDate(currentList.value, 'date', 'desc').map((item) => {
-    const balance = totalAmount > item.buy ? item.buy : totalAmount
-    totalAmount -= balance
-    return {
-      id: item.id,
-      date: format(item.date, 'yyyy/MM/dd'),
-      sell: item.sell,
-      buy: item.buy,
-      exchangeRate: roundNumber(item.sell / item.buy, 4),
-      balance
+  return sortListByDate(convertField(currentList.value, 'date', convertToDate), 'date', 'desc').map(
+    (item) => {
+      const balance = totalAmount > item.buy ? item.buy : totalAmount
+      totalAmount -= balance
+      return {
+        id: item.id,
+        date: format(item.date, 'yyyy/MM/dd'),
+        sell: item.sell,
+        buy: item.buy,
+        exchangeRate: roundNumber(item.sell / item.buy, 4),
+        balance
+      }
     }
-  })
+  )
 })
 const averageRate = computed((): number => {
   let sellTotal = 0

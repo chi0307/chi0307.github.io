@@ -26,10 +26,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { toRefs } from 'vue'
+import type { URL } from '@/utils/types'
 
-import type { ProjectItem } from '@/utils/types'
-
-const { data } = defineProps<{ data: ProjectItem }>()
-const { description, previewUrl, link, image, deprecated } = toRefs(data)
+const { description, previewUrl, link, image, deprecated } = defineProps<{
+  description: string
+  image: string
+  previewUrl: URL | null
+  link: {
+    title: string
+    url: URL
+  } | null
+  deprecated: boolean
+}>()
 </script>

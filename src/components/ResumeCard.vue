@@ -12,7 +12,9 @@
         'gap-4px': isMobile
       }"
     >
-      <p class="text-1.5rem text-emphasis">{{ startMonth }} ~ {{ endMonth ?? '' }}</p>
+      <p class="text-1.5rem text-emphasis">
+        {{ formatDate(startMonth) }} ~ {{ formatDate(endMonth) }}
+      </p>
       <p>{{ title }}</p>
       <p style="color: #666">{{ subTitle }}</p>
     </div>
@@ -29,14 +31,22 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { format } from 'date-fns'
 import { storeToRefs } from 'pinia'
-import { toRefs } from 'vue'
 
 import { useLayoutStore } from '@/stores/layoutStore'
-import type { ResumeItem } from '@/utils/types'
 
-const { data } = defineProps<{ data: ResumeItem }>()
-const { startMonth, endMonth, title, subTitle, description } = toRefs(data)
+const { startMonth, endMonth, title, subTitle, description } = defineProps<{
+  startMonth: Date
+  endMonth: Date | null
+  title: string
+  subTitle: string
+  description: string
+}>()
+
+function formatDate(date: Date | null): string {
+  return date !== null ? format(date, 'yyyy/MM/dd') : ''
+}
 
 const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 </script>

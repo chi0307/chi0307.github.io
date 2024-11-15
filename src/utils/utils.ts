@@ -19,25 +19,6 @@ export function isNotNullishValue<T>(data: T | null | undefined): data is T {
   return data !== null && data !== undefined
 }
 
-export function sortListByDate<T extends object>(
-  list: T[],
-  sortBy: keyof T,
-  direction: 'asc' | 'desc'
-): T[] {
-  type SortEvent = (aItem: T, bItem: T) => 1 | -1
-  let sortEvent: SortEvent
-  if (direction === 'asc') {
-    sortEvent = (aItem: T, bItem: T): ReturnType<SortEvent> =>
-      // eslint-disable-next-line security/detect-object-injection
-      aItem[sortBy] > bItem[sortBy] ? 1 : -1
-  } else {
-    sortEvent = (aItem: T, bItem: T): ReturnType<SortEvent> =>
-      // eslint-disable-next-line security/detect-object-injection
-      aItem[sortBy] > bItem[sortBy] ? -1 : 1
-  }
-  return [...list].sort(sortEvent)
-}
-
 export function generateUuid(): UUID {
   const id = uuidv7()
   if (!isUuid(id)) {
