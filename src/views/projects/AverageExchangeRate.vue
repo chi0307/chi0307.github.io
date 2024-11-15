@@ -24,6 +24,7 @@
           :rules="[isNumber]"
           type="number"
           hide-details="auto"
+          inputmode="decimal"
           @update:model-value="
             (newValue: string) => {
               const newAmount = parseInt(newValue)
@@ -61,12 +62,14 @@
           v-model.number="addItem.sell"
           type="number"
           hide-details="auto"
+          inputmode="decimal"
           :label="`賣出${localCurrencyString}`"
         />
         <v-text-field
           v-model.number="addItem.buy"
           type="number"
           hide-details="auto"
+          inputmode="decimal"
           :label="`買入${foreignCurrencyString}`"
         />
         <v-text-field
