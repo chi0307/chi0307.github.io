@@ -1,4 +1,4 @@
-import { errorEvent } from '@/utils/utils'
+import { errorEvent } from '@/utils'
 import {
   isAverageExchangeRateGroup,
   type AverageExchangeRateGroup

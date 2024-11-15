@@ -26,7 +26,7 @@
 </template>
 <script lang="ts" setup>
 import type { URL } from '@/utils/types'
-import { redirectNewWindow } from '@/utils/utils'
+import { redirectNewWindow } from '@/utils'
 interface SocialMediaItem {
   iconClass: string
   redirectUrl: URL
