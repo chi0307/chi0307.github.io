@@ -1,4 +1,4 @@
-import type { SkillGroup } from '@/utils/types'
+import type { SkillGroup } from '@/types/website'
 
 export const skillGroups: SkillGroup[] = [
   {

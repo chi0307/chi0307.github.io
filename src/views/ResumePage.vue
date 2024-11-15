@@ -32,9 +32,10 @@ import SkillGroupCard from '@/components/SkillGroupCard.vue'
 import { educations } from '@/configs/educations'
 import { skillGroups } from '@/configs/skillGroups'
 import { workExperiences } from '@/configs/workExperiences'
+import type { PropTypeOf } from '@/types'
+import type { ResumeItem } from '@/types/website'
 import { convertField, convertToDate } from '@/utils/converts'
 import { sortListByDate } from '@/utils/sorts'
-import type { PropTypeOf, ResumeItem } from '@/utils/types'
 
 function convertResumeList(list: ResumeItem[]): PropTypeOf<typeof ResumeCard>[] {
   return sortListByDate(

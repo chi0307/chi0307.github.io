@@ -1,7 +1,7 @@
 import { v7 as uuidv7 } from 'uuid'
 
+import type { URL, UUID } from '@/types'
 import { isUuid } from '@/utils/checkTyping'
-import type { URL, UUID } from '@/utils/types'
 
 export function redirect(url: URL): void {
   window.open(url, '_self')

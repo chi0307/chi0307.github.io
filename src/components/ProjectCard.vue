@@ -26,7 +26,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { URL } from '@/utils/types'
+import type { URL } from '@/types'
 
 const { description, previewUrl, link, image, deprecated } = defineProps<{
   description: string

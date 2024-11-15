@@ -25,7 +25,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import type { URL } from '@/utils/types'
+import type { URL } from '@/types'
 import { redirectNewWindow } from '@/utils'
 interface SocialMediaItem {
   iconClass: string

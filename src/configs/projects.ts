@@ -1,4 +1,4 @@
-import type { ProjectItem } from '@/utils/types'
+import type { ProjectItem } from '@/types/website'
 
 export const projects: ProjectItem[] = [
   {

@@ -1,6 +1,6 @@
 import { createIs } from 'typia'
 
-import type { UUID } from '@/utils/types'
+import type { UUID } from '@/types'
 
 export const isNumber = createIs<number>()
 export const isString = createIs<string>()

@@ -31,7 +31,7 @@
 import { storeToRefs } from 'pinia'
 
 import { useLayoutStore } from '@/stores/layoutStore'
-import type { SkillGroup } from '@/utils/types'
+import type { SkillGroup } from '@/types/website'
 
 defineProps<{
   list: SkillGroup[]

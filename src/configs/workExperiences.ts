@@ -1,4 +1,4 @@
-import type { ResumeItem } from '@/utils/types'
+import type { ResumeItem } from '@/types/website'
 
 export const workExperiences: ResumeItem[] = [
   {

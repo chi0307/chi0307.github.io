@@ -1,6 +1,6 @@
 import typia from 'typia'
 
-import type { UUID } from '@/utils/types'
+import type { UUID } from '@/types'
 import { errorEvent, isTruthyString } from '@/utils'
 
 export interface AverageExchangeRateItem {

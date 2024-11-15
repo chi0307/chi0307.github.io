@@ -128,12 +128,12 @@
 import { format } from 'date-fns'
 import { computed, onMounted, ref, watch } from 'vue'
 
+import type { UUID } from '@/types'
+import { generateUuid, isTruthyString, roundNumber } from '@/utils'
 import { isNumber, isUuid } from '@/utils/checkTyping'
 import { convertField, convertToDate } from '@/utils/converts'
 import { sortListByDate } from '@/utils/sorts'
 import { localStorageManager } from '@/utils/StorageManager'
-import type { UUID } from '@/utils/types'
-import { generateUuid, isTruthyString, roundNumber } from '@/utils'
 
 import {
   type AverageExchangeRateItem,
