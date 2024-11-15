@@ -20,8 +20,6 @@
         <v-text-field
           :model-value="currentAmount"
           :label="`剩餘${foreignCurrencyString}`"
-          validate-on="invalid-input"
-          :rules="[isNumber]"
           type="number"
           hide-details="auto"
           inputmode="decimal"
@@ -133,7 +131,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 
 import type { UUID } from '@/types'
 import { generateUuid, isTruthyString, roundNumber } from '@/utils'
-import { isNumber, isUuid } from '@/utils/checkTyping'
+import { isUuid } from '@/utils/checkTyping'
 import { convertField, convertToDate } from '@/utils/converts'
 import { sortListByDate } from '@/utils/sorts'
 import { localStorageManager } from '@/utils/StorageManager'
