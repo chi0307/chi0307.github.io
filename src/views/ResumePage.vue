@@ -2,7 +2,7 @@
   <section class="relative flex-center flex-col px-24px gap-24px py-32px">
     <p class="card-title">Work Experiences</p>
     <ResumeCard
-      v-for="(item, index) of convertResumeList(workExperiences)"
+      v-for="(item, index) of sortListByField(workExperiences, 'startMonth', 'desc')"
       :key="index"
       :start-month="item.startMonth"
       :end-month="item.endMonth"
@@ -13,7 +13,7 @@
     />
     <p class="card-title">Educations</p>
     <ResumeCard
-      v-for="(item, index) of convertResumeList(educations)"
+      v-for="(item, index) of sortListByField(educations, 'startMonth', 'desc')"
       :key="index"
       :start-month="item.startMonth"
       :end-month="item.endMonth"
@@ -32,18 +32,7 @@ import SkillGroupCard from '@/components/SkillGroupCard.vue'
 import { educations } from '@/configs/educations'
 import { skillGroups } from '@/configs/skillGroups'
 import { workExperiences } from '@/configs/workExperiences'
-import type { PropTypeOf } from '@/types'
-import type { ResumeItem } from '@/types/website'
-import { convertField, convertToDate } from '@/utils/converts'
-import { sortListByDate } from '@/utils/sorts'
-
-function convertResumeList(list: ResumeItem[]): PropTypeOf<typeof ResumeCard>[] {
-  return sortListByDate(
-    convertField(convertField(list, 'startMonth', convertToDate), 'endMonth', convertToDate),
-    'startMonth',
-    'desc'
-  )
-}
+import { sortListByField } from '@/utils/sorts'
 </script>
 <style scoped>
 .card-title {

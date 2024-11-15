@@ -12,9 +12,7 @@
         'gap-4px': isMobile
       }"
     >
-      <p class="text-1.5rem text-emphasis">
-        {{ formatDate(startMonth) }} ~ {{ formatDate(endMonth) }}
-      </p>
+      <p class="text-1.5rem text-emphasis">{{ startMonth }} ~ {{ endMonth ?? '' }}</p>
       <p>{{ title }}</p>
       <p style="color: #666">{{ subTitle }}</p>
     </div>
@@ -31,22 +29,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { format } from 'date-fns'
 import { storeToRefs } from 'pinia'
 
 import { useLayoutStore } from '@/stores/layoutStore'
 
 const { startMonth, endMonth, title, subTitle, description } = defineProps<{
-  startMonth: Date
-  endMonth: Date | null
+  startMonth: `${number}/${number}`
+  endMonth: `${number}/${number}` | null
   title: string
   subTitle: string
   description: string
 }>()
-
-function formatDate(date: Date | null): string {
-  return date !== null ? format(date, 'yyyy/MM/dd') : ''
-}
 
 const { isDesktop, isMobile } = storeToRefs(useLayoutStore())
 </script>
