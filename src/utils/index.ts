@@ -27,12 +27,24 @@ export function generateUuid(): UUID {
   return id
 }
 
-export function errorEvent(message: string, error: unknown): void {
-  if (error instanceof Error) {
-    alert(`${message}, error: ${error.message}`)
+export function errorEvent(
+  message: string,
+  {
+    error = null,
+    type = 'console.error'
+  }: {
+    error?: unknown
+    type?: 'console.error' | 'alert'
+  } = {}
+): void {
+  const event: (text: string) => void = type === 'console.error' ? console.error : alert
+  if (error === null) {
+    event(message)
+  } else if (error instanceof Error) {
+    event(`${message}, error: ${error.message}`)
   } else {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    alert(`${message}, unknown: ${error}`)
+    event(`${message}, unknown: ${error}`)
   }
 }
 

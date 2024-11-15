@@ -25,9 +25,9 @@ class StorageManager<StorageTyping extends Record<string, unknown>> {
       if (this.typeChecker[key](data)) {
         return data
       }
-      console.error(`storage ${key} check typing failed`)
+      errorEvent(`storage ${key} check typing failed`)
     } catch (error) {
-      errorEvent(`storage ${key} parse failed`, error)
+      errorEvent(`storage ${key} parse failed`, { error, type: 'alert' })
     }
     return null
   }

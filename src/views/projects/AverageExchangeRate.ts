@@ -44,7 +44,7 @@ export function formatCurrency(
         minimumFractionDigits: 0
       })
     } catch (error) {
-      errorEvent('parse currency and locale failed', error)
+      errorEvent('parse currency and locale failed', { error })
     }
   }
   try {
@@ -52,7 +52,42 @@ export function formatCurrency(
       return amount.toLocaleString(locale)
     }
   } catch (error) {
-    errorEvent('parse locale failed', error)
+    errorEvent('parse locale failed', { error })
   }
   return amount.toLocaleString()
+}
+
+export function checkFormatCurrency({
+  locale,
+  localCurrencyCode,
+  foreignCurrencyCode
+}: Record<'locale' | 'localCurrencyCode' | 'foreignCurrencyCode', string>): void {
+  const amount = 0
+  try {
+    if (isTruthyString(locale)) {
+      amount.toLocaleString(locale)
+      if (isTruthyString(localCurrencyCode)) {
+        try {
+          amount.toLocaleString(locale, {
+            style: 'currency',
+            currency: localCurrencyCode
+          })
+        } catch (error) {
+          errorEvent('本幣代碼錯誤', { error, type: 'alert' })
+        }
+      }
+      if (isTruthyString(foreignCurrencyCode)) {
+        try {
+          amount.toLocaleString(locale, {
+            style: 'currency',
+            currency: foreignCurrencyCode
+          })
+        } catch (error) {
+          errorEvent('外幣代碼錯誤', { error, type: 'alert' })
+        }
+      }
+    }
+  } catch (error) {
+    errorEvent('語系代碼錯誤', { error, type: 'alert' })
+  }
 }

@@ -112,7 +112,7 @@
       <template #actions>
         <div class="flex items-center justify-between w-full">
           <v-btn text="Delete" @click="deleteTabEvent(selectedTab)" />
-          <v-btn text="Save" @click="editTabEvent" />
+          <v-btn text="Save" @click="saveTabEvent" />
         </div>
       </template>
     </v-card>
@@ -143,7 +143,8 @@ import {
   type AverageExchangeRateData,
   type AverageExchangeRateGroup,
   initAverageExchangeRateData,
-  formatCurrency
+  formatCurrency,
+  checkFormatCurrency
 } from './AverageExchangeRate'
 
 interface DataRow {
@@ -342,11 +343,12 @@ watch(showEditTabDialog, () => {
   }
 })
 
-function editTabEvent(): void {
+function saveTabEvent(): void {
   if (editTab.value === null) {
     return
   }
   const { title, localCurrencyCode, foreignCurrencyCode, locale } = editTab.value
+  checkFormatCurrency({ locale, localCurrencyCode, foreignCurrencyCode })
   update('title', title)
   update('localCurrencyCode', isTruthyString(localCurrencyCode) ? localCurrencyCode : null)
   update('foreignCurrencyCode', isTruthyString(foreignCurrencyCode) ? foreignCurrencyCode : null)
