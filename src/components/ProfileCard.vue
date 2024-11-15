@@ -25,10 +25,11 @@
   </div>
 </template>
 <script lang="ts" setup>
+import type { URL } from '@/utils/types'
 import { redirectNewWindow } from '@/utils/utils'
 interface SocialMediaItem {
   iconClass: string
-  redirectUrl: `https://${string}`
+  redirectUrl: URL
 }
 const socialMediaList: SocialMediaItem[] = [
   { iconClass: 'fa-brands fa-instagram', redirectUrl: 'https://www.instagram.com/benson0307' },
