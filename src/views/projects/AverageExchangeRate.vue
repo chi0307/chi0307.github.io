@@ -20,14 +20,10 @@
         <v-text-field
           :model-value="currentAmount"
           :label="`剩餘${foreignCurrencyString}`"
-          type="number"
           hide-details="auto"
           inputmode="decimal"
           @update:model-value="
-            (newValue: string) => {
-              const newAmount = parseInt(newValue)
-              update('amount', isNaN(newAmount) ? 0 : newAmount)
-            }
+            (newValue: string) => update('amount', checkNumberAndReturn(newValue))
           "
         />
       </div>
@@ -57,18 +53,20 @@
           label="交易日期"
         />
         <v-text-field
-          v-model.number="addItem.sell"
-          type="number"
+          :model-value="addItem.sell"
           hide-details="auto"
           inputmode="decimal"
           :label="`賣出${localCurrencyString}`"
+          @update:model-value="
+            (newValue: string) => (addItem.sell = checkNumberAndReturn(newValue))
+          "
         />
         <v-text-field
-          v-model.number="addItem.buy"
-          type="number"
+          :model-value="addItem.buy"
           hide-details="auto"
           inputmode="decimal"
           :label="`買入${foreignCurrencyString}`"
+          @update:model-value="(newValue: string) => (addItem.buy = checkNumberAndReturn(newValue))"
         />
         <v-text-field
           hide-details="auto"
@@ -381,5 +379,10 @@ function deleteTabEvent(id: UUID | null): void {
       showEditTabDialog.value = false
     }
   }
+}
+
+function checkNumberAndReturn(newValue: string): number {
+  const newNumber = parseFloat(newValue)
+  return isNaN(newNumber) ? 0 : newNumber
 }
 </script>
