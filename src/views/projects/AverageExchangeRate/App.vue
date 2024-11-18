@@ -141,7 +141,7 @@ import {
   initAverageExchangeRateData,
   formatCurrency,
   checkFormatCurrency
-} from './AverageExchangeRate'
+} from '.'
 
 interface DataRow {
   id: UUID
