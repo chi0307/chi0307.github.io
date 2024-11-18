@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "clear": "sh clear.sh",
-    "generate-pages": "sh ./generate-pages.sh",
+    "generate-pages": "pnpm run clear && sh ./generate-pages.sh",
     "build": "pnpm run generate-pages && run-p check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
