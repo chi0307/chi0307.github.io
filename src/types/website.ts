@@ -15,7 +15,7 @@ export interface SkillGroup {
 
 export interface ProjectItem {
   description: string
-  image: string
+  image: `${string}.webp`
   previewUrl: URL | null
   link: {
     title: string
