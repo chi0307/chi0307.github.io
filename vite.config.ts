@@ -24,8 +24,11 @@ export default defineConfig({
     rollupOptions: {
       input,
       output: {
-        entryFileNames: '[name]/index.js',
-        assetFileNames: '[name].[ext]'
+        sourcemap: true,
+        format: 'es',
+        entryFileNames: '[name]/index-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+        dir: 'dist'
       }
     }
   },
