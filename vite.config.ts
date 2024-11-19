@@ -26,7 +26,7 @@ export default defineConfig({
       output: {
         sourcemap: true,
         format: 'es',
-        entryFileNames: '[name]/index-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
         dir: 'dist'
       }
