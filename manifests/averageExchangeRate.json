@@ -15,7 +15,7 @@
       "type": "image/png"
     }
   ],
-  "name": "外幣匯率",
-  "short_name": "外幣匯率",
+  "name": "外幣平均匯率",
+  "short_name": "外幣平均匯率",
   "theme_color": "#ffffff"
 }
