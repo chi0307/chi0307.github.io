@@ -113,8 +113,11 @@
       </template>
       <template #actions>
         <div class="flex items-center justify-between w-full">
-          <v-btn text="Delete" @click="deleteTabEvent(selectedTab)" />
-          <v-btn text="Save" @click="saveTabEvent" />
+          <v-btn text="Delete" color="red" @click="deleteTabEvent(selectedTab)" />
+          <div>
+            <v-btn text="Cancel" @click="showEditTabDialog = false" />
+            <v-btn text="Save" color="blue" @click="saveTabEvent" />
+          </div>
         </div>
       </template>
     </v-card>
@@ -124,7 +127,7 @@
       <template #text> {{ deleteData?.message ?? '' }} </template>
       <template #actions>
         <v-btn class="ms-auto" text="Cancel" @click="deleteData = null" />
-        <v-btn class="ms-auto" text="Delete" @click="deleteData?.event" />
+        <v-btn class="ms-auto" color="red" text="Delete" @click="deleteData?.event" />
       </template>
     </v-card>
   </v-dialog>
@@ -336,8 +339,11 @@ function update<Key extends keyof AverageExchangeRateData>(
   localStorageManager.set('averageExchangeRate', restoreData.value)
 }
 
-watch(showEditTabDialog, () => {
-  if (currentData.value !== null) {
+watch(showEditTabDialog, (show) => {
+  if (!show) {
+    editTab.value = null
+    return
+  } else if (currentData.value !== null) {
     editTab.value = {
       title: currentData.value.title,
       localCurrencyCode: currentData.value.localCurrencyCode ?? '',
