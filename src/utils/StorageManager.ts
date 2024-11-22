@@ -1,4 +1,4 @@
-import { errorEvent } from '@/utils'
+import { errorHandle } from '@/utils'
 import {
   isAverageExchangeRateGroup,
   type AverageExchangeRateGroup
@@ -25,9 +25,9 @@ class StorageManager<StorageTyping extends Record<string, unknown>> {
       if (this.typeChecker[key](data)) {
         return data
       }
-      errorEvent(`storage ${key} check typing failed`)
+      errorHandle(`storage ${key} check typing failed`)
     } catch (error) {
-      errorEvent(`storage ${key} parse failed`, { error, type: 'alert' })
+      errorHandle(`storage ${key} parse failed`, { error, type: 'alert' })
     }
     return null
   }

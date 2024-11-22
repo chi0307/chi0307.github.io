@@ -1,7 +1,7 @@
 import typia from 'typia'
 
 import type { UUID } from '@/types'
-import { errorEvent, isTruthyString } from '@/utils'
+import { errorHandle, isTruthyString } from '@/utils'
 
 export interface AverageExchangeRateItem {
   id: UUID
@@ -44,7 +44,7 @@ export function formatCurrency(
         minimumFractionDigits: 0
       })
     } catch (error) {
-      errorEvent('parse currency and locale failed', { error })
+      errorHandle('parse currency and locale failed', { error })
     }
   }
   try {
@@ -52,7 +52,7 @@ export function formatCurrency(
       return amount.toLocaleString(locale)
     }
   } catch (error) {
-    errorEvent('parse locale failed', { error })
+    errorHandle('parse locale failed', { error })
   }
   return amount.toLocaleString()
 }
@@ -73,7 +73,7 @@ export function checkFormatCurrency({
             currency: localCurrencyCode
           })
         } catch (error) {
-          errorEvent('本幣代碼錯誤', { error, type: 'alert' })
+          errorHandle('本幣代碼錯誤', { error, type: 'alert' })
         }
       }
       if (isTruthyString(foreignCurrencyCode)) {
@@ -83,11 +83,11 @@ export function checkFormatCurrency({
             currency: foreignCurrencyCode
           })
         } catch (error) {
-          errorEvent('外幣代碼錯誤', { error, type: 'alert' })
+          errorHandle('外幣代碼錯誤', { error, type: 'alert' })
         }
       }
     }
   } catch (error) {
-    errorEvent('語系代碼錯誤', { error, type: 'alert' })
+    errorHandle('語系代碼錯誤', { error, type: 'alert' })
   }
 }

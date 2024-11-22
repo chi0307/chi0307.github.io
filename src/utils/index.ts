@@ -27,7 +27,7 @@ export function generateUuid(): UUID {
   return id
 }
 
-export function errorEvent(
+export function errorHandle(
   message: string,
   {
     error = null,
