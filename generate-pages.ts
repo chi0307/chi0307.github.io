@@ -4,12 +4,12 @@ import * as fs from 'fs'
 import { promises } from 'fs'
 import * as path from 'path'
 
-import { Route } from './src/router/route'
+import { AllRoute } from './src/router/route'
 
 const template = fs.readFileSync('index.html', 'utf-8')
 
 async function main(): Promise<void> {
-  for (const route of Object.values(Route)) {
+  for (const route of Object.values(AllRoute)) {
     const fileName = route.replace(/^\//, '')
     if (fileName === '') {
       continue
