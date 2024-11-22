@@ -24,7 +24,7 @@ export function initAverageExchangeRateData(): AverageExchangeRateData {
     amount: 0,
     localCurrencyCode: null,
     foreignCurrencyCode: null,
-    locale: null
+    locale: null,
   }
 }
 
@@ -34,14 +34,14 @@ export const isAverageExchangeRateGroup = typia.createIs<AverageExchangeRateGrou
 export function formatCurrency(
   amount: number,
   locale: string | null | undefined,
-  currency: string | null | undefined
+  currency: string | null | undefined,
 ): string {
   if (isTruthyString(currency) && isTruthyString(locale)) {
     try {
       return amount.toLocaleString(locale, {
         style: 'currency',
         currency,
-        minimumFractionDigits: 0
+        minimumFractionDigits: 0,
       })
     } catch (error) {
       errorHandle('parse currency and locale failed', { error })
@@ -60,7 +60,7 @@ export function formatCurrency(
 export function checkFormatCurrency({
   locale,
   localCurrencyCode,
-  foreignCurrencyCode
+  foreignCurrencyCode,
 }: Record<'locale' | 'localCurrencyCode' | 'foreignCurrencyCode', string>): void {
   const amount = 0
   try {
@@ -70,7 +70,7 @@ export function checkFormatCurrency({
         try {
           amount.toLocaleString(locale, {
             style: 'currency',
-            currency: localCurrencyCode
+            currency: localCurrencyCode,
           })
         } catch (error) {
           errorHandle('本幣代碼錯誤', { error, type: 'alert' })
@@ -80,7 +80,7 @@ export function checkFormatCurrency({
         try {
           amount.toLocaleString(locale, {
             style: 'currency',
-            currency: foreignCurrencyCode
+            currency: foreignCurrencyCode,
           })
         } catch (error) {
           errorHandle('外幣代碼錯誤', { error, type: 'alert' })

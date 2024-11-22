@@ -1,7 +1,7 @@
 import { errorHandle } from '@/utils'
 import {
   isAverageExchangeRateGroup,
-  type AverageExchangeRateGroup
+  type AverageExchangeRateGroup,
 } from '@/views/projects/AverageExchangeRate'
 
 class StorageManager<StorageTyping extends Record<string, unknown>> {
@@ -14,7 +14,7 @@ class StorageManager<StorageTyping extends Record<string, unknown>> {
   }
 
   public get<Key extends Extract<keyof StorageTyping, string>>(
-    key: Key
+    key: Key,
   ): StorageTyping[Key] | null {
     const sourceData = this.storage.getItem(key)
     if (sourceData === null) {
@@ -34,7 +34,7 @@ class StorageManager<StorageTyping extends Record<string, unknown>> {
 
   public set<Key extends Extract<keyof StorageTyping, string>>(
     key: Key,
-    value: StorageTyping[Key]
+    value: StorageTyping[Key],
   ): void {
     if (!this.typeChecker[key](value)) {
       throw new Error(`Type error: Invalid data type for key "${key}"`)
@@ -54,7 +54,7 @@ type TypeChecker<StorageTyping> = {
 export const localStorageManager = new StorageManager<{
   averageExchangeRate: AverageExchangeRateGroup
 }>(localStorage, {
-  averageExchangeRate: isAverageExchangeRateGroup
+  averageExchangeRate: isAverageExchangeRateGroup,
 })
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

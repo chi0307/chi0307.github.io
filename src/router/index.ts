@@ -10,28 +10,28 @@ const router = createRouter({
     {
       name: Route.Home,
       path: Route.Home,
-      redirect: Route.AboutMe
+      redirect: Route.AboutMe,
     },
     {
       component: () => import('@/views/AboutMePage.vue'),
       name: Route.AboutMe,
-      path: Route.AboutMe
+      path: Route.AboutMe,
     },
     {
       component: () => import('@/views/ProjectsPage.vue'),
       name: Route.Projects,
-      path: Route.Projects
+      path: Route.Projects,
     },
     {
       component: () => import('@/views/ResumePage.vue'),
       name: Route.Resume,
-      path: Route.Resume
+      path: Route.Resume,
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: Route.Home
-    }
-  ]
+      redirect: Route.Home,
+    },
+  ],
 })
 
 export default router

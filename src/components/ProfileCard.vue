@@ -34,6 +34,6 @@ interface SocialMediaItem {
 const socialMediaList: SocialMediaItem[] = [
   { iconClass: 'fa-brands fa-instagram', redirectUrl: 'https://www.instagram.com/benson0307' },
   { iconClass: 'fa-brands fa-github', redirectUrl: 'https://github.com/chi0307' },
-  { iconClass: 'fa-brands fa-bitbucket', redirectUrl: 'https://bitbucket.org/junchi_0307' }
+  { iconClass: 'fa-brands fa-bitbucket', redirectUrl: 'https://bitbucket.org/junchi_0307' },
 ]
 </script>

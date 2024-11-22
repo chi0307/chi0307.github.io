@@ -2,14 +2,14 @@
   <div
     :class="{
       'min-h-300px': isDesktop,
-      'flex-col gap-8px': isMobile
+      'flex-col gap-8px': isMobile,
     }"
   >
     <div
       class="flex-col"
       :class="{
         'w-40% py-32px gap-16px': isDesktop,
-        'gap-4px': isMobile
+        'gap-4px': isMobile,
       }"
     >
       <p class="text-1.5rem text-emphasis">{{ startMonth }} ~ {{ endMonth ?? '' }}</p>
@@ -20,7 +20,7 @@
     <!-- eslint-disable vue/no-v-html -->
     <div
       :class="{
-        'w-60% py-32px pl-16px': isDesktop
+        'w-60% py-32px pl-16px': isDesktop,
       }"
       class="text-0.9rem line-height-180%"
       v-html="description"

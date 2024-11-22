@@ -7,7 +7,7 @@
         ref="main"
         class="w-full overflow-x-hidden overflow-y-auto"
         :style="{
-          height: `calc(100% - ${headerHeight}px)`
+          height: `calc(100% - ${headerHeight}px)`,
         }"
       >
         <RouterView class="min-h-full" />

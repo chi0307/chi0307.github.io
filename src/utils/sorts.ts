@@ -1,7 +1,7 @@
 export function sortListByField<T extends object>(
   list: T[],
   sortBy: keyof T,
-  direction: 'asc' | 'desc'
+  direction: 'asc' | 'desc',
 ): T[] {
   type SortEvent = (aItem: T, bItem: T) => 1 | -1 | 0
   let sortEvent: SortEvent
@@ -24,7 +24,7 @@ export function sortListByField<T extends object>(
 export function sortListByDate<T extends object, D extends keyof T>(
   list: T[],
   sortBy: D & (T[D] extends Date ? D : never), // 限制 D 的型別
-  direction: 'asc' | 'desc'
+  direction: 'asc' | 'desc',
 ): T[] {
   return sortListByField(list, sortBy, direction)
 }

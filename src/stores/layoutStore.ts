@@ -57,6 +57,6 @@ export const useLayoutStore = defineStore('layout', () => {
     checkIsCurrentPage,
     checkIsParentPage,
     pushRoute,
-    isSideProjectsPage
+    isSideProjectsPage,
   }
 })

@@ -14,7 +14,7 @@ const input = Object.fromEntries([
     .map((route) => {
       const pageName = route.replace(/^\//, '')
       return [pageName, `${pageName}.html`] as const
-    })
+    }),
 ])
 
 // https://vitejs.dev/config/
@@ -28,14 +28,14 @@ export default defineConfig({
         format: 'es',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
-        dir: 'dist'
-      }
-    }
+        dir: 'dist',
+      },
+    },
   },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@themes': fileURLToPath(new URL('./themes', import.meta.url))
-    }
-  }
+      '@themes': fileURLToPath(new URL('./themes', import.meta.url)),
+    },
+  },
 })

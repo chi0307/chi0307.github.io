@@ -9,7 +9,7 @@ export type ConvertData<T, I, O> = T extends I
         : T
 
 export function convertToDate<T extends string | null | undefined>(
-  data: T
+  data: T,
 ): ConvertData<T, string, Date> {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
   return (typeof data === 'string' ? new Date(data) : data) as any
@@ -18,7 +18,7 @@ export function convertToDate<T extends string | null | undefined>(
 export function convertField<T extends object, K extends keyof T, V>(
   list: T[],
   field: K,
-  convertToAny: (value: T[K]) => V
+  convertToAny: (value: T[K]) => V,
 ): (Omit<T, K> & Record<K, V>)[] {
   return list.map((item) => {
     const newItem = { ...item, [field]: convertToAny(item[field]) } as Omit<T, K> & Record<K, V>

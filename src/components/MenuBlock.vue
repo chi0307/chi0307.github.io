@@ -14,7 +14,7 @@
       <p
         class="text-1.3rem"
         :class="{
-          'text-emphasis': checkIsParentPage(item.route)
+          'text-emphasis': checkIsParentPage(item.route),
         }"
       >
         {{ item.title }}

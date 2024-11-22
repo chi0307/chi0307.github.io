@@ -7,14 +7,14 @@ export interface PageItem {
 export const pageList: PageItem[] = [
   {
     title: 'About Me',
-    route: Route.AboutMe
+    route: Route.AboutMe,
   },
   {
     title: 'Resume',
-    route: Route.Resume
+    route: Route.Resume,
   },
   {
     title: 'Projects',
-    route: Route.Projects
-  }
+    route: Route.Projects,
+  },
 ]

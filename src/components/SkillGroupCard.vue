@@ -6,7 +6,7 @@
       class="flex-col"
       :class="{
         'gap-16px p-20px': isDesktop,
-        'gap-8px py-10px': isMobile
+        'gap-8px py-10px': isMobile,
       }"
     >
       <p class="text-1.4rem font-700">{{ title }}</p>
@@ -14,7 +14,7 @@
         class="grid"
         :class="{
           'grid-cols-2 gap-16px': isDesktop,
-          'gap-12px': isMobile
+          'gap-12px': isMobile,
         }"
       >
         <div v-for="(skill, index2) of skills" :key="index2" class="flex items-center">

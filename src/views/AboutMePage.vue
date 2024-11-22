@@ -4,13 +4,13 @@
       class="left-0 bg-deep-primary top-0 absolute"
       :class="{
         'h-full w-35%': isDesktop,
-        'h-300px w-full': isMobile
+        'h-300px w-full': isMobile,
       }"
     />
     <div
       class="flex z-1 m-36px"
       :class="{
-        'flex-col': isMobile
+        'flex-col': isMobile,
       }"
     >
       <ProfileCard class="item-card" />

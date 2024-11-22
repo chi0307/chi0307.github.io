@@ -4,5 +4,5 @@ export enum Route {
   Projects = '/projects',
   Resume = '/resume',
 
-  ProjectsAverageExchangeRate = '/projects/averageExchangeRate'
+  ProjectsAverageExchangeRate = '/projects/averageExchangeRate',
 }

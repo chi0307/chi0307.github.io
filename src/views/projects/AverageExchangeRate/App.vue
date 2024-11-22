@@ -140,7 +140,7 @@ import {
   type AverageExchangeRateGroup,
   initAverageExchangeRateData,
   formatCurrency,
-  checkFormatCurrency
+  checkFormatCurrency,
 } from '.'
 
 interface DataRow {
@@ -169,14 +169,14 @@ const headers = computed(
         key: 'sell',
         nowrap: true,
         sortable: false,
-        align: 'end'
+        align: 'end',
       },
       {
         title: `買入${foreignCurrencyString.value}`,
         key: 'buy',
         nowrap: true,
         sortable: false,
-        align: 'end'
+        align: 'end',
       },
       { title: '匯率', key: 'exchangeRate', nowrap: true, sortable: false },
       {
@@ -184,13 +184,13 @@ const headers = computed(
         key: 'balance',
         nowrap: true,
         sortable: false,
-        align: 'end'
+        align: 'end',
       },
       {
         key: 'actions',
-        sortable: false
-      }
-    ] as const
+        sortable: false,
+      },
+    ] as const,
 )
 
 const rows = computed((): TableRow[] => {
@@ -199,18 +199,18 @@ const rows = computed((): TableRow[] => {
     sell: formatCurrency(
       item.sell,
       currentData.value?.locale,
-      currentData.value?.localCurrencyCode
+      currentData.value?.localCurrencyCode,
     ),
     buy: formatCurrency(
       item.buy,
       currentData.value?.locale,
-      currentData.value?.foreignCurrencyCode
+      currentData.value?.foreignCurrencyCode,
     ),
     balance: formatCurrency(
       item.balance,
       currentData.value?.locale,
-      currentData.value?.foreignCurrencyCode
-    )
+      currentData.value?.foreignCurrencyCode,
+    ),
   }))
 })
 const dataRows = computed((): DataRow[] => {
@@ -225,9 +225,9 @@ const dataRows = computed((): DataRow[] => {
         sell: item.sell,
         buy: item.buy,
         exchangeRate: roundNumber(item.sell / item.buy, 4),
-        balance
+        balance,
       }
-    }
+    },
   )
 })
 const averageRate = computed((): number => {
@@ -247,7 +247,7 @@ const showEditTabDialog = ref(false)
 const selectedTab = ref<UUID | null>(null)
 const restoreData = ref<AverageExchangeRateGroup>({})
 const currentData = computed((): AverageExchangeRateData | null =>
-  selectedTab.value !== null ? (restoreData.value[selectedTab.value] ?? null) : null
+  selectedTab.value !== null ? (restoreData.value[selectedTab.value] ?? null) : null,
 )
 const currentList = computed((): AverageExchangeRateItem[] => currentData.value?.list ?? [])
 const currentAmount = computed((): number => currentData.value?.amount ?? 0)
@@ -257,12 +257,12 @@ const tabs = computed((): { id: string; title: string }[] => {
 const localCurrencyString = computed(() =>
   isTruthyString(currentData.value?.localCurrencyCode)
     ? ` ${currentData.value.localCurrencyCode}`
-    : '本幣'
+    : '本幣',
 )
 const foreignCurrencyString = computed(() =>
   isTruthyString(currentData.value?.foreignCurrencyCode)
     ? ` ${currentData.value.foreignCurrencyCode}`
-    : '外幣'
+    : '外幣',
 )
 
 onMounted(() => {
@@ -287,7 +287,7 @@ function resetItem(): Omit<AverageExchangeRateItem, 'id'> {
   return {
     sell: 0,
     buy: 0,
-    date: format(new Date(), "yyyy-MM-dd'T'HH:mm")
+    date: format(new Date(), "yyyy-MM-dd'T'HH:mm"),
   }
 }
 
@@ -317,7 +317,7 @@ function addTab(): void {
 
 function update<Key extends keyof AverageExchangeRateData>(
   key: Key,
-  value: AverageExchangeRateData[Key]
+  value: AverageExchangeRateData[Key],
 ): void {
   if (selectedTab.value === null) {
     return
@@ -334,7 +334,7 @@ watch(showEditTabDialog, () => {
       title: currentData.value.title,
       localCurrencyCode: currentData.value.localCurrencyCode ?? '',
       foreignCurrencyCode: currentData.value.foreignCurrencyCode ?? '',
-      locale: currentData.value.locale ?? ''
+      locale: currentData.value.locale ?? '',
     }
   }
 })
@@ -359,10 +359,10 @@ function deleteItemEvent({ id }: TableRow): void {
     event: (): void => {
       update(
         'list',
-        [...currentList.value].filter((item) => item.id !== id)
+        [...currentList.value].filter((item) => item.id !== id),
       )
       deleteData.value = null
-    }
+    },
   }
 }
 function deleteTabEvent(id: UUID | null): void {
@@ -377,7 +377,7 @@ function deleteTabEvent(id: UUID | null): void {
       checkAndResetTab()
       deleteData.value = null
       showEditTabDialog.value = false
-    }
+    },
   }
 }
 

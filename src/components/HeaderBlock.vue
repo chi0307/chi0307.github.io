@@ -4,10 +4,10 @@
     :class="{
       'px-64px': isDesktop,
       'px-16px': isMobile,
-      'shadow-header': headerShadow
+      'shadow-header': headerShadow,
     }"
     :style="{
-      height: `${headerHeight}px`
+      height: `${headerHeight}px`,
     }"
   >
     <p class="font-bold text-1.5rem">Website</p>
@@ -17,7 +17,7 @@
         :key="index"
         class="cursor-pointer"
         :class="{
-          'text-emphasis': checkIsParentPage(item.route)
+          'text-emphasis': checkIsParentPage(item.route),
         }"
         @click="pushRoute(item.route)"
       >

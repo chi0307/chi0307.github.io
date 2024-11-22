@@ -17,10 +17,10 @@ export function createBaseApp(component: Component): App<Element> {
       defaultTheme: 'custom',
       themes: {
         custom: {
-          colors
-        }
-      }
-    }
+          colors,
+        },
+      },
+    },
   })
   app.use(vuetify)
 

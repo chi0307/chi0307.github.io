@@ -7,15 +7,15 @@ export const projects: ProjectItem[] = [
     previewUrl: 'https://chi0307.github.io/website-legacy-by-2024-10/side/chatbot-json-toolbox/',
     link: {
       title: '套件',
-      url: 'https://www.npmjs.com/package/@chi0307/transform-chatbot-message'
-    }
+      url: 'https://www.npmjs.com/package/@chi0307/transform-chatbot-message',
+    },
   },
   {
     description:
       '簡單的一個 chatbot 呈現畫面，<br/>嘗試用 PWA、Vue 3.0、TS 開發，<br/>目前僅用假資料，無串接後台。',
     image: '/chatbot-preview.webp',
     previewUrl: 'https://chi0307.github.io/chatbot',
-    link: null
+    link: null,
   },
   {
     description:
@@ -23,6 +23,6 @@ export const projects: ProjectItem[] = [
     image: '/linebot-preview.webp',
     previewUrl: 'https://line.me/R/ti/p/%40tyo2763z',
     link: null,
-    deprecated: true
-  }
+    deprecated: true,
+  },
 ]

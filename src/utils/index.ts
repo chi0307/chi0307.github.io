@@ -31,11 +31,11 @@ export function errorHandle(
   message: string,
   {
     error = null,
-    type = 'console.error'
+    type = 'console.error',
   }: {
     error?: unknown
     type?: 'console.error' | 'alert'
-  } = {}
+  } = {},
 ): void {
   const event: (text: string) => void = type === 'console.error' ? console.error : alert
   if (error === null) {
