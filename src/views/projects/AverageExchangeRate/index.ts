@@ -30,6 +30,7 @@ export function initAverageExchangeRateData(): AverageExchangeRateData {
 
 export type AverageExchangeRateGroup = Record<UUID, AverageExchangeRateData>
 export const isAverageExchangeRateGroup = typia.createIs<AverageExchangeRateGroup>()
+export const isAverageExchangeRateData = typia.createIs<AverageExchangeRateData>()
 
 export function formatCurrency(
   amount: number,

@@ -103,6 +103,12 @@
             label="外幣代碼"
             placeholder="JPY"
           />
+          <v-textarea
+            v-model="editTab.config"
+            :error-messages="configIsValid ? '' : 'json 無效'"
+            label="設定檔"
+            messages="若有修改到設定檔上方其他設定就會忽略"
+          />
         </div>
       </template>
       <template #actions>
@@ -141,6 +147,7 @@ import {
   initAverageExchangeRateData,
   formatCurrency,
   checkFormatCurrency,
+  isAverageExchangeRateData,
 } from '.'
 
 interface DataRow {
@@ -297,6 +304,7 @@ interface EditTab {
   localCurrencyCode: string
   foreignCurrencyCode: string
   locale: string
+  config: string
 }
 const editTab = ref<EditTab | null>(null)
 
@@ -335,6 +343,7 @@ watch(showEditTabDialog, () => {
       localCurrencyCode: currentData.value.localCurrencyCode ?? '',
       foreignCurrencyCode: currentData.value.foreignCurrencyCode ?? '',
       locale: currentData.value.locale ?? '',
+      config: JSON.stringify(currentData.value, null, 2),
     }
   }
 })
@@ -343,12 +352,21 @@ function saveTabEvent(): void {
   if (editTab.value === null) {
     return
   }
-  const { title, localCurrencyCode, foreignCurrencyCode, locale } = editTab.value
-  checkFormatCurrency({ locale, localCurrencyCode, foreignCurrencyCode })
-  update('title', title)
-  update('localCurrencyCode', isTruthyString(localCurrencyCode) ? localCurrencyCode : null)
-  update('foreignCurrencyCode', isTruthyString(foreignCurrencyCode) ? foreignCurrencyCode : null)
-  update('locale', isTruthyString(locale) ? locale : null)
+  const { title, localCurrencyCode, foreignCurrencyCode, locale, config } = editTab.value
+  const configJson = checkAverageExchangeRateConfig(config)
+  if (
+    configJson !== null &&
+    selectedTab.value !== null &&
+    JSON.stringify(configJson) !== JSON.stringify(currentData.value)
+  ) {
+    restoreData.value[selectedTab.value] = configJson
+  } else {
+    checkFormatCurrency({ locale, localCurrencyCode, foreignCurrencyCode })
+    update('title', title)
+    update('localCurrencyCode', isTruthyString(localCurrencyCode) ? localCurrencyCode : null)
+    update('foreignCurrencyCode', isTruthyString(foreignCurrencyCode) ? foreignCurrencyCode : null)
+    update('locale', isTruthyString(locale) ? locale : null)
+  }
   showEditTabDialog.value = false
 }
 
@@ -384,5 +402,25 @@ function deleteTabEvent(id: UUID | null): void {
 function checkNumberAndReturn(newValue: string): number {
   const newNumber = parseFloat(newValue)
   return isNaN(newNumber) ? 0 : newNumber
+}
+
+const configIsValid = ref(true)
+watch(
+  () => editTab.value?.config,
+  (data) => {
+    configIsValid.value = Boolean(checkAverageExchangeRateConfig(data))
+  },
+)
+function checkAverageExchangeRateConfig(data: string | undefined): AverageExchangeRateData | null {
+  if (data === undefined) {
+    return null
+  }
+  let jsonData: unknown
+  try {
+    jsonData = JSON.parse(data)
+  } catch {
+    return null
+  }
+  return isAverageExchangeRateData(jsonData) ? jsonData : null
 }
 </script>
