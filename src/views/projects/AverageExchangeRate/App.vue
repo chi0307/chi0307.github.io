@@ -283,7 +283,6 @@ function checkAndResetTab(): void {
   if (Object.keys(restoreData.value).length === 0) {
     addTab()
   }
-  localStorageManager.set('averageExchangeRate', restoreData.value)
   const tabId = Object.keys(restoreData.value)[0]
   if (isUuid(tabId)) {
     selectedTab.value = tabId
@@ -323,8 +322,15 @@ function addTab(): void {
   const id = generateUuid()
   restoreData.value[id] = initAverageExchangeRateData()
   selectedTab.value = id
-  localStorageManager.set('averageExchangeRate', restoreData.value)
 }
+
+watch(
+  restoreData,
+  () => {
+    localStorageManager.set('averageExchangeRate', restoreData.value)
+  },
+  { deep: true },
+)
 
 function update<Key extends keyof AverageExchangeRateData>(
   key: Key,
@@ -336,7 +342,6 @@ function update<Key extends keyof AverageExchangeRateData>(
   const data: AverageExchangeRateData =
     restoreData.value[selectedTab.value] ?? initAverageExchangeRateData()
   data[key] = value
-  localStorageManager.set('averageExchangeRate', restoreData.value)
 }
 
 watch(showEditTabDialog, (show) => {
