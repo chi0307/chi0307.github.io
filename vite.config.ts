@@ -5,6 +5,7 @@ import UnpluginTypia from '@ryoppippi/unplugin-typia/vite'
 import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import { defineConfig } from 'vite'
+import { VitePWA } from 'vite-plugin-pwa'
 
 import { AllRoute, MiniSideProjectRoute } from './src/router/route'
 
@@ -37,12 +38,23 @@ const input = Object.fromEntries([
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [UnpluginTypia(), vue(), UnoCSS()],
+  plugins: [
+    UnpluginTypia(),
+    vue(),
+    UnoCSS(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,ttf,woff2}'],
+      },
+      manifest: false,
+    }),
+  ],
   build: {
+    sourcemap: true,
     rollupOptions: {
       input,
       output: {
-        sourcemap: true,
         format: 'es',
         entryFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
