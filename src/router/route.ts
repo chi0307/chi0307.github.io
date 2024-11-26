@@ -7,6 +7,7 @@ export enum Route {
 
 export enum MiniSideProjectRoute {
   ProjectsAverageExchangeRate = '/projects/averageExchangeRate',
+  ProjectsTaichungGarbageTruck = '/projects/taichungGarbageTruck',
 }
 
 export const AllRoute = {
