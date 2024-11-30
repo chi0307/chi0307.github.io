@@ -2,7 +2,7 @@ name: Monthly Node.js Package Update
 
 on:
   schedule:
-    - cron: '*/3 * * * *'
+    - cron: '0 0 */7 * *'
   workflow_dispatch:
 
 permissions:
