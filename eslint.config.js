@@ -22,15 +22,15 @@ export default tsEslint.config(
     plugins: {
       '@typescript-eslint': tsEslint.plugin,
       'import-x': importX,
-      perfectionist
+      perfectionist,
     },
     settings: {
       'import-x/resolver': {
         typescript: {
           alwaysTryTypes: true,
-          project: ['**/tsconfig.json', '**/tsconfig.*.json']
-        }
-      }
+          project: ['**/tsconfig.json', '**/tsconfig.*.json'],
+        },
+      },
     },
     languageOptions: {
       parserOptions: {
@@ -38,8 +38,8 @@ export default tsEslint.config(
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
         parser: '@typescript-eslint/parser',
-        project: './tsconfig.app.json'
-      }
+        project: './tsconfig.app.json',
+      },
     },
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'error',
@@ -52,8 +52,8 @@ export default tsEslint.config(
           caughtErrorsIgnorePattern: '^_',
           destructuredArrayIgnorePattern: '^_',
           varsIgnorePattern: '^_',
-          ignoreRestSiblings: true
-        }
+          ignoreRestSiblings: true,
+        },
       ],
       'perfectionist/sort-imports': [
         'error',
@@ -65,30 +65,30 @@ export default tsEslint.config(
             ['internal-type', 'internal'],
             ['parent-type', 'parent', 'sibling-type', 'sibling'],
             'object',
-            'unknown'
+            'unknown',
           ],
-          internalPattern: ['@/**']
-        }
+          internalPattern: ['^@/.*'],
+        },
       ],
       'import-x/no-cycle': 'error',
       '@typescript-eslint/naming-convention': [
         'error',
         {
           selector: 'enumMember',
-          format: ['PascalCase']
-        }
-      ]
-    }
+          format: ['PascalCase'],
+        },
+      ],
+    },
   },
   {
     files: ['vite.config.ts', 'uno.config.ts'],
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.node.json'
-      }
-    }
+        project: './tsconfig.node.json',
+      },
+    },
   },
   {
-    ignores: ['**/dist/*', '**/dist-generate-html/*', 'eslint.config.js', '*.timestamp-*.mjs']
-  }
+    ignores: ['**/dist/*', '**/dist-generate-html/*', 'eslint.config.js', '*.timestamp-*.mjs'],
+  },
 )
