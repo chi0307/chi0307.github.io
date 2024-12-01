@@ -2,7 +2,7 @@ name: Monthly Node.js Package Update
 
 on:
   schedule:
-    - cron: '0 0 */7 * *'
+    - cron: '0 0 */14 * *'
   workflow_dispatch:
     branches:
       - master
@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 檢出專案
       - name: Check out master branch
         uses: actions/checkout@v4
         with:
@@ -31,7 +30,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Upgrade npm packages
