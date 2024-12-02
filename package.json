@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.1",
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@unocss/reset": "^0.64.1",
     "axios": "^1.7.8",
     "date-fns": "^4.1.0",
@@ -38,6 +39,7 @@
     "@ryoppippi/unplugin-typia": "npm:@jsr/ryoppippi__unplugin-typia@^1.0.7",
     "@tsconfig/node22": "^22.0.0",
     "@tsconfig/strictest": "^2.0.5",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^22.10.1",
     "@types/uuid": "^10.0.0",
     "@unocss/eslint-plugin": "^0.64.1",
