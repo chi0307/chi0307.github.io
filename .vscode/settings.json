@@ -6,5 +6,11 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "css.customData": [".vscode/cssCustomData.json"],
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "cSpell.words": ["fontawesome", "pinia", "Unplugin", "vuetify"]
+  "cSpell.words": ["fontawesome", "pinia", "Unplugin", "vuetify"],
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }
