@@ -71,7 +71,7 @@
         <v-text-field
           hide-details="auto"
           label="平均匯率"
-          :model-value="addItem.buy === 0 ? 0 : roundNumber(addItem.sell / addItem.buy, 4)"
+          :model-value="addItem.buy === 0 ? 0 : round(addItem.sell / addItem.buy)"
           disabled
         />
       </template>
@@ -137,7 +137,7 @@ import { format } from 'date-fns'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import type { UUID } from '@/types'
-import { generateUuid, isTruthyString, roundNumber } from '@/utils'
+import { generateUuid, isTruthyString, roundByDigits } from '@/utils'
 import { isUuid } from '@/utils/checkTyping'
 import { convertField, convertToDate } from '@/utils/converts'
 import { sortListByDate } from '@/utils/sorts'
@@ -169,6 +169,8 @@ interface TableRow {
   exchangeRate: number
   balance: string
 }
+
+const round = roundByDigits(4)
 
 const headers = computed(
   () =>
@@ -234,7 +236,7 @@ const dataRows = computed((): DataRow[] => {
         date: format(item.date, 'yyyy/MM/dd'),
         sell: item.sell,
         buy: item.buy,
-        exchangeRate: roundNumber(item.sell / item.buy, 4),
+        exchangeRate: round(item.sell / item.buy),
         balance,
       }
     },
@@ -249,7 +251,7 @@ const averageRate = computed((): number => {
       sellTotal += item.balance * item.exchangeRate
     }
   }
-  return buyTotal === 0 ? 0 : roundNumber(sellTotal / buyTotal, 4)
+  return buyTotal === 0 ? 0 : round(sellTotal / buyTotal)
 })
 
 const showAddItemDialog = ref(false)

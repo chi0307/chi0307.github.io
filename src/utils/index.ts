@@ -10,9 +10,11 @@ export function redirectNewWindow(url: URL): void {
   window.open(url, '_blank')
 }
 
-export function roundNumber(num: number, digits: number): number {
-  const pow = Math.pow(10, digits)
-  return Math.round(num * pow) / pow
+export function roundByDigits(digits: number): (num: number) => number {
+  return (num: number): number => {
+    const pow = Math.pow(10, digits)
+    return Math.round(num * pow) / pow
+  }
 }
 
 export function isNotNullishValue<T>(data: T | null | undefined): data is T {
