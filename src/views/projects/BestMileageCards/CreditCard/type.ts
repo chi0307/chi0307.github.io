@@ -4,15 +4,19 @@ export type TransactionType = 'Domestic' | 'Foreign'
 
 /** input 的交易資料 */
 export interface TransactionInfo {
-  store?: string
-  payment?: Payment
-  transactionType?: TransactionType
+  /** 消費店家 */
+  transactionStore?: string
+  /** 支援的交易方式 */
+  acceptedPayments?: Payment[]
+  /** 交易屬性（國內交易、國外交易） */
+  transactionAttributesType?: TransactionType
   amount: number
 }
 
 /** 回饋哩程資訊 */
 export interface RewardMileInfo {
-  planName: string
-  name: string | null
-  miles: number
+  readonly planName: string
+  readonly name: string | null
+  readonly miles: number
+  readonly payments: readonly Payment[]
 }

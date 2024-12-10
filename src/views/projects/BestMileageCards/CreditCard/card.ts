@@ -62,14 +62,22 @@ export class CreditCard {
   }
 
   private _rewardMilesWithPlan(plan: Plan, paymentInfo: TransactionInfo): RewardMileInfo {
-    if (paymentInfo.store !== undefined && this._blackList.includes(paymentInfo.store)) {
-      return {
-        planName: plan.name,
-        name: null,
-        miles: 0,
-      }
+    const noneMatchRewardInfo: RewardMileInfo = {
+      planName: plan.name,
+      name: null,
+      miles: 0,
+      payments: [],
+    }
+    if (
+      paymentInfo.transactionStore !== undefined &&
+      this._blackList.includes(paymentInfo.transactionStore)
+    ) {
+      return noneMatchRewardInfo
     }
     const reward = plan.getRewardMiles(paymentInfo)
+    if (reward === null) {
+      return noneMatchRewardInfo
+    }
     return {
       planName: plan.name,
       ...reward,
