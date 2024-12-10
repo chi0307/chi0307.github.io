@@ -56,26 +56,26 @@ export class CreditCard {
     }
   }
 
-  private _rewardMilesWithPlan(plan: Plan, paymentInfo: TransactionInfo): RewardMileInfo | null {
-    if (this._blackList.includes(paymentInfo.store)) {
-      return null
+  private _rewardMilesWithPlan(plan: Plan, paymentInfo: TransactionInfo): RewardMileInfo {
+    if (paymentInfo.store !== undefined && this._blackList.includes(paymentInfo.store)) {
+      return {
+        planName: plan.name,
+        name: null,
+        miles: 0,
+      }
     }
-    return plan.getRewardMiles(paymentInfo)
+    const reward = plan.getRewardMiles(paymentInfo)
+    return {
+      planName: plan.name,
+      ...reward,
+    }
   }
 
-  public currentPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo | null {
+  public currentPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo {
     return this._rewardMilesWithPlan(this._currentPlan, paymentInfo)
   }
 
-  public getAllPlanRewardMiles(
-    paymentInfo: TransactionInfo,
-  ): ({ name: string; reward: RewardMileInfo | null } | null)[] {
-    return this._plans.map((plan) => {
-      const reward = this._rewardMilesWithPlan(plan, paymentInfo)
-      return {
-        name: plan.name,
-        reward,
-      }
-    })
+  public getAllPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo[] {
+    return this._plans.map((plan) => this._rewardMilesWithPlan(plan, paymentInfo))
   }
 }
