@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ inputStores }}
     <div v-for="(items, index) of list" :key="index">
       <div v-for="(item, index2) of items" :key="index2">
         {{ item.planName }}, {{ item.name }}, {{ item.miles }}
@@ -13,6 +14,10 @@ import { computed, onMounted, ref } from 'vue'
 import { rewardFactory, CreditCard, Plan, type TransactionInfo } from './CreditCard'
 
 const cards = ref<CreditCard[]>([])
+
+const inputStores = computed((): string[] => {
+  return cards.value.flatMap((card) => card.inputStores)
+})
 
 const list = computed(() => {
   const paymentInfo: TransactionInfo = {

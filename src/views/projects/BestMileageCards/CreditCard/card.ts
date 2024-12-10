@@ -5,10 +5,10 @@ import type { TransactionInfo, RewardMileInfo } from './type'
 // 之後要再想看看能怎麼實作讓 card 這邊可以吃 type, pointsPerMile, milesPerUnit 這些資料
 // 目前放在 reward 裡面可能不是好方法（畢竟目前已知的卡片都是固定回饋方式的）
 export interface CardParams {
-  name: string
-  plans: Plan[]
-  cardUrl: string | null
-  blackList: string[]
+  readonly name: string
+  readonly plans: readonly Plan[]
+  readonly cardUrl: string | null
+  readonly blackList: readonly string[]
 }
 export class CreditCard {
   /** 當前選擇的方案 */
@@ -16,11 +16,11 @@ export class CreditCard {
   /** 卡片名稱 */
   private _name: string
   /** 全部的方案 (如果像旅人卡那樣，只有一種回饋方式這邊選項就會只有一個) */
-  private _plans: Plan[]
+  private _plans: readonly Plan[]
   /** 信用卡的銀行網頁 */
   private _cardUrl: string | null
   /** 不回饋清單 */
-  private _blackList: string[] = []
+  private _blackList: readonly string[] = []
 
   public constructor({ name, plans, cardUrl, blackList }: CardParams) {
     this._name = name
@@ -43,7 +43,12 @@ export class CreditCard {
     return this._plans.map((plan) => plan.name)
   }
 
-  public cardUrl(): string | null {
+  /** 方便在前端做選單或 autocomplete 用的 */
+  public get inputStores(): string[] {
+    return this._plans.flatMap((plan) => plan.inputStores)
+  }
+
+  public get cardUrl(): string | null {
     return this._cardUrl
   }
 

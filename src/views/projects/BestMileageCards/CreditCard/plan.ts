@@ -2,26 +2,31 @@ import { type Reward, type RewardType } from './rewards'
 import type { Payment, TransactionInfo, RewardMileInfo, TransactionType } from './type'
 
 interface RewardCriteria {
-  stores: string[]
-  payments: Payment[]
-  transactionType: TransactionType | null
+  readonly stores: readonly string[]
+  readonly payments: readonly Payment[]
+  readonly transactionType: TransactionType | null
 }
 
 interface PlanReward extends RewardCriteria {
-  reward: Reward<RewardType>
+  readonly reward: Reward<RewardType>
 }
 
 export class Plan {
   private _name: string
-  private _rewards: PlanReward[]
+  private _rewards: readonly PlanReward[]
 
-  public constructor(name: string, rewards: PlanReward[]) {
+  public constructor(name: string, rewards: readonly PlanReward[]) {
     this._name = name
     this._rewards = rewards
   }
 
   public get name(): string {
     return this._name
+  }
+
+  /** 方便在前端做選單或 autocomplete 用的 */
+  public get inputStores(): string[] {
+    return this._rewards.flatMap((reward) => reward.stores)
   }
 
   public getApplicableReward({
