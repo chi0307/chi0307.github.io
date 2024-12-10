@@ -1,11 +1,12 @@
 import { type Reward, type RewardType } from './rewards'
 import type { Payment, TransactionInfo, RewardMileInfo, TransactionType } from './type'
 
-export interface RewardCriteria {
+interface RewardCriteria {
   stores: string[]
   payments: Payment[]
   transactionType: TransactionType | null
 }
+
 interface PlanReward extends RewardCriteria {
   reward: Reward<RewardType>
 }
@@ -24,24 +25,37 @@ export class Plan {
   }
 
   public getApplicableReward({
-    store,
-    payment,
+    store = null,
+    payment = null,
+    transactionType: type = null,
   }: {
-    store: string
-    payment: Payment | null
+    store?: string | null | undefined
+    payment?: Payment | null | undefined
+    transactionType?: TransactionType | null | undefined
   }): Reward<RewardType> | null {
     return (
-      this._rewards.find(({ stores = [], payments = [] }: PlanReward): boolean => {
-        const isAllowStore = stores.length === 0 ? true : stores.includes(store)
-        const isAllowPayment =
+      this._rewards.find(({ stores, payments, transactionType }: PlanReward): boolean => {
+        const isStore = store === null || (stores.length === 0 ? true : stores.includes(store))
+        const isPayment =
           payment === null || (payments.length === 0 ? true : payments.includes(payment))
-        return isAllowStore || isAllowPayment
+        const isTransactionType =
+          type === null || transactionType === null || type === transactionType
+        return isStore && isPayment && isTransactionType
       })?.reward ?? null
     )
   }
 
-  public getRewardMiles({ store, payment, amount }: TransactionInfo): RewardMileInfo {
-    const reward = this.getApplicableReward({ payment, store })
+  public getRewardMiles({
+    store,
+    payment,
+    amount,
+    transactionType,
+  }: TransactionInfo): Pick<RewardMileInfo, 'name' | 'miles'> {
+    const reward = this.getApplicableReward({
+      payment,
+      store,
+      transactionType,
+    })
     return {
       name: reward?.name ?? null,
       miles: reward?.calculateMiles(amount) ?? 0,

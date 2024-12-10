@@ -1,37 +1,38 @@
 <template>
-  <div></div>
+  <div>
+    <div v-for="(items, index) of list" :key="index">
+      <div v-for="(item, index2) of items" :key="index2">
+        {{ item.planName }}, {{ item.name }}, {{ item.miles }}
+      </div>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
-import {
-  rewardFactory,
-  type RewardType,
-  CreditCard,
-  Plan,
-  type TransactionInfo,
-} from './CreditCard'
+import { rewardFactory, CreditCard, Plan, type TransactionInfo } from './CreditCard'
 
 const cards = ref<CreditCard[]>([])
 
-onMounted(() => {
-  cards.value = [createHsbc(), createCube()]
+const list = computed(() => {
   const paymentInfo: TransactionInfo = {
     amount: 200,
-    store: 'Apple Store',
-    payment: 'Apple Pay',
+    store: 'momo',
+    payment: 'Line Pay',
+    // transactionType: 'Domestic',
   }
-  for (const card of cards.value) {
-    card.currentPlanRewardMiles(paymentInfo)
-  }
+  return cards.value.map((card) => card.getAllPlanRewardMiles(paymentInfo))
+})
+
+onMounted(() => {
+  cards.value = [createHsbc(), createCube()]
 })
 
 function createHsbc(): CreditCard {
-  const type: RewardType = 'DirectMilesReward'
   const plan = new Plan('基本回饋', [
     {
       reward: rewardFactory({
-        type,
+        type: 'DirectMilesReward',
         name: '國外消費',
         spendingPerMile: 10,
       }),
@@ -41,7 +42,7 @@ function createHsbc(): CreditCard {
     },
     {
       reward: rewardFactory({
-        type,
+        type: 'DirectMilesReward',
         name: '國內消費',
         spendingPerMile: 20,
       }),
@@ -60,17 +61,16 @@ function createHsbc(): CreditCard {
 }
 
 function createCube(): CreditCard {
-  const type: RewardType = 'RoundedPointsRewardPercentage'
   const plan1 = new Plan('集精選', [
     {
       reward: rewardFactory({
-        type,
+        type: 'RoundedPointsRewardPercentage',
         name: '基本回饋',
         pointBackRate: 2,
         pointsPerMile: 300,
         milesPerUnit: 1000,
       }),
-      stores: ['台灣中油', '全聯'],
+      stores: ['台灣中油', '全聯', '7-11', '全家'],
       payments: [],
       transactionType: null,
     },
@@ -78,7 +78,7 @@ function createCube(): CreditCard {
   const plan2 = new Plan('來支付', [
     {
       reward: rewardFactory({
-        type,
+        type: 'RoundedPointsRewardPercentage',
         name: '基本回饋',
         pointBackRate: 2,
         pointsPerMile: 300,
@@ -89,9 +89,23 @@ function createCube(): CreditCard {
       transactionType: null,
     },
   ])
+  const plan3 = new Plan('玩數位', [
+    {
+      reward: rewardFactory({
+        type: 'RoundedPointsRewardPercentage',
+        name: '基本回饋',
+        pointBackRate: 3,
+        pointsPerMile: 300,
+        milesPerUnit: 1000,
+      }),
+      stores: ['PChome', '蝦皮購物', '博客來', 'momo'],
+      payments: [],
+      transactionType: null,
+    },
+  ])
   const cube = new CreditCard({
     name: 'Cube 卡',
-    plans: [plan1, plan2],
+    plans: [plan1, plan2, plan3],
     cardUrl: null,
     blackList: [],
   })
