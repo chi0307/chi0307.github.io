@@ -24,7 +24,7 @@ const list = computed(() => {
     amount: 200,
     store: 'momo',
     payment: 'Line Pay',
-    // transactionType: 'Domestic',
+    transactionType: 'Domestic',
   }
   return cards.value.map((card) => card.getAllPlanRewardMiles(paymentInfo))
 })
@@ -34,31 +34,33 @@ onMounted(() => {
 })
 
 function createHsbc(): CreditCard {
-  const plan = new Plan('基本回饋', [
-    {
-      reward: rewardFactory({
-        type: 'DirectMilesReward',
-        name: '國外消費',
-        spendingPerMile: 10,
-      }),
-      stores: [],
-      payments: [],
-      transactionType: 'Foreign',
-    },
-    {
-      reward: rewardFactory({
-        type: 'DirectMilesReward',
-        name: '國內消費',
-        spendingPerMile: 20,
-      }),
-      stores: [],
-      payments: [],
-      transactionType: 'Domestic',
-    },
-  ])
+  const plans: Plan[] = [
+    new Plan('基本回饋', [
+      {
+        reward: rewardFactory({
+          type: 'DirectMilesReward',
+          name: '國外消費',
+          spendingPerMile: 10,
+        }),
+        stores: [],
+        payments: [],
+        transactionType: 'Foreign',
+      },
+      {
+        reward: rewardFactory({
+          type: 'DirectMilesReward',
+          name: '國內消費',
+          spendingPerMile: 20,
+        }),
+        stores: [],
+        payments: [],
+        transactionType: 'Domestic',
+      },
+    ]),
+  ]
   const hsbc = new CreditCard({
     name: '匯豐旅人卡',
-    plans: [plan],
+    plans,
     cardUrl: null,
     blackList: [],
   })
@@ -66,51 +68,75 @@ function createHsbc(): CreditCard {
 }
 
 function createCube(): CreditCard {
-  const plan1 = new Plan('集精選', [
-    {
-      reward: rewardFactory({
-        type: 'RoundedPointsRewardPercentage',
-        name: '基本回饋',
-        pointBackRate: 2,
-        pointsPerMile: 300,
-        milesPerUnit: 1000,
-      }),
-      stores: ['台灣中油', '全聯', '7-11', '全家'],
-      payments: [],
-      transactionType: null,
-    },
-  ])
-  const plan2 = new Plan('來支付', [
-    {
-      reward: rewardFactory({
-        type: 'RoundedPointsRewardPercentage',
-        name: '基本回饋',
-        pointBackRate: 2,
-        pointsPerMile: 300,
-        milesPerUnit: 1000,
-      }),
-      stores: [],
-      payments: ['Line Pay'],
-      transactionType: null,
-    },
-  ])
-  const plan3 = new Plan('玩數位', [
-    {
-      reward: rewardFactory({
-        type: 'RoundedPointsRewardPercentage',
-        name: '基本回饋',
-        pointBackRate: 3,
-        pointsPerMile: 300,
-        milesPerUnit: 1000,
-      }),
-      stores: ['PChome', '蝦皮購物', '博客來', 'momo'],
-      payments: [],
-      transactionType: null,
-    },
-  ])
+  const plans: Plan[] = [
+    new Plan('集精選', [
+      {
+        reward: rewardFactory({
+          type: 'RoundedPointsRewardPercentage',
+          name: '基本回饋',
+          pointBackRate: 2,
+          pointsPerMile: 300,
+          milesPerUnit: 1000,
+        }),
+        stores: ['台灣中油', '全聯', '7-11', '全家'],
+        payments: [],
+        transactionType: null,
+      },
+    ]),
+    new Plan('來支付', [
+      {
+        reward: rewardFactory({
+          type: 'RoundedPointsRewardPercentage',
+          name: '基本回饋',
+          pointBackRate: 2,
+          pointsPerMile: 300,
+          milesPerUnit: 1000,
+        }),
+        stores: [],
+        payments: ['Line Pay'],
+        transactionType: null,
+      },
+    ]),
+    new Plan('玩數位', [
+      {
+        reward: rewardFactory({
+          type: 'RoundedPointsRewardPercentage',
+          name: '基本回饋',
+          pointBackRate: 3,
+          pointsPerMile: 300,
+          milesPerUnit: 1000,
+        }),
+        stores: ['PChome', '蝦皮購物', '博客來', 'momo'],
+        payments: [],
+        transactionType: null,
+      },
+    ]),
+    new Plan('樂饗購', [
+      {
+        reward: rewardFactory({
+          type: 'RoundedPointsRewardPercentage',
+          name: '基本回饋',
+          pointBackRate: 3,
+          pointsPerMile: 300,
+          milesPerUnit: 1000,
+        }),
+        stores: [
+          'SOGO百貨',
+          '太平洋百貨',
+          '新光三越',
+          'Uber Eats',
+          'foodpanda',
+          '康是美',
+          '屈臣氏',
+        ],
+        payments: [],
+        transactionType: null,
+      },
+    ]),
+  ]
   const cube = new CreditCard({
     name: 'Cube 卡',
-    plans: [plan1, plan2, plan3],
+    plans,
     cardUrl: null,
     blackList: [],
   })
