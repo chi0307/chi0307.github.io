@@ -3,10 +3,10 @@ import { roundByDigits } from '@/utils'
 const round = roundByDigits(2)
 
 interface BaseRewardParams {
-  type: RewardType
-  name: string
-  pointsPerMile: number
-  milesPerUnit: number
+  readonly type: RewardType
+  readonly name: string
+  readonly pointsPerMile: number
+  readonly milesPerUnit: number
 }
 abstract class BaseReward {
   private _type: RewardType
@@ -89,7 +89,7 @@ class RoundedPointsRewardPercentage extends BaseReward {
     pointBackRate,
     ...superParams
   }: {
-    pointBackRate: number
+    readonly pointBackRate: number
   } & BaseRewardParams) {
     super(superParams)
     this._pointBackRate = pointBackRate
@@ -122,7 +122,7 @@ class TruncatedPointsRewardPercentage extends BaseReward {
     pointBackRate,
     ...superParams
   }: {
-    pointBackRate: number
+    readonly pointBackRate: number
   } & BaseRewardParams) {
     super(superParams)
     this._pointBackRate = pointBackRate
@@ -155,7 +155,7 @@ class PointsRewardThreshold extends BaseReward {
     spendingPerPoint,
     ...superParams
   }: {
-    spendingPerPoint: number
+    readonly spendingPerPoint: number
   } & BaseRewardParams) {
     super(superParams)
     this._spendingPerPoint = spendingPerPoint
@@ -187,7 +187,10 @@ class DirectMilesReward extends BaseReward {
   public constructor({
     spendingPerMile,
     ...superParams
-  }: { spendingPerMile: number } & Omit<BaseRewardParams, 'pointsPerMile' | 'milesPerUnit'>) {
+  }: { readonly spendingPerMile: number } & Omit<
+    BaseRewardParams,
+    'pointsPerMile' | 'milesPerUnit'
+  >) {
     super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
     this._spendingPerMile = spendingPerMile
   }
