@@ -30,40 +30,51 @@ export class Plan {
   }
 
   public getApplicableReward({
-    store = null,
-    payment = null,
-    transactionType: type = null,
+    transactionStore = null,
+    acceptedPayments = null,
+    transactionAttributesType = null,
   }: {
-    store?: string | null | undefined
-    payment?: Payment | null | undefined
-    transactionType?: TransactionType | null | undefined
-  }): Reward<RewardType> | null {
+    transactionStore?: string | null | undefined
+    acceptedPayments?: Payment[] | null | undefined
+    transactionAttributesType?: TransactionType | null | undefined
+  }): PlanReward | null {
     return (
       this._rewards.find(({ stores, payments, transactionType }: PlanReward): boolean => {
-        const isStore = store === null || (stores.length === 0 ? true : stores.includes(store))
+        const isStore =
+          transactionStore === null ||
+          (stores.length === 0 ? true : stores.includes(transactionStore))
         const isPayment =
-          payment === null || (payments.length === 0 ? true : payments.includes(payment))
+          acceptedPayments === null ||
+          (payments.length === 0
+            ? true
+            : payments.some((payment) => acceptedPayments.includes(payment)))
         const isTransactionType =
-          type === null || transactionType === null || type === transactionType
+          transactionAttributesType === null ||
+          transactionType === null ||
+          transactionAttributesType === transactionType
         return isStore && isPayment && isTransactionType
-      })?.reward ?? null
+      }) ?? null
     )
   }
 
   public getRewardMiles({
-    store,
-    payment,
+    transactionStore,
+    acceptedPayments,
     amount,
-    transactionType,
-  }: TransactionInfo): Pick<RewardMileInfo, 'name' | 'miles'> {
+    transactionAttributesType,
+  }: TransactionInfo): Pick<RewardMileInfo, 'name' | 'miles' | 'payments'> | null {
     const reward = this.getApplicableReward({
-      payment,
-      store,
-      transactionType,
+      acceptedPayments,
+      transactionStore,
+      transactionAttributesType,
     })
+    if (reward === null) {
+      return null
+    }
     return {
-      name: reward?.name ?? null,
-      miles: reward?.calculateMiles(amount) ?? 0,
+      name: reward.reward.name,
+      miles: reward.reward.calculateMiles(amount),
+      payments: reward.payments,
     }
   }
 }

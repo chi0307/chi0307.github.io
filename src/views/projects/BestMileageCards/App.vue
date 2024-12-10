@@ -3,7 +3,8 @@
     {{ inputStores }}
     <div v-for="(items, index) of list" :key="index">
       <div v-for="(item, index2) of items" :key="index2">
-        {{ item.planName }}, {{ item.name }}, {{ item.miles }}
+        {{ item.planName }}, {{ item.name }}, {{ item.miles }}, 支付方式:
+        {{ item.payments.join(', ') }}
       </div>
     </div>
   </div>
@@ -22,9 +23,9 @@ const inputStores = computed((): string[] => {
 const list = computed(() => {
   const paymentInfo: TransactionInfo = {
     amount: 200,
-    store: 'momo',
-    payment: 'Line Pay',
-    transactionType: 'Domestic',
+    transactionStore: 'momo',
+    acceptedPayments: ['Line Pay', 'Apple Pay'],
+    transactionAttributesType: 'Domestic',
   }
   return cards.value.map((card) => card.getAllPlanRewardMiles(paymentInfo))
 })
