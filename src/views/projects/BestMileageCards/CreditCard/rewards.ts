@@ -1,26 +1,24 @@
 import { roundByDigits } from '@/utils'
 
-import type { RewardConfig } from './type'
-
 const round = roundByDigits(2)
 
-interface BaseRewardParams {
-  readonly type: RewardType
+interface BaseRewardParams<Type extends RewardType> {
+  readonly type: Type
   readonly name: string
   /** N 點可以換里程 */
   readonly pointsPerMile: number
   /** 可以換 N 哩里程 */
   readonly milesPerUnit: number
 }
-abstract class BaseReward {
-  protected readonly _type: RewardType
+abstract class BaseReward<Type extends RewardType> {
+  protected readonly _type: Type
   protected readonly _name: string
   /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
   protected readonly _pointsPerMile: number
   /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
   protected readonly _milesPerUnit: number
 
-  public constructor({ type, name, pointsPerMile, milesPerUnit }: BaseRewardParams) {
+  public constructor({ type, name, pointsPerMile, milesPerUnit }: BaseRewardParams<Type>) {
     this._type = type
     this._name = name
     this._pointsPerMile = pointsPerMile
@@ -88,7 +86,9 @@ abstract class BaseReward {
 /**
  * 點數回饋 (N%回饋點數，四捨五入)
  */
-class RoundedPointsRewardPercentage extends BaseReward {
+class RoundedPointsRewardPercentage<
+  Type extends 'RoundedPointsRewardPercentage',
+> extends BaseReward<Type> {
   private readonly _pointBackRate: number
 
   public constructor({
@@ -97,7 +97,7 @@ class RoundedPointsRewardPercentage extends BaseReward {
   }: {
     /** N% 回饋（四捨五入） */
     readonly pointBackRate: number
-  } & BaseRewardParams) {
+  } & BaseRewardParams<Type>) {
     super(superParams)
     this._pointBackRate = pointBackRate
   }
@@ -131,7 +131,9 @@ class RoundedPointsRewardPercentage extends BaseReward {
 /**
  * 點數回饋 (N%回饋點數，無條件捨去)
  */
-class TruncatedPointsRewardPercentage extends BaseReward {
+class TruncatedPointsRewardPercentage<
+  Type extends 'TruncatedPointsRewardPercentage',
+> extends BaseReward<Type> {
   private readonly _pointBackRate: number
 
   public constructor({
@@ -140,7 +142,7 @@ class TruncatedPointsRewardPercentage extends BaseReward {
   }: {
     /** N% 回饋（無條件捨去） */
     readonly pointBackRate: number
-  } & BaseRewardParams) {
+  } & BaseRewardParams<Type>) {
     super(superParams)
     this._pointBackRate = pointBackRate
   }
@@ -174,7 +176,7 @@ class TruncatedPointsRewardPercentage extends BaseReward {
 /**
  * 點數回饋 (消費N元累積一點)
  */
-class PointsRewardThreshold extends BaseReward {
+class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseReward<Type> {
   private readonly _spendingPerPoint: number
 
   public constructor({
@@ -183,7 +185,7 @@ class PointsRewardThreshold extends BaseReward {
   }: {
     /** N 元累積一點 */
     readonly spendingPerPoint: number
-  } & BaseRewardParams) {
+  } & BaseRewardParams<Type>) {
     super(superParams)
     this._spendingPerPoint = spendingPerPoint
   }
@@ -217,7 +219,7 @@ class PointsRewardThreshold extends BaseReward {
 /**
  * 哩程回饋
  */
-class DirectMilesReward extends BaseReward {
+class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Type> {
   private readonly _spendingPerMile: number
 
   public constructor({
@@ -226,7 +228,7 @@ class DirectMilesReward extends BaseReward {
   }: {
     /** N 元一哩 */
     readonly spendingPerMile: number
-  } & Omit<BaseRewardParams, 'pointsPerMile' | 'milesPerUnit'>) {
+  } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
     super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
     this._spendingPerMile = spendingPerMile
   }
@@ -262,13 +264,13 @@ const rewards = {
 } as const
 export type RewardType = keyof typeof rewards
 export type Reward<Type extends RewardType> = InstanceType<(typeof rewards)[Type]>
-export type RewardParams<Type extends RewardType> = ConstructorParameters<(typeof rewards)[Type]>[0]
+export type RewardConfig = ConstructorParameters<(typeof rewards)[RewardType]>[0]
 
 export function rewardFactory<Type extends RewardType>(
-  params: RewardParams<Type> & { type: Type },
+  params: RewardConfig & { type: Type },
 ): Reward<Type> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
-  return new rewards[params.type](params as any)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return new rewards[params.type](params)
 }
