@@ -20,13 +20,13 @@ export class CreditCard {
   /** 信用卡的銀行網頁 */
   private readonly _cardUrl: string | null
   /** 不回饋清單 */
-  private readonly _blackList: readonly string[] = []
+  private readonly _blackList: ReadonlySet<string>
 
   public constructor({ name, plans, cardUrl, blackList }: CardParams) {
     this._name = name
     this._plans = plans
     this._cardUrl = cardUrl ?? null
-    this._blackList = blackList
+    this._blackList = new Set(blackList)
 
     const plan = plans[0]
     if (plan === undefined) {
@@ -57,7 +57,9 @@ export class CreditCard {
     if (plan) {
       this._currentPlan = plan
     } else {
-      throw new Error(`plan ${planName} not found`)
+      throw new Error(
+        `plan ${planName} not found. Available plans: ${this._plans.map((p) => p.name).join(', ')}`,
+      )
     }
   }
 
@@ -70,7 +72,7 @@ export class CreditCard {
     }
     if (
       paymentInfo.transactionStore !== undefined &&
-      this._blackList.includes(paymentInfo.transactionStore)
+      this._blackList.has(paymentInfo.transactionStore)
     ) {
       return noneMatchRewardInfo
     }
@@ -97,7 +99,7 @@ export class CreditCard {
       card: {
         name: this._name,
         cardUrl: this._cardUrl,
-        blackList: this._blackList,
+        blackList: [...this._blackList.values()],
       },
       plans: this._plans.map((plan) => plan.export()),
     }

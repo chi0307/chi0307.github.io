@@ -1,5 +1,4 @@
 import type { CardParams } from './Card'
-import type { PlanReward } from './Plan'
 import type { RewardConfig } from './Reward'
 
 export const Payment = ['Line Pay', 'Apple Pay', '街口支付', '信用卡'] as const
@@ -25,8 +24,11 @@ export interface RewardMileInfo {
   readonly payments: readonly Payment[]
 }
 
-export interface RewardRuleConfig extends Omit<PlanReward, 'reward'> {
+export interface RewardRuleConfig {
   reward: RewardConfig
+  stores: string[]
+  payments: Payment[]
+  transactionType: TransactionType | null
 }
 export interface PlanConfig {
   name: string
