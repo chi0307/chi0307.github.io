@@ -36,11 +36,9 @@ onMounted(() => {
 
 function createHsbc(): CreditCard {
   return createCard({
-    card: {
-      name: '匯豐旅人卡',
-      cardUrl: null,
-      blackList: [],
-    },
+    name: '匯豐旅人卡',
+    cardUrl: null,
+    blackList: [],
     plans: [
       {
         name: '基本回饋',
@@ -73,11 +71,9 @@ function createHsbc(): CreditCard {
 
 function createCube(): CreditCard {
   return createCard({
-    card: {
-      name: 'Cube 卡',
-      cardUrl: null,
-      blackList: [],
-    },
+    name: 'Cube 卡',
+    cardUrl: null,
+    blackList: [],
     plans: [
       {
         name: '集精選',

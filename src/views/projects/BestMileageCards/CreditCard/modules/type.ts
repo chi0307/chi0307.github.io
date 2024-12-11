@@ -1,4 +1,3 @@
-import type { CardParams } from './Card'
 import type { RewardConfig } from './Reward'
 
 export const Payment = ['Line Pay', 'Apple Pay', '街口支付', '信用卡'] as const
@@ -35,6 +34,8 @@ export interface PlanConfig {
   rewards: RewardRuleConfig[]
 }
 export interface CardConfig {
-  card: Omit<CardParams, 'plans'>
+  name: string
+  cardUrl: string | null
+  blackList: string[]
   plans: PlanConfig[]
 }

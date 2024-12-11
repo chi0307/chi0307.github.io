@@ -4,12 +4,6 @@ import type { TransactionInfo, RewardMileInfo, CardConfig } from './type'
 // TODO
 // 之後要再想看看能怎麼實作讓 card 這邊可以吃 type, pointsPerMile, milesPerUnit 這些資料
 // 目前放在 reward 裡面可能不是好方法（畢竟目前已知的卡片都是固定回饋方式的）
-export interface CardParams {
-  readonly name: string
-  readonly plans: readonly Plan[]
-  readonly cardUrl: string | null
-  readonly blackList: readonly string[]
-}
 export class CreditCard {
   /** 當前選擇的方案 */
   private _currentPlan: Plan
@@ -22,10 +16,15 @@ export class CreditCard {
   /** 不回饋清單 */
   private readonly _blackList: ReadonlySet<string>
 
-  public constructor({ name, plans, cardUrl, blackList }: CardParams) {
+  public constructor({
+    name,
+    plans,
+    blackList,
+    cardUrl,
+  }: Omit<CardConfig, 'plans'> & { plans: Plan[] }) {
     this._name = name
     this._plans = plans
-    this._cardUrl = cardUrl ?? null
+    this._cardUrl = cardUrl
     this._blackList = new Set(blackList)
 
     const plan = plans[0]
@@ -96,11 +95,9 @@ export class CreditCard {
 
   public toJSON(): CardConfig {
     return {
-      card: {
-        name: this._name,
-        cardUrl: this._cardUrl,
-        blackList: [...this._blackList.values()],
-      },
+      name: this._name,
+      cardUrl: this._cardUrl,
+      blackList: [...this._blackList.values()],
       plans: this._plans.map((plan) => plan.toJSON()),
     }
   }

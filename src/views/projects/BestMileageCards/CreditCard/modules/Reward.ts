@@ -119,7 +119,7 @@ class RoundedPointsRewardPercentage<
   }
   public toJSON(): RewardConfig {
     return {
-      type: 'RoundedPointsRewardPercentage',
+      type: this._type,
       name: this._name,
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
@@ -164,7 +164,7 @@ class TruncatedPointsRewardPercentage<
   }
   public toJSON(): RewardConfig {
     return {
-      type: 'TruncatedPointsRewardPercentage',
+      type: this._type,
       name: this._name,
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
@@ -207,7 +207,7 @@ class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseRe
   }
   public toJSON(): RewardConfig {
     return {
-      type: 'PointsRewardThreshold',
+      type: this._type,
       name: this._name,
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
@@ -249,7 +249,7 @@ class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Typ
   }
   public toJSON(): RewardConfig {
     return {
-      type: 'DirectMilesReward',
+      type: this._type,
       name: this._name,
       spendingPerMile: this._spendingPerMile,
     }
