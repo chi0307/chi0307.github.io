@@ -9,4 +9,4 @@ export {
   type PlanConfig,
   type RewardRuleConfig,
 } from './modules/type'
-export { createCard } from './createCard'
+export { createCard, isCardConfig } from './createCard'

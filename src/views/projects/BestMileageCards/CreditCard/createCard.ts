@@ -1,3 +1,5 @@
+import typia from 'typia'
+
 import { CreditCard } from './modules/Card'
 import { Plan } from './modules/Plan'
 import type { CardConfig } from './modules/type'
@@ -9,3 +11,5 @@ export function createCard(config: CardConfig): CreditCard {
     plans,
   })
 }
+
+export const isCardConfig = typia.createIs<CardConfig>()
