@@ -1,5 +1,5 @@
 import { type Reward, type RewardType } from './rewards'
-import type { Payment, TransactionInfo, RewardMileInfo, TransactionType } from './type'
+import type { Payment, TransactionInfo, RewardMileInfo, TransactionType, PlanConfig } from './type'
 
 interface RewardCriteria {
   readonly stores: readonly string[]
@@ -7,13 +7,13 @@ interface RewardCriteria {
   readonly transactionType: TransactionType | null
 }
 
-interface PlanReward extends RewardCriteria {
+export interface PlanReward extends RewardCriteria {
   readonly reward: Reward<RewardType>
 }
 
 export class Plan {
-  private _name: string
-  private _rewards: readonly PlanReward[]
+  private readonly _name: string
+  private readonly _rewards: readonly PlanReward[]
 
   public constructor(name: string, rewards: readonly PlanReward[]) {
     this._name = name
@@ -73,6 +73,16 @@ export class Plan {
       name: reward.reward.name,
       miles: reward.reward.calculateMiles(amount),
       payments: reward.payments,
+    }
+  }
+
+  public export(): PlanConfig {
+    return {
+      name: this._name,
+      rewards: this._rewards.map(({ reward, ...rules }) => ({
+        ...rules,
+        reward: reward.export(),
+      })),
     }
   }
 }
