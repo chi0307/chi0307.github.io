@@ -1,5 +1,5 @@
 import { Plan } from './plan'
-import type { TransactionInfo, RewardMileInfo } from './type'
+import type { TransactionInfo, RewardMileInfo, CardConfig } from './type'
 
 // TODO
 // 之後要再想看看能怎麼實作讓 card 這邊可以吃 type, pointsPerMile, milesPerUnit 這些資料
@@ -14,13 +14,13 @@ export class CreditCard {
   /** 當前選擇的方案 */
   private _currentPlan: Plan
   /** 卡片名稱 */
-  private _name: string
+  private readonly _name: string
   /** 全部的方案 (如果像旅人卡那樣，只有一種回饋方式這邊選項就會只有一個) */
-  private _plans: readonly Plan[]
+  private readonly _plans: readonly Plan[]
   /** 信用卡的銀行網頁 */
-  private _cardUrl: string | null
+  private readonly _cardUrl: string | null
   /** 不回饋清單 */
-  private _blackList: readonly string[] = []
+  private readonly _blackList: readonly string[] = []
 
   public constructor({ name, plans, cardUrl, blackList }: CardParams) {
     this._name = name
@@ -90,5 +90,16 @@ export class CreditCard {
 
   public getAllPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo[] {
     return this._plans.map((plan) => this._rewardMilesWithPlan(plan, paymentInfo))
+  }
+
+  public export(): CardConfig {
+    return {
+      card: {
+        name: this._name,
+        cardUrl: this._cardUrl,
+        blackList: this._blackList,
+      },
+      plans: this._plans.map((plan) => plan.export()),
+    }
   }
 }
