@@ -32,11 +32,11 @@ export class Plan {
   public getApplicableReward({
     transactionStore = null,
     acceptedPayments = null,
-    transactionAttributesType = null,
+    transactionAttributesType,
   }: {
     transactionStore?: string | null | undefined
     acceptedPayments?: Payment[] | null | undefined
-    transactionAttributesType?: TransactionType | null | undefined
+    transactionAttributesType: TransactionType
   }): PlanReward | null {
     return (
       this._rewards.find(({ stores, payments, transactionType }: PlanReward): boolean => {
@@ -49,9 +49,7 @@ export class Plan {
             ? true
             : payments.some((payment) => acceptedPayments.includes(payment)))
         const isTransactionType =
-          transactionAttributesType === null ||
-          transactionType === null ||
-          transactionAttributesType === transactionType
+          transactionType === null || transactionAttributesType === transactionType
         return isStore && isPayment && isTransactionType
       }) ?? null
     )

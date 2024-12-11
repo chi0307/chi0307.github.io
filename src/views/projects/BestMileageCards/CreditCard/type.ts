@@ -9,7 +9,7 @@ export interface TransactionInfo {
   /** 支援的交易方式 */
   acceptedPayments?: Payment[]
   /** 交易屬性（國內交易、國外交易） */
-  transactionAttributesType?: TransactionType
+  transactionAttributesType: TransactionType
   amount: number
 }
 
