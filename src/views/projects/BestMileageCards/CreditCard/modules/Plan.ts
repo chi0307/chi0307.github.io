@@ -86,14 +86,14 @@ export class Plan {
     }
   }
 
-  public export(): PlanConfig {
+  public toJSON(): PlanConfig {
     return {
       name: this._name,
       rewards: this._rewards.map(({ reward, stores, payments, transactionType }) => ({
         transactionType,
         stores: [...stores.values()],
         payments: [...payments.values()],
-        reward: reward.export(),
+        reward: reward.toJSON(),
       })),
     }
   }

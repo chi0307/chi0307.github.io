@@ -94,14 +94,14 @@ export class CreditCard {
     return this._plans.map((plan) => this._rewardMilesWithPlan(plan, paymentInfo))
   }
 
-  public export(): CardConfig {
+  public toJSON(): CardConfig {
     return {
       card: {
         name: this._name,
         cardUrl: this._cardUrl,
         blackList: [...this._blackList.values()],
       },
-      plans: this._plans.map((plan) => plan.export()),
+      plans: this._plans.map((plan) => plan.toJSON()),
     }
   }
 }

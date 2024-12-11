@@ -80,7 +80,7 @@ abstract class BaseReward<Type extends RewardType> {
     }
   }
 
-  public abstract export(): RewardConfig
+  public abstract toJSON(): RewardConfig
 }
 
 /**
@@ -117,7 +117,7 @@ class RoundedPointsRewardPercentage<
     const points = Math.round(amount * (this._pointBackRate / 100))
     return round((points / this._pointsPerMile) * this._milesPerUnit)
   }
-  public export(): RewardConfig {
+  public toJSON(): RewardConfig {
     return {
       type: 'RoundedPointsRewardPercentage',
       name: this._name,
@@ -162,7 +162,7 @@ class TruncatedPointsRewardPercentage<
     const points = Math.floor(amount * (this._pointBackRate / 100))
     return round((points / this._pointsPerMile) * this._milesPerUnit)
   }
-  public export(): RewardConfig {
+  public toJSON(): RewardConfig {
     return {
       type: 'TruncatedPointsRewardPercentage',
       name: this._name,
@@ -205,7 +205,7 @@ class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseRe
     const points = Math.floor(amount / this._spendingPerPoint)
     return round((points / this._pointsPerMile) * this._milesPerUnit)
   }
-  public export(): RewardConfig {
+  public toJSON(): RewardConfig {
     return {
       type: 'PointsRewardThreshold',
       name: this._name,
@@ -247,7 +247,7 @@ class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Typ
   public calculateMiles(amount: number): number {
     return Math.floor(amount / this._spendingPerMile)
   }
-  public export(): RewardConfig {
+  public toJSON(): RewardConfig {
     return {
       type: 'DirectMilesReward',
       name: this._name,
