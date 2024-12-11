@@ -1,4 +1,4 @@
-import { type Reward, type RewardType } from './rewards'
+import { type Reward, type RewardType } from './Reward'
 import type { Payment, TransactionInfo, RewardMileInfo, TransactionType, PlanConfig } from './type'
 
 interface RewardCriteria {

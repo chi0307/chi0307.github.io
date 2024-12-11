@@ -1,4 +1,4 @@
-import { Plan } from './plan'
+import { Plan } from './Plan'
 import type { TransactionInfo, RewardMileInfo, CardConfig } from './type'
 
 // TODO

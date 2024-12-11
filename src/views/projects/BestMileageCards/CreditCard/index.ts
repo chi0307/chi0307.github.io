@@ -1,5 +1,5 @@
-export { CreditCard, type CardParams } from './card'
-export { type Reward, type RewardType } from './rewards'
+export { CreditCard } from './modules/Card'
+export { type Reward, type RewardType, type RewardConfig } from './modules/Reward'
 export {
   Payment,
   type TransactionType,
@@ -8,6 +8,5 @@ export {
   type CardConfig,
   type PlanConfig,
   type RewardRuleConfig,
-  type RewardConfig,
-} from './type'
+} from './modules/type'
 export { createCard } from './createCard'

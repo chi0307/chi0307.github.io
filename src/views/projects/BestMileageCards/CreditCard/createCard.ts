@@ -1,7 +1,7 @@
-import { CreditCard } from './card'
-import { Plan } from './plan'
-import { rewardFactory } from './rewards'
-import type { CardConfig } from './type'
+import { CreditCard } from './modules/Card'
+import { Plan } from './modules/Plan'
+import { rewardFactory } from './modules/Reward'
+import type { CardConfig } from './modules/type'
 
 export function createCard(config: CardConfig): CreditCard {
   const plans: Plan[] = config.plans.map(
