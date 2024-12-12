@@ -6,7 +6,5 @@ export {
   type TransactionInfo,
   type RewardMileInfo,
   type CardConfig,
-  type PlanConfig,
-  type RewardRuleConfig,
 } from './modules/type'
 export { createCard, isCardConfig } from './createCard'

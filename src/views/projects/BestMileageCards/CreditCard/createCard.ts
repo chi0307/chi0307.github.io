@@ -2,6 +2,7 @@ import typia from 'typia'
 
 import { CreditCard } from './modules/Card'
 import { Plan } from './modules/Plan'
+import { rewardFactory } from './modules/Reward'
 import type { CardConfig } from './modules/type'
 
 export function createCard({
@@ -10,8 +11,19 @@ export function createCard({
   cardUrl,
   plans: planConfigs,
 }: CardConfig): CreditCard {
-  const plans: Plan[] = planConfigs.map(({ name, rewards }) => new Plan(name, rewards))
-  return new CreditCard({ name, plans, blackList, cardUrl })
+  const plans: Plan[] = planConfigs.map(
+    ({ name, rewards }) =>
+      new Plan(
+        name,
+        rewards.map(({ stores, payments, transactionType, reward }) => ({
+          reward: rewardFactory(reward),
+          transactionType,
+          stores: new Set(stores),
+          payments: new Set(payments),
+        })),
+      ),
+  )
+  return new CreditCard({ name, plans, blackList: new Set(blackList), cardUrl })
 }
 
 export const isCardConfig = typia.createIs<CardConfig>()

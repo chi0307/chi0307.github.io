@@ -1,14 +1,7 @@
 import { removeDuplicates } from '@/utils'
 
-import { rewardFactory, type Reward, type RewardType } from './Reward'
-import type {
-  Payment,
-  TransactionInfo,
-  RewardMileInfo,
-  TransactionType,
-  PlanConfig,
-  RewardRuleConfig,
-} from './type'
+import { type Reward, type RewardType } from './Reward'
+import type { Payment, TransactionInfo, RewardMileInfo, TransactionType, PlanConfig } from './type'
 
 interface PlanReward {
   readonly reward: Reward<RewardType>
@@ -21,17 +14,12 @@ export class Plan {
   private readonly _name: string
   private readonly _rewards: readonly PlanReward[]
 
-  public constructor(name: string, rewards: RewardRuleConfig[]) {
+  public constructor(name: string, rewards: PlanReward[]) {
     this._name = name
     if (rewards.length === 0) {
       throw new Error(`Plan "${name}" must have at least one reward rule.`)
     }
-    this._rewards = rewards.map(({ stores, payments, transactionType, reward }) => ({
-      reward: rewardFactory(reward),
-      transactionType,
-      stores: new Set(stores),
-      payments: new Set(payments),
-    }))
+    this._rewards = rewards
   }
 
   public get name(): string {

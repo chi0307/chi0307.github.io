@@ -23,7 +23,7 @@ export interface RewardMileInfo {
   readonly payments: readonly Payment[]
 }
 
-export interface RewardRuleConfig {
+interface RewardRuleConfig {
   reward: RewardConfig
   stores: string[]
   payments: Payment[]

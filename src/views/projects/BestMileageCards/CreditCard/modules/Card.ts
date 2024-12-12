@@ -3,6 +3,13 @@ import { removeDuplicates } from '@/utils'
 import { Plan } from './Plan'
 import type { TransactionInfo, RewardMileInfo, CardConfig } from './type'
 
+interface CardParams {
+  name: string
+  plans: Plan[]
+  blackList: Set<string>
+  cardUrl: string | null
+}
+
 // TODO
 // 之後要再想看看能怎麼實作讓 card 這邊可以吃 type, pointsPerMile, milesPerUnit 這些資料
 // 目前放在 reward 裡面可能不是好方法（畢竟目前已知的卡片都是固定回饋方式的）
@@ -18,16 +25,11 @@ export class CreditCard {
   /** 不回饋清單 */
   private readonly _blackList: ReadonlySet<string>
 
-  public constructor({
-    name,
-    plans,
-    blackList,
-    cardUrl,
-  }: Omit<CardConfig, 'plans'> & { plans: Plan[] }) {
+  public constructor({ name, plans, blackList, cardUrl }: CardParams) {
     this._name = name
     this._plans = plans
     this._cardUrl = cardUrl
-    this._blackList = new Set(blackList)
+    this._blackList = blackList
 
     const plan = plans[0]
     if (plan === undefined) {
