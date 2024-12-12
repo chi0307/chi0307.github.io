@@ -1,3 +1,5 @@
+import { removeDuplicates } from '@/utils'
+
 import { rewardFactory, type Reward, type RewardType } from './Reward'
 import type {
   Payment,
@@ -37,8 +39,8 @@ export class Plan {
   }
 
   /** 方便在前端做選單或 autocomplete 用的 */
-  public get inputStores(): string[] {
-    return this._rewards.flatMap((reward) => [...reward.stores.values()])
+  public get storeList(): string[] {
+    return removeDuplicates(this._rewards.flatMap((reward) => [...reward.stores]))
   }
 
   public getApplicableReward({

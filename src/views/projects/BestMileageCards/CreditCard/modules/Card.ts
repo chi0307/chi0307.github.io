@@ -1,3 +1,5 @@
+import { removeDuplicates } from '@/utils'
+
 import { Plan } from './Plan'
 import type { TransactionInfo, RewardMileInfo, CardConfig } from './type'
 
@@ -43,8 +45,8 @@ export class CreditCard {
   }
 
   /** 方便在前端做選單或 autocomplete 用的 */
-  public get inputStores(): string[] {
-    return this._plans.flatMap((plan) => plan.inputStores)
+  public get storeList(): string[] {
+    return removeDuplicates([...this._plans.flatMap((plan) => plan.storeList), ...this._blackList])
   }
 
   public get cardUrl(): string | null {

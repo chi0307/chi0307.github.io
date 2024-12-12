@@ -12,12 +12,14 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 
+import { removeDuplicates } from '@/utils'
+
 import { CreditCard, type TransactionInfo, createCard } from './CreditCard'
 
 const cards = ref<CreditCard[]>([])
 
 const inputStores = computed((): string[] => {
-  return cards.value.flatMap((card) => card.inputStores)
+  return removeDuplicates(cards.value.flatMap((card) => card.storeList))
 })
 
 const list = computed(() => {
