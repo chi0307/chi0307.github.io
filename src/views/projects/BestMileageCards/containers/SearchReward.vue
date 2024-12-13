@@ -46,18 +46,16 @@
         variant="outlined"
       >
         <template #title>
-          <p class="flex items-center justify-between">
+          <div class="flex items-center justify-between">
             {{ item.miles }}
             <i v-if="item.isSelectedPlan" class="fa-solid fa-circle-check" />
-          </p>
+          </div>
         </template>
-        <template #subtitle>
-          <div class="flex-col justify-center gap-4px">
-            <p>
+        <template #text>
+          <div class="flex-col gap-8px">
+            <p class="text-0.75rem">
               {{ `${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''}` }}
-            </p>
-            <p>
-              {{ item.payments.length === 0 ? '' : `支付方式: ${item.payments.join(', ')}` }}
+              {{ item.payments.length === 0 ? '' : ` (支付方式: ${item.payments.join(', ')})` }}
             </p>
           </div>
         </template>
@@ -69,6 +67,7 @@
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 
 import { removeDuplicates } from '@/utils'
+import { sortListByField } from '@/utils/sorts'
 
 import {
   createCard,
@@ -126,7 +125,7 @@ const rewardMilesList = computed((): RewardItem[] => {
     }
   }
   rewardCardListElement.value?.scrollTo({ top: 0, behavior: 'smooth' })
-  return list.sort((a, b) => b.miles - a.miles)
+  return sortListByField(list, 'miles', 'desc')
 })
 
 onMounted(() => {
@@ -254,3 +253,9 @@ function createCube(): CreditCard {
   })
 }
 </script>
+
+<style scoped>
+.v-card-text p {
+  @apply line-height-none;
+}
+</style>
