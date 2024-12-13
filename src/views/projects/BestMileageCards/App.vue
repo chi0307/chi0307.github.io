@@ -1,159 +1,51 @@
 <template>
-  <div>
-    {{ inputStores }}
-    <div v-for="(items, index) of list" :key="index">
-      <div v-for="(item, index2) of items" :key="index2">
-        {{ item.planName }}, {{ item.name }}, {{ item.miles }}, 支付方式:
-        {{ item.payments.join(', ') }}
+  <v-app>
+    <v-app-bar density="comfortable" :elevation="2">
+      <template #prepend>
+        <v-app-bar-nav-icon @click="openNavigation = !openNavigation">
+          <i class="fa-solid fa-bars" />
+        </v-app-bar-nav-icon>
+      </template>
+    </v-app-bar>
+    <v-navigation-drawer v-model="openNavigation">
+      <template v-for="(item, index) of pageList" :key="index">
+        <v-list-item
+          :title="item"
+          class="h-48px"
+          :class="{ 'text-emphasis': currentPage === item }"
+          @click="
+            () => {
+              currentPage = item
+              openNavigation = false
+            }
+          "
+        />
+        <v-divider />
+      </template>
+    </v-navigation-drawer>
+    <v-main>
+      <div class="m-8px">
+        <component :is="componentList[currentPage]" />
       </div>
-    </div>
-  </div>
+    </v-main>
+  </v-app>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
-import { removeDuplicates } from '@/utils'
+import CommonSettings from './Containers/CommonSettings.vue'
+import SearchReward from './Containers/SearchReward.vue'
 
-import { CreditCard, type TransactionInfo, createCard } from './CreditCard'
+const componentList = {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  search: SearchReward,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  setting: CommonSettings,
+} as const
+type PageList = keyof typeof componentList
+const pageList = Object.keys(componentList) as unknown as PageList[]
 
-const cards = ref<CreditCard[]>([])
-
-const inputStores = computed((): string[] => {
-  return removeDuplicates(cards.value.flatMap((card) => card.storeList))
-})
-
-const list = computed(() => {
-  const paymentInfo: TransactionInfo = {
-    amount: 200,
-    transactionStore: 'momo',
-    acceptedPayments: ['Line Pay', 'Apple Pay'],
-    transactionAttributesType: 'Domestic',
-  }
-  return cards.value.map((card) => card.getAllPlanRewardMiles(paymentInfo))
-})
-
-onMounted(() => {
-  cards.value = [createHsbc(), createCube()]
-})
-
-function createHsbc(): CreditCard {
-  return createCard({
-    name: '匯豐旅人卡',
-    cardUrl: null,
-    blackList: [],
-    plans: [
-      {
-        name: '基本回饋',
-        rewards: [
-          {
-            reward: {
-              type: 'DirectMilesReward',
-              name: '國外消費',
-              spendingPerMile: 10,
-            },
-            stores: [],
-            payments: [],
-            transactionType: 'Foreign',
-          },
-          {
-            reward: {
-              type: 'DirectMilesReward',
-              name: '國內消費',
-              spendingPerMile: 20,
-            },
-            stores: [],
-            payments: [],
-            transactionType: 'Domestic',
-          },
-        ],
-      },
-    ],
-  })
-}
-
-function createCube(): CreditCard {
-  return createCard({
-    name: 'Cube 卡',
-    cardUrl: null,
-    blackList: [],
-    plans: [
-      {
-        name: '集精選',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: '基本回饋',
-              pointBackRate: 2,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: ['台灣中油', '全聯', '7-11', '全家'],
-            payments: [],
-            transactionType: null,
-          },
-        ],
-      },
-      {
-        name: '來支付',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: '基本回饋',
-              pointBackRate: 2,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: [],
-            payments: ['Line Pay'],
-            transactionType: null,
-          },
-        ],
-      },
-      {
-        name: '玩數位',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: '基本回饋',
-              pointBackRate: 3,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: ['PChome', '蝦皮購物', '博客來', 'momo'],
-            payments: [],
-            transactionType: null,
-          },
-        ],
-      },
-      {
-        name: '樂饗購',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: '基本回饋',
-              pointBackRate: 3,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: [
-              'SOGO百貨',
-              '太平洋百貨',
-              '新光三越',
-              'Uber Eats',
-              'foodpanda',
-              '康是美',
-              '屈臣氏',
-            ],
-            payments: [],
-            transactionType: null,
-          },
-        ],
-      },
-    ],
-  })
-}
+const openNavigation = ref(false)
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const currentPage = ref<PageList>(pageList[0]!)
 </script>
