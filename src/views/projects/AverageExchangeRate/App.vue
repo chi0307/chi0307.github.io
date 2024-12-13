@@ -38,13 +38,11 @@
       </template>
     </v-data-table>
     <div class="fixed bottom-24px right-24px" @click="showAddItemDialog = true">
-      <v-btn icon>
-        <i class="fas fa-plus" />
-      </v-btn>
+      <v-btn icon="fas fa-plus" />
     </div>
   </main>
   <v-dialog v-model="showAddItemDialog">
-    <v-card prepend-icon="mdi-update" title="Add Item">
+    <v-card title="Add Item">
       <template #text>
         <v-text-field
           v-model="addItem.date"
@@ -81,7 +79,7 @@
     </v-card>
   </v-dialog>
   <v-dialog v-model="showEditTabDialog">
-    <v-card v-if="editTab !== null" prepend-icon="mdi-update" title="Setting">
+    <v-card v-if="editTab !== null" title="Setting">
       <template #text>
         <div class="flex-col gap-8px">
           <v-text-field v-model="editTab.title" hide-details="auto" label="標籤名稱" />
