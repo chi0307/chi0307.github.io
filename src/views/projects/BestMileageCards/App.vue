@@ -32,8 +32,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import CommonSettings from './Containers/CommonSettings.vue'
-import SearchReward from './Containers/SearchReward.vue'
+import CommonSettings from './containers/CommonSettings.vue'
+import SearchReward from './containers/SearchReward.vue'
 
 const componentList = {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
