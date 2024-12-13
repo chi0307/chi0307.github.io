@@ -1,3 +1,5 @@
+import type { UUID } from '@/types'
+
 import type { RewardConfig } from './Reward'
 
 export const Payment = ['Line Pay', 'Apple Pay', '街口支付', '信用卡'] as const
@@ -17,7 +19,8 @@ export interface TransactionInfo {
 
 /** 回饋哩程資訊 */
 export interface RewardMileInfo {
-  readonly planName: string
+  readonly planId: UUID | null
+  readonly planName: string | null
   readonly name: string | null
   readonly miles: number
   readonly payments: readonly Payment[]
@@ -30,7 +33,8 @@ interface RewardRuleConfig {
   transactionType: TransactionType | null
 }
 export interface PlanConfig {
-  name: string
+  name: string | null
+  /** 回饋列表會有順序問題，前面的達成後就不會往下搜索，所以需要注意順序 */
   rewards: RewardRuleConfig[]
 }
 export interface CardConfig {

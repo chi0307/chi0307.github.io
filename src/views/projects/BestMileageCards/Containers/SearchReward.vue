@@ -33,21 +33,23 @@
       <v-radio density="compact" label="國外交易" value="Foreign" />
     </v-radio-group>
   </div>
-  <div class="flex-col gap-4px">
+  <div class="gap-4px flex-col">
     <v-card
-      v-for="(item, index) of list"
+      v-for="(item, index) of rewardMilesList"
       :key="index"
       density="compact"
       class="mx-auto w-full"
-      :subtitle="`${item.planName} ${item.name ?? ''}`"
-      :title="item.miles"
+      :subtitle="`${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''}`"
       link
-    />
+    >
+      <template #title>
+        <p class="flex items-center justify-between">
+          {{ item.miles }}
+          <i v-if="item.isSelectedPlan" class="fa-solid fa-circle-check" />
+        </p>
+      </template>
+    </v-card>
   </div>
-  <!-- <div>
-    {{ item.planName }}, {{ item.name }}, {{ item.miles }}, 支付方式:
-    {{ item.payments.join(', ') }}
-  </div> -->
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
@@ -58,10 +60,18 @@ import {
   createCard,
   Payment,
   type CreditCard,
-  type RewardMileInfo,
   type TransactionInfo,
   type TransactionType,
 } from '../CreditCard'
+
+interface RewardItem {
+  cardName: string
+  planName: string | null
+  rewardName: string | null
+  miles: number
+  isSelectedPlan: boolean
+  payments: readonly Payment[]
+}
 
 const cards = ref<CreditCard[]>([])
 const amount = ref<number>(0)
@@ -74,7 +84,7 @@ const storeList = computed((): string[] => {
   return removeDuplicates(['其他店家', ...cards.value.flatMap((card) => card.storeList)])
 })
 
-const list = computed((): RewardMileInfo[] => {
+const rewardMilesList = computed((): RewardItem[] => {
   const paymentInfo: TransactionInfo = {
     amount: amount.value,
     acceptedPayments: acceptedPayments.value,
@@ -83,10 +93,22 @@ const list = computed((): RewardMileInfo[] => {
   if (transactionStore.value !== '' && transactionStore.value !== otherStore) {
     paymentInfo.transactionStore = transactionStore.value
   }
-  return cards.value
-    .map((card) => card.getAllPlanRewardMiles(paymentInfo))
-    .flat(1)
-    .sort((a, b) => b.miles - a.miles)
+  const list: RewardItem[] = []
+  for (const card of cards.value) {
+    const rewardMileList = card.getAllPlanRewardMiles(paymentInfo)
+    for (const item of rewardMileList) {
+      const rewardItem: RewardItem = {
+        cardName: card.name,
+        planName: item.planName,
+        rewardName: item.name,
+        miles: item.miles,
+        payments: item.payments,
+        isSelectedPlan: item.planId === card.selectedPlanId,
+      }
+      list.push(rewardItem)
+    }
+  }
+  return list.sort((a, b) => b.miles - a.miles)
 })
 
 onMounted(() => {
@@ -100,7 +122,7 @@ function createHsbc(): CreditCard {
     blackList: [],
     plans: [
       {
-        name: '',
+        name: null,
         rewards: [
           {
             reward: {
@@ -140,7 +162,7 @@ function createCube(): CreditCard {
           {
             reward: {
               type: 'RoundedPointsRewardPercentage',
-              name: '',
+              name: null,
               pointBackRate: 2,
               pointsPerMile: 300,
               milesPerUnit: 1000,
@@ -157,7 +179,7 @@ function createCube(): CreditCard {
           {
             reward: {
               type: 'RoundedPointsRewardPercentage',
-              name: '',
+              name: null,
               pointBackRate: 2,
               pointsPerMile: 300,
               milesPerUnit: 1000,
@@ -174,7 +196,7 @@ function createCube(): CreditCard {
           {
             reward: {
               type: 'RoundedPointsRewardPercentage',
-              name: '',
+              name: null,
               pointBackRate: 3,
               pointsPerMile: 300,
               milesPerUnit: 1000,
@@ -191,7 +213,7 @@ function createCube(): CreditCard {
           {
             reward: {
               type: 'RoundedPointsRewardPercentage',
-              name: '',
+              name: null,
               pointBackRate: 3,
               pointsPerMile: 300,
               milesPerUnit: 1000,

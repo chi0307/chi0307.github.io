@@ -11,18 +11,18 @@ interface PlanReward {
 }
 
 export class Plan {
-  private readonly _name: string
+  private readonly _name: string | null
   private readonly _rewards: readonly PlanReward[]
 
-  public constructor(name: string, rewards: PlanReward[]) {
+  public constructor(name: string | null, rewards: PlanReward[]) {
     this._name = name
     if (rewards.length === 0) {
-      throw new Error(`Plan "${name}" must have at least one reward rule.`)
+      throw new Error(`Plan "${name ?? 'unknown'}" must have at least one reward rule.`)
     }
     this._rewards = rewards
   }
 
-  public get name(): string {
+  public get name(): string | null {
     return this._name
   }
 

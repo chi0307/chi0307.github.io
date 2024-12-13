@@ -1,4 +1,5 @@
-import { removeDuplicates } from '@/utils'
+import type { UUID } from '@/types'
+import { generateUuid, removeDuplicates } from '@/utils'
 
 import { Plan } from './Plan'
 import type { TransactionInfo, RewardMileInfo, CardConfig } from './type'
@@ -15,11 +16,11 @@ interface CardParams {
 // 目前放在 reward 裡面可能不是好方法（畢竟目前已知的卡片都是固定回饋方式的）
 export class CreditCard {
   /** 當前選擇的方案 */
-  private _currentPlan: Plan
+  private _selectedPlanId: UUID
   /** 卡片名稱 */
   private readonly _name: string
   /** 全部的方案 (如果像旅人卡那樣，只有一種回饋方式這邊選項就會只有一個) */
-  private readonly _plans: readonly Plan[]
+  private readonly _plans: ReadonlyMap<UUID, Plan>
   /** 信用卡的銀行網頁 */
   private readonly _cardUrl: string | null
   /** 不回饋清單 */
@@ -27,47 +28,69 @@ export class CreditCard {
 
   public constructor({ name, plans, blackList, cardUrl }: CardParams) {
     this._name = name
-    this._plans = plans
+    this._plans = new Map(plans.map((plan) => [generateUuid(), plan]))
     this._cardUrl = cardUrl
     this._blackList = blackList
 
-    const plan = plans[0]
-    if (plan === undefined) {
+    const firstPlanKey = this._plans.keys().next().value
+    if (this._plans.size === 0 || firstPlanKey === undefined) {
       throw new Error('this credit card no any plan')
     }
-    this._currentPlan = plan
+    this._selectedPlanId = firstPlanKey
+  }
+
+  public get selectedPlan(): Plan {
+    return this._getPlan(this._selectedPlanId)
   }
 
   public get name(): string {
     return this._name
   }
 
-  public get allPlanNames(): string[] {
-    return this._plans.map((plan) => plan.name)
+  public get selectedPlanId(): UUID {
+    return this._selectedPlanId
+  }
+
+  /** 回傳 uuid 跟 plan name */
+  public get selectablePlan(): { id: UUID; name: string | null }[] {
+    return [...this._plans.entries()].map(([id, { name }]) => ({ id, name }))
   }
 
   /** 方便在前端做選單或 autocomplete 用的 */
   public get storeList(): string[] {
-    return removeDuplicates([...this._plans.flatMap((plan) => plan.storeList), ...this._blackList])
+    return removeDuplicates([
+      ...[...this._plans.values()].flatMap((plan) => plan.storeList),
+      ...this._blackList,
+    ])
   }
 
   public get cardUrl(): string | null {
     return this._cardUrl
   }
 
-  public switchPlan(planName: string): void {
-    const plan = this._plans.find((p) => p.name === planName)
+  public switchPlan(id: UUID): boolean {
+    const plan = this._plans.get(id)
     if (plan) {
-      this._currentPlan = plan
-    } else {
-      throw new Error(
-        `plan ${planName} not found. Available plans: ${this._plans.map((p) => p.name).join(', ')}`,
-      )
+      this._selectedPlanId = id
+      return true
     }
+    return false
   }
 
-  private _rewardMilesWithPlan(plan: Plan, paymentInfo: TransactionInfo): RewardMileInfo {
+  private _getPlan(id: UUID): Plan {
+    const plan = this._plans.get(id)
+    if (plan === undefined) {
+      throw new Error(
+        `plan id ${id} not found. Available plans: ${[...this._plans.keys()].join(', ')}`,
+      )
+    }
+    return plan
+  }
+
+  private _rewardMilesWithPlan(planId: UUID, paymentInfo: TransactionInfo): RewardMileInfo {
+    const plan = this._getPlan(planId)
     const noneMatchRewardInfo: RewardMileInfo = {
+      planId: null,
       planName: plan.name,
       name: null,
       miles: 0,
@@ -84,17 +107,18 @@ export class CreditCard {
       return noneMatchRewardInfo
     }
     return {
+      planId,
       planName: plan.name,
       ...reward,
     }
   }
 
   public currentPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo {
-    return this._rewardMilesWithPlan(this._currentPlan, paymentInfo)
+    return this._rewardMilesWithPlan(this._selectedPlanId, paymentInfo)
   }
 
   public getAllPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo[] {
-    return this._plans.map((plan) => this._rewardMilesWithPlan(plan, paymentInfo))
+    return [...this._plans.keys()].map((id) => this._rewardMilesWithPlan(id, paymentInfo))
   }
 
   public toJSON(): CardConfig {
@@ -102,7 +126,7 @@ export class CreditCard {
       name: this._name,
       cardUrl: this._cardUrl,
       blackList: [...this._blackList.values()],
-      plans: this._plans.map((plan) => plan.toJSON()),
+      plans: [...this._plans.values()].map((plan) => plan.toJSON()),
     }
   }
 }

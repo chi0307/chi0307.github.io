@@ -4,7 +4,7 @@ const round = roundByDigits(2)
 
 interface BaseRewardParams<Type extends RewardType> {
   readonly type: Type
-  readonly name: string
+  readonly name: string | null
   /** N 點可以換里程 */
   readonly pointsPerMile: number
   /** 可以換 N 哩里程 */
@@ -12,7 +12,7 @@ interface BaseRewardParams<Type extends RewardType> {
 }
 abstract class BaseReward<Type extends RewardType> {
   protected readonly _type: Type
-  protected readonly _name: string
+  protected readonly _name: string | null
   /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
   protected readonly _pointsPerMile: number
   /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
@@ -44,7 +44,7 @@ abstract class BaseReward<Type extends RewardType> {
   }
 
   /** 回饋名稱 */
-  public get name(): string {
+  public get name(): string | null {
     return this._name
   }
 
