@@ -1,58 +1,72 @@
 <template>
-  <v-text-field
-    v-model.number="amount"
-    class="mb-8px"
-    density="comfortable"
-    hide-details
-    label="交易金額"
-  />
-  <v-autocomplete
-    v-model="transactionStore"
-    class="mb-8px"
-    density="comfortable"
-    hide-details
-    label="消費店家"
-    :items="storeList"
-  />
-  <v-label text="支援的付款方式" />
-  <div class="flex items-center flex-wrap gap-x-8px">
-    <v-checkbox
-      v-for="(payment, index) of Payment"
-      :key="index"
-      v-model="acceptedPayments"
-      density="compact"
-      :value="payment"
+  <div class="flex-col gap-8px h-full">
+    <v-text-field
+      v-model.number="amount"
+      class="flex-grow-0"
+      density="comfortable"
       hide-details
-      :label="payment"
+      label="交易金額"
+      inputmode="decimal"
     />
-  </div>
-  <div class="flex-center gap-8px">
-    <v-label text="交易類型" />
-    <v-radio-group v-model="transactionAttributesType" hide-details inline>
-      <v-radio density="compact" label="國內交易" value="Domestic" />
-      <v-radio density="compact" label="國外交易" value="Foreign" />
-    </v-radio-group>
-  </div>
-  <div class="gap-4px flex-col">
-    <v-card
-      v-for="(item, index) of rewardMilesList"
-      :key="index"
-      density="compact"
-      class="mx-auto w-full"
-      :subtitle="`${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''}`"
-      link
-    >
-      <template #title>
-        <p class="flex items-center justify-between">
-          {{ item.miles }}
-          <i v-if="item.isSelectedPlan" class="fa-solid fa-circle-check" />
-        </p>
-      </template>
-    </v-card>
+    <v-autocomplete
+      v-model="transactionStore"
+      class="flex-grow-0"
+      density="comfortable"
+      hide-details
+      label="消費店家"
+      :items="storeList"
+    />
+    <div>
+      <v-label text="支援的付款方式" />
+      <div class="flex items-center flex-wrap gap-x-8px">
+        <v-checkbox
+          v-for="(payment, index) of Payment"
+          :key="index"
+          v-model="acceptedPayments"
+          density="compact"
+          :value="payment"
+          hide-details
+          :label="payment"
+        />
+      </div>
+    </div>
+    <div class="flex-center gap-8px">
+      <v-label text="交易類型" />
+      <v-radio-group v-model="transactionAttributesType" hide-details inline>
+        <v-radio density="compact" label="國內交易" value="Domestic" />
+        <v-radio density="compact" label="國外交易" value="Foreign" />
+      </v-radio-group>
+    </div>
+    <div ref="rewardCardList" class="gap-4px flex-col flex-grow-1 overflow-y-auto">
+      <v-card
+        v-for="(item, index) of rewardMilesList"
+        :key="index"
+        density="compact"
+        class="mx-auto w-full flex-shrink-0"
+        variant="outlined"
+      >
+        <template #title>
+          <p class="flex items-center justify-between">
+            {{ item.miles }}
+            <i v-if="item.isSelectedPlan" class="fa-solid fa-circle-check" />
+          </p>
+        </template>
+        <template #subtitle>
+          <div class="flex-col justify-center gap-4px">
+            <p>
+              {{ `${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''}` }}
+            </p>
+            <p>
+              {{ item.payments.length === 0 ? '' : `支付方式: ${item.payments.join(', ')}` }}
+            </p>
+          </div>
+        </template>
+      </v-card>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, useTemplateRef } from 'vue'
 
 import { removeDuplicates } from '@/utils'
 
@@ -79,9 +93,12 @@ const transactionStore = ref<string>('')
 const otherStore = '其他店家'
 const transactionAttributesType = ref<TransactionType>('Domestic')
 const acceptedPayments = ref<Payment[]>([])
+const rewardCardListElement = useTemplateRef<Element>('rewardCardList')
 
 const storeList = computed((): string[] => {
-  return removeDuplicates(['其他店家', ...cards.value.flatMap((card) => card.storeList)])
+  return removeDuplicates(['其他店家', ...cards.value.flatMap((card) => card.storeList)]).sort(
+    (a, b) => (a > b ? 1 : -1),
+  )
 })
 
 const rewardMilesList = computed((): RewardItem[] => {
@@ -108,6 +125,7 @@ const rewardMilesList = computed((): RewardItem[] => {
       list.push(rewardItem)
     }
   }
+  rewardCardListElement.value?.scrollTo({ top: 0, behavior: 'smooth' })
   return list.sort((a, b) => b.miles - a.miles)
 })
 
@@ -119,7 +137,7 @@ function createHsbc(): CreditCard {
   return createCard({
     name: '匯豐旅人卡',
     cardUrl: null,
-    blackList: [],
+    blackList: ['全聯'],
     plans: [
       {
         name: null,

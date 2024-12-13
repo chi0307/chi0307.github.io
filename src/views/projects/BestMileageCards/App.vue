@@ -5,6 +5,7 @@
         <v-app-bar-nav-icon @click="openNavigation = !openNavigation">
           <i class="fa-solid fa-bars" />
         </v-app-bar-nav-icon>
+        <v-app-bar-title>回饋哩程查詢</v-app-bar-title>
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="openNavigation">
@@ -23,11 +24,9 @@
         <v-divider />
       </template>
     </v-navigation-drawer>
-    <v-main>
-      <div class="m-8px">
-        <component :is="componentList[currentPage]" />
-      </div>
-    </v-main>
+    <main style="height: calc(100dvh - 56px)" class="overflow-hidden mt-56px p-8px">
+      <component :is="componentList[currentPage]" />
+    </main>
   </v-app>
 </template>
 <script lang="ts" setup>
