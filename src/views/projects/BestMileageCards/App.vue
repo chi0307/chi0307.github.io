@@ -25,7 +25,9 @@
       </template>
     </v-navigation-drawer>
     <main style="height: calc(100dvh - 56px)" class="overflow-hidden mt-56px p-8px">
-      <component :is="componentList[currentPage]" />
+      <KeepAlive>
+        <component :is="componentList[currentPage]" />
+      </KeepAlive>
     </main>
   </v-app>
 </template>
@@ -37,9 +39,9 @@ import SearchReward from './containers/SearchReward.vue'
 
 const componentList = {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  search: SearchReward,
+  查詢回饋: SearchReward,
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  setting: CommonSettings,
+  喜好設定: CommonSettings,
 } as const
 type PageList = keyof typeof componentList
 const pageList = Object.keys(componentList) as unknown as PageList[]

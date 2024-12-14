@@ -68,6 +68,7 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 
 import { removeDuplicates } from '@/utils'
@@ -76,11 +77,13 @@ import { sortList, sortListByField } from '@/utils/sorts'
 import { hsbcCards } from '../configs/hsbc'
 import {
   createCard,
+  CreditCard,
   Payment,
-  type CreditCard,
+  type RewardMileInfo,
   type TransactionInfo,
   type TransactionType,
 } from '../CreditCard'
+import { useBestMileageCardsStore } from '../store'
 
 interface RewardItem {
   cardName: string
@@ -90,6 +93,8 @@ interface RewardItem {
   isSelectedPlan: boolean
   payments: readonly Payment[]
 }
+
+const { showRewardMilesType } = storeToRefs(useBestMileageCardsStore())
 
 const cards = ref<CreditCard[]>([])
 const amount = ref<number>(0)
@@ -105,6 +110,14 @@ const storeList = computed((): string[] => {
   return [otherStore, ...stores]
 })
 
+function getRewardMiles(card: CreditCard, paymentInfo: TransactionInfo): RewardMileInfo[] {
+  if (showRewardMilesType.value === 'CurrentPlanRewardMiles') {
+    return [card.currentPlanRewardMiles(paymentInfo)]
+  } else {
+    return card.getAllPlanRewardMiles(paymentInfo)
+  }
+}
+
 const rewardMilesList = computed((): RewardItem[] => {
   const paymentInfo: TransactionInfo = {
     amount: amount.value,
@@ -116,7 +129,10 @@ const rewardMilesList = computed((): RewardItem[] => {
   }
   const list: RewardItem[] = []
   for (const card of cards.value) {
-    const rewardMileList = card.getAllPlanRewardMiles(paymentInfo)
+    if (!(card instanceof CreditCard)) {
+      continue
+    }
+    const rewardMileList = getRewardMiles(card, paymentInfo)
     for (const item of rewardMileList) {
       const rewardItem: RewardItem = {
         cardName: card.name,
@@ -124,7 +140,8 @@ const rewardMilesList = computed((): RewardItem[] => {
         rewardName: item.name,
         miles: item.miles,
         payments: item.payments,
-        isSelectedPlan: item.planId === card.selectedPlanId,
+        isSelectedPlan:
+          showRewardMilesType.value === 'AllPlanRewardMiles' && item.planId === card.selectedPlanId,
       }
       list.push(rewardItem)
     }
