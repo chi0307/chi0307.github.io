@@ -33,11 +33,11 @@ export class Plan {
 
   public getApplicableReward({
     transactionStore = null,
-    acceptedPayments = null,
+    acceptedPayments = [],
     transactionAttributesType,
   }: {
     transactionStore?: string | null | undefined
-    acceptedPayments?: Payment[] | null | undefined
+    acceptedPayments?: Payment[] | undefined
     transactionAttributesType: TransactionType
   }): PlanReward | null {
     return (
@@ -45,7 +45,7 @@ export class Plan {
         const isStore =
           transactionStore === null || stores.size === 0 || stores.has(transactionStore)
         const isPayment =
-          acceptedPayments === null ||
+          acceptedPayments.length === 0 ||
           payments.size === 0 ||
           acceptedPayments.some((payment) => payments.has(payment))
         const isTransactionType =
@@ -69,10 +69,14 @@ export class Plan {
     if (reward === null) {
       return null
     }
+    const payments =
+      acceptedPayments === undefined
+        ? [...reward.payments.values()]
+        : acceptedPayments.filter((item) => reward.payments.has(item))
     return {
       name: reward.reward.name,
       miles: reward.reward.calculateMiles(amount),
-      payments: [...reward.payments.values()],
+      payments,
     }
   }
 

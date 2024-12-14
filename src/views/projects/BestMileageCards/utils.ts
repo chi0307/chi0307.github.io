@@ -1,8 +1,8 @@
 import typia from 'typia'
 
 import { CustomStorageManager } from '@/utils/StorageManager'
-import type { Payment } from '@/views/projects/BestMileageCards/CreditCard'
 
+import { type Payment } from './CreditCard'
 import { isShowRewardMilesType, type ShowRewardMilesType } from './types'
 
 export const storageManager = new CustomStorageManager<{

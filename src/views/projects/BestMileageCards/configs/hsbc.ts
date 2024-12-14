@@ -1,6 +1,6 @@
 import type { CardConfig } from '../CreditCard'
 
-const blackList: string[] = []
+const blackList: string[] = ['全聯']
 
 export const hsbcCards: CardConfig[] = [
   {
