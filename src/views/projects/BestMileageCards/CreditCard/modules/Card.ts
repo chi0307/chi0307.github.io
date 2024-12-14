@@ -9,6 +9,7 @@ interface CardParams {
   plans: Plan[]
   blackList: Set<string>
   cardUrl: string | null
+  updateAt: Date
 }
 
 // TODO
@@ -25,12 +26,14 @@ export class CreditCard {
   private readonly _cardUrl: string | null
   /** 不回饋清單 */
   private readonly _blackList: ReadonlySet<string>
+  private readonly _updateAt: Date
 
-  public constructor({ name, plans, blackList, cardUrl }: CardParams) {
+  public constructor({ name, plans, blackList, cardUrl, updateAt }: CardParams) {
     this._name = name
     this._plans = new Map(plans.map((plan) => [generateUuid(), plan]))
     this._cardUrl = cardUrl
     this._blackList = blackList
+    this._updateAt = updateAt
 
     const firstPlanKey = this._plans.keys().next().value
     if (this._plans.size === 0 || firstPlanKey === undefined) {
@@ -127,6 +130,7 @@ export class CreditCard {
       cardUrl: this._cardUrl,
       blackList: [...this._blackList.values()],
       plans: [...this._plans.values()].map((plan) => plan.toJSON()),
+      updateAt: this._updateAt.toISOString(),
     }
   }
 }

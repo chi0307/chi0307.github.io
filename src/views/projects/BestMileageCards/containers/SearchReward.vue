@@ -172,6 +172,7 @@ function createCube(): CreditCard {
     name: 'Cube 卡',
     cardUrl: null,
     blackList: [],
+    updateAt: '2024-12-01T00:00:00.000Z',
     plans: [
       {
         name: '集精選',

@@ -10,6 +10,7 @@ export function createCard({
   blackList,
   cardUrl,
   plans: planConfigs,
+  updateAt,
 }: CardConfig): CreditCard {
   const plans: Plan[] = planConfigs.map(
     ({ name, rewards }) =>
@@ -23,7 +24,13 @@ export function createCard({
         })),
       ),
   )
-  return new CreditCard({ name, plans, blackList: new Set(blackList), cardUrl })
+  return new CreditCard({
+    name,
+    plans,
+    blackList: new Set(blackList),
+    cardUrl,
+    updateAt: new Date(updateAt),
+  })
 }
 
 export const isCardConfig = typia.createIs<CardConfig>()

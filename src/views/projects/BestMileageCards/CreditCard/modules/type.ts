@@ -1,4 +1,4 @@
-import type { UUID } from '@/types'
+import type { DateISOString, UUID } from '@/types'
 
 import type { RewardConfig } from './Reward'
 
@@ -42,4 +42,6 @@ export interface CardConfig {
   cardUrl: string | null
   blackList: string[]
   plans: PlanConfig[]
+  /** 最後更新卡片權益的時間 */
+  updateAt: DateISOString
 }
