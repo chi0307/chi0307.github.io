@@ -5,7 +5,7 @@
         <v-app-bar-nav-icon @click="openNavigation = !openNavigation">
           <i class="fa-solid fa-bars" />
         </v-app-bar-nav-icon>
-        <v-app-bar-title>回饋哩程查詢</v-app-bar-title>
+        <v-app-bar-title>{{ currentPage }}</v-app-bar-title>
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="openNavigation">
@@ -35,11 +35,14 @@
 import { ref } from 'vue'
 
 import CommonSettings from './containers/CommonSettings.vue'
+import CreditCardManagement from './containers/CreditCardManagement.vue'
 import SearchReward from './containers/SearchReward.vue'
 
 const componentList = {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   查詢回饋: SearchReward,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  信用卡管理: CreditCardManagement,
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   喜好設定: CommonSettings,
 } as const
