@@ -11,6 +11,7 @@
     <v-autocomplete
       ref="storeAutoComplete"
       v-model="transactionStore"
+      :custom-filter="customSearchStore"
       class="flex-grow-0"
       density="comfortable"
       hide-details
@@ -77,6 +78,7 @@ import { computed, ref, useTemplateRef } from 'vue'
 import { removeDuplicates } from '@/utils'
 import { sortList, sortListByField } from '@/utils/sorts'
 
+import { storeCategories, storeAliases } from '../configs/storeAliases'
 import {
   CreditCard,
   type Payment,
@@ -106,10 +108,36 @@ const acceptedPayments = ref<Payment[]>([])
 const rewardCardListElement = useTemplateRef<HTMLElement>('rewardCardList')
 const storeAutoCompleteElement = useTemplateRef<HTMLElement>('storeAutoComplete')
 
-const storeList = computed((): string[] => {
+interface Item {
+  title: string
+  aliases?: string[]
+}
+const storeList = computed((): Item[] => {
   const stores = sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
-  return [otherStore, ...stores]
+  const items = stores.map((store) => {
+    const aliases: string[] = storeAliases[store] ?? []
+    for (const { category, stores } of storeCategories) {
+      if (stores.includes(store)) {
+        aliases.push(category)
+      }
+    }
+    return {
+      title: store,
+      aliases,
+    }
+  })
+  return [{ title: otherStore }, ...items]
 })
+
+function customSearchStore(
+  value: string,
+  searchQuery: string,
+  item?: { raw: Item; value: string },
+): boolean {
+  searchQuery = searchQuery.toLowerCase()
+  const list = [value, ...(item?.raw.aliases ?? [])].map((item) => item.toLowerCase())
+  return list.some((item) => item.includes(searchQuery))
+}
 
 function getRewardMiles(card: CreditCard, paymentInfo: TransactionInfo): RewardMileInfo[] {
   if (showRewardMilesType.value === 'CurrentPlanRewardMiles') {
