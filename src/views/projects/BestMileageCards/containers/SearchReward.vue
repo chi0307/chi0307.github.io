@@ -9,12 +9,16 @@
       inputmode="decimal"
     />
     <v-autocomplete
+      ref="storeAutoComplete"
       v-model="transactionStore"
       class="flex-grow-0"
       density="comfortable"
       hide-details
       label="消費店家"
       :items="storeList"
+      :clearable="transactionStore !== ''"
+      placeholder="全部店家"
+      @update:menu="(status: boolean) => !status && storeAutoCompleteElement?.blur()"
     />
     <div>
       <v-label text="支援的付款方式" />
@@ -67,7 +71,7 @@
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 
 import { removeDuplicates } from '@/utils'
-import { sortListByField } from '@/utils/sorts'
+import { sortList, sortListByField } from '@/utils/sorts'
 
 import { hsbcCards } from '../configs/hsbc'
 import {
@@ -93,12 +97,12 @@ const transactionStore = ref<string>('')
 const otherStore = '其他店家'
 const transactionAttributesType = ref<TransactionType>('Domestic')
 const acceptedPayments = ref<Payment[]>([])
-const rewardCardListElement = useTemplateRef<Element>('rewardCardList')
+const rewardCardListElement = useTemplateRef<HTMLElement>('rewardCardList')
+const storeAutoCompleteElement = useTemplateRef<HTMLElement>('storeAutoComplete')
 
 const storeList = computed((): string[] => {
-  return removeDuplicates(['其他店家', ...cards.value.flatMap((card) => card.storeList)]).sort(
-    (a, b) => (a > b ? 1 : -1),
-  )
+  const stores = sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
+  return [otherStore, ...stores]
 })
 
 const rewardMilesList = computed((): RewardItem[] => {
@@ -107,7 +111,7 @@ const rewardMilesList = computed((): RewardItem[] => {
     acceptedPayments: acceptedPayments.value,
     transactionAttributesType: transactionAttributesType.value,
   }
-  if (transactionStore.value !== '' && transactionStore.value !== otherStore) {
+  if (transactionStore.value !== '') {
     paymentInfo.transactionStore = transactionStore.value
   }
   const list: RewardItem[] = []
