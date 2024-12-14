@@ -2,7 +2,30 @@ import type { DateISOString, UUID } from '@/types'
 
 import type { RewardConfig } from './Reward'
 
-export const Payment = ['Line Pay', 'Apple Pay', '街口支付', '信用卡'] as const
+export const Payment = [
+  '信用卡',
+  'Apple Pay',
+  'Samsung Pay',
+  'Google Pay',
+  'Line Pay',
+  'Fitbit Pay',
+  'Garmin Pay',
+  'Hami Pay',
+  '街口支付',
+  '全盈+PAY',
+  '全支付',
+  'Pi錢包',
+  '橘子支付',
+  '歐付寶',
+  'icash pay',
+  'OPEN錢包',
+  'My FamiPay',
+  '悠遊付',
+  'ezPay',
+  'GOMAJI Pay',
+  'friday wallet',
+  'PayPal',
+] as const
 export type Payment = (typeof Payment)[number]
 export type TransactionType = 'Domestic' | 'Foreign'
 

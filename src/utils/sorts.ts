@@ -2,7 +2,7 @@ type ReturnSortEvent = 1 | -1 | 0
 type SortEvent<T> = (aItem: T, bItem: T) => ReturnSortEvent
 
 export function sortList<T extends string | number | boolean>(
-  list: T[],
+  list: readonly T[],
   direction: 'asc' | 'desc',
 ): T[] {
   let sortEvent: SortEvent<T>
@@ -19,7 +19,7 @@ export function sortList<T extends string | number | boolean>(
 }
 
 export function sortListByField<T extends object>(
-  list: T[],
+  list: readonly T[],
   sortBy: keyof T,
   direction: 'asc' | 'desc',
 ): T[] {
@@ -41,7 +41,7 @@ export function sortListByField<T extends object>(
 }
 
 export function sortListByDate<T extends object, D extends keyof T>(
-  list: T[],
+  list: readonly T[],
   sortBy: D & (T[D] extends Date ? D : never), // 限制 D 的型別
   direction: 'asc' | 'desc',
 ): T[] {

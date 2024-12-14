@@ -24,7 +24,7 @@
       <v-label text="支援的付款方式" />
       <div class="flex items-center flex-wrap gap-x-8px">
         <v-checkbox
-          v-for="(payment, index) of Payment"
+          v-for="(payment, index) of commonPaymentMethods"
           :key="index"
           v-model="acceptedPayments"
           density="compact"
@@ -78,7 +78,7 @@ import { hsbcCards } from '../configs/hsbc'
 import {
   createCard,
   CreditCard,
-  Payment,
+  type Payment,
   type RewardMileInfo,
   type TransactionInfo,
   type TransactionType,
@@ -94,7 +94,7 @@ interface RewardItem {
   payments: readonly Payment[]
 }
 
-const { showRewardMilesType } = storeToRefs(useBestMileageCardsStore())
+const { showRewardMilesType, commonPaymentMethods } = storeToRefs(useBestMileageCardsStore())
 
 const cards = ref<CreditCard[]>([])
 const amount = ref<number>(0)
