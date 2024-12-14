@@ -1,5 +1,5 @@
 import type { UUID } from '@/types'
-import { generateUuid, removeDuplicates } from '@/utils'
+import { removeDuplicates } from '@/utils'
 
 import { Plan } from './Plan'
 import {
@@ -11,12 +11,12 @@ import {
 } from './type'
 
 interface CardParams {
-  name: string
-  plans: Plan[]
-  blackList: Set<string>
-  cardUrl: string | null
-  updateAt: Date
-  airLines: AirLines
+  readonly name: string
+  readonly plans: ReadonlyMap<UUID, Plan>
+  readonly blackList: ReadonlySet<string>
+  readonly cardUrl: string | null
+  readonly updateAt: Date
+  readonly airLines: AirLines
 }
 
 // TODO
@@ -39,7 +39,7 @@ export class CreditCard {
 
   public constructor({ name, plans, blackList, cardUrl, updateAt, airLines }: CardParams) {
     this._name = name
-    this._plans = new Map(plans.map((plan) => [generateUuid(), plan]))
+    this._plans = plans
     this._cardUrl = cardUrl
     this._blackList = blackList
     this._updateAt = updateAt
@@ -89,7 +89,7 @@ export class CreditCard {
     return this._cardUrl
   }
 
-  public switchPlan(id: UUID): boolean {
+  public updatePlan(id: UUID): boolean {
     const plan = this._plans.get(id)
     if (plan) {
       this._selectedPlanId = id

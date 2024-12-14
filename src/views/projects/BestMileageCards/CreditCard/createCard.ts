@@ -1,5 +1,8 @@
 import typia from 'typia'
 
+import type { UUID } from '@/types'
+import { generateUuid } from '@/utils'
+
 import { CreditCard } from './modules/Card'
 import { Plan } from './modules/Plan'
 import { rewardFactory } from './modules/Reward'
@@ -13,8 +16,9 @@ export function createCard({
   updateAt,
   airLines,
 }: CardConfig): CreditCard {
-  const plans: Plan[] = planConfigs.map(
-    ({ name, rewards }) =>
+  const plans = new Map<UUID, Plan>(
+    planConfigs.map(({ name, rewards }) => [
+      generateUuid(),
       new Plan(
         name,
         rewards.map(({ stores, payments, transactionType, reward }) => ({
@@ -24,6 +28,7 @@ export function createCard({
           payments: new Set(payments),
         })),
       ),
+    ]),
   )
   return new CreditCard({
     name,
