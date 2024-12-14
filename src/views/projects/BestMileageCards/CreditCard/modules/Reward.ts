@@ -1,5 +1,7 @@
 import { roundByDigits } from '@/utils'
 
+import type { AirLines } from './type'
+
 const round = roundByDigits(2)
 
 interface BaseRewardParams<Type extends RewardType> {
@@ -9,6 +11,8 @@ interface BaseRewardParams<Type extends RewardType> {
   readonly pointsPerMile: number
   /** 可以換 N 哩里程 */
   readonly milesPerUnit: number
+  /** 目標里程 */
+  readonly airLines: AirLines
 }
 abstract class BaseReward<Type extends RewardType> {
   protected readonly _type: Type
@@ -17,12 +21,21 @@ abstract class BaseReward<Type extends RewardType> {
   protected readonly _pointsPerMile: number
   /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
   protected readonly _milesPerUnit: number
+  /** 目標里程 */
+  protected readonly _airLines: AirLines
 
-  public constructor({ type, name, pointsPerMile, milesPerUnit }: BaseRewardParams<Type>) {
+  public constructor({
+    type,
+    name,
+    pointsPerMile,
+    milesPerUnit,
+    airLines,
+  }: BaseRewardParams<Type>) {
     this._type = type
     this._name = name
     this._pointsPerMile = pointsPerMile
     this._milesPerUnit = milesPerUnit
+    this._airLines = airLines
   }
   /** 描述 */
   public abstract get description(): string
@@ -83,9 +96,7 @@ abstract class BaseReward<Type extends RewardType> {
   public abstract toJSON(): RewardConfig
 }
 
-/**
- * 點數回饋 (N%回饋點數，四捨五入)
- */
+/** 點數回饋 (N%回饋點數，四捨五入) */
 class RoundedPointsRewardPercentage<
   Type extends 'RoundedPointsRewardPercentage',
 > extends BaseReward<Type> {
@@ -124,13 +135,12 @@ class RoundedPointsRewardPercentage<
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
       pointBackRate: this._pointBackRate,
+      airLines: this._airLines,
     }
   }
 }
 
-/**
- * 點數回饋 (N%回饋點數，無條件捨去)
- */
+/** 點數回饋 (N%回饋點數，無條件捨去) */
 class TruncatedPointsRewardPercentage<
   Type extends 'TruncatedPointsRewardPercentage',
 > extends BaseReward<Type> {
@@ -169,13 +179,12 @@ class TruncatedPointsRewardPercentage<
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
       pointBackRate: this._pointBackRate,
+      airLines: this._airLines,
     }
   }
 }
 
-/**
- * 點數回饋 (消費N元累積一點)
- */
+/** 點數回饋 (消費N元累積一點) */
 class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseReward<Type> {
   private readonly _spendingPerPoint: number
 
@@ -212,14 +221,52 @@ class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseRe
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
       spendingPerPoint: this._spendingPerPoint,
+      airLines: this._airLines,
     }
   }
 }
 
-/**
- * 哩程回饋
- */
-class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Type> {
+/** 哩程回饋（累計）*/
+class DirectMilesAccumulation<Type extends 'DirectMilesAccumulation'> extends BaseReward<Type> {
+  private readonly _spendingPerMile: number
+
+  public constructor({
+    spendingPerMile,
+    ...superParams
+  }: {
+    /** N 元一哩 */
+    readonly spendingPerMile: number
+  } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
+    super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
+    this._spendingPerMile = spendingPerMile
+  }
+  public get baselineCostPerMile(): number {
+    return this._spendingPerMile
+  }
+  public get bestCaseCostPerMile(): number {
+    return this.baselineCostPerMile
+  }
+  public get maximumCostPerMile(): number {
+    return this.baselineCostPerMile
+  }
+  public get description(): string {
+    return `每消費${this._spendingPerMile.toString()}元累積1哩程 (小數會進行累計)`
+  }
+  public calculateMiles(amount: number): number {
+    return round(amount / this._spendingPerMile)
+  }
+  public toJSON(): RewardConfig {
+    return {
+      type: this._type,
+      name: this._name,
+      spendingPerMile: this._spendingPerMile,
+      airLines: this._airLines,
+    }
+  }
+}
+
+/** 哩程回饋（以單筆做無條件捨去到整數）*/
+class RoundedMilesAccumulation<Type extends 'RoundedMilesAccumulation'> extends BaseReward<Type> {
   private readonly _spendingPerMile: number
 
   public constructor({
@@ -242,7 +289,7 @@ class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Typ
     return this._spendingPerMile + this._spendingPerMile - 1
   }
   public get description(): string {
-    return `每消費${this._spendingPerMile.toString()}元累積1哩程`
+    return `每消費${this._spendingPerMile.toString()}元累積1哩程 (小數不累計)`
   }
   public calculateMiles(amount: number): number {
     return Math.floor(amount / this._spendingPerMile)
@@ -252,6 +299,7 @@ class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Typ
       type: this._type,
       name: this._name,
       spendingPerMile: this._spendingPerMile,
+      airLines: this._airLines,
     }
   }
 }
@@ -260,7 +308,8 @@ const rewards = {
   RoundedPointsRewardPercentage,
   TruncatedPointsRewardPercentage,
   PointsRewardThreshold,
-  DirectMilesReward,
+  DirectMilesAccumulation,
+  RoundedMilesAccumulation,
 } as const
 export type RewardType = keyof typeof rewards
 export type Reward<Type extends RewardType> = InstanceType<(typeof rewards)[Type]>

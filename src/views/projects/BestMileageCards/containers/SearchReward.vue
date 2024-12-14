@@ -69,6 +69,7 @@ import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { removeDuplicates } from '@/utils'
 import { sortListByField } from '@/utils/sorts'
 
+import { hsbcCards } from '../configs/hsbc'
 import {
   createCard,
   Payment,
@@ -129,43 +130,16 @@ const rewardMilesList = computed((): RewardItem[] => {
 })
 
 onMounted(() => {
-  cards.value = [createHsbc(), createCube()]
+  cards.value = [
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    createCard(hsbcCards[0]!),
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    createCard(hsbcCards[1]!),
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    createCard(hsbcCards[2]!),
+    createCube(),
+  ]
 })
-
-function createHsbc(): CreditCard {
-  return createCard({
-    name: '匯豐旅人卡',
-    cardUrl: null,
-    blackList: ['全聯'],
-    plans: [
-      {
-        name: null,
-        rewards: [
-          {
-            reward: {
-              type: 'DirectMilesReward',
-              name: '國外消費',
-              spendingPerMile: 10,
-            },
-            stores: [],
-            payments: [],
-            transactionType: 'Foreign',
-          },
-          {
-            reward: {
-              type: 'DirectMilesReward',
-              name: '國內消費',
-              spendingPerMile: 20,
-            },
-            stores: [],
-            payments: [],
-            transactionType: 'Domestic',
-          },
-        ],
-      },
-    ],
-  })
-}
 
 function createCube(): CreditCard {
   return createCard({
@@ -184,6 +158,7 @@ function createCube(): CreditCard {
               pointBackRate: 2,
               pointsPerMile: 300,
               milesPerUnit: 1000,
+              airLines: 'EVA',
             },
             stores: ['台灣中油', '全聯', '7-11', '全家'],
             payments: [],
@@ -201,6 +176,7 @@ function createCube(): CreditCard {
               pointBackRate: 2,
               pointsPerMile: 300,
               milesPerUnit: 1000,
+              airLines: 'EVA',
             },
             stores: [],
             payments: ['Line Pay'],
@@ -218,6 +194,7 @@ function createCube(): CreditCard {
               pointBackRate: 3,
               pointsPerMile: 300,
               milesPerUnit: 1000,
+              airLines: 'EVA',
             },
             stores: ['PChome', '蝦皮購物', '博客來', 'momo'],
             payments: [],
@@ -235,6 +212,7 @@ function createCube(): CreditCard {
               pointBackRate: 3,
               pointsPerMile: 300,
               milesPerUnit: 1000,
+              airLines: 'EVA',
             },
             stores: [
               'SOGO百貨',

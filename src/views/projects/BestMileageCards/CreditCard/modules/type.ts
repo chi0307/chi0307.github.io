@@ -6,6 +6,17 @@ export const Payment = ['Line Pay', 'Apple Pay', '街口支付', '信用卡'] as
 export type Payment = (typeof Payment)[number]
 export type TransactionType = 'Domestic' | 'Foreign'
 
+export const airLinesObj = {
+  SJX: '星宇航空',
+  EVA: '長榮航空',
+  ANA: '全日空',
+  JAL: '日航',
+  CPA: '國泰航空',
+  CAL: '華航',
+} as const
+export type AirLines = keyof typeof airLinesObj
+export const AirLines = Object.keys(airLinesObj) as AirLines[]
+
 /** input 的交易資料 */
 export interface TransactionInfo {
   /** 消費店家 */
