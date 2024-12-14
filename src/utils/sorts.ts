@@ -1,18 +1,37 @@
+type ReturnSortEvent = 1 | -1 | 0
+type SortEvent<T> = (aItem: T, bItem: T) => ReturnSortEvent
+
+export function sortList<T extends string | number | boolean>(
+  list: T[],
+  direction: 'asc' | 'desc',
+): T[] {
+  let sortEvent: SortEvent<T>
+  if (direction === 'asc') {
+    sortEvent = (aItem: T, bItem: T): ReturnSortEvent => {
+      return aItem > bItem ? 1 : aItem < bItem ? -1 : 0
+    }
+  } else {
+    sortEvent = (aItem: T, bItem: T): ReturnSortEvent => {
+      return aItem > bItem ? -1 : aItem < bItem ? 1 : 0
+    }
+  }
+  return [...list].sort(sortEvent)
+}
+
 export function sortListByField<T extends object>(
   list: T[],
   sortBy: keyof T,
   direction: 'asc' | 'desc',
 ): T[] {
-  type SortEvent = (aItem: T, bItem: T) => 1 | -1 | 0
-  let sortEvent: SortEvent
+  let sortEvent: SortEvent<T>
   if (direction === 'asc') {
-    sortEvent = (aItem: T, bItem: T): ReturnType<SortEvent> => {
+    sortEvent = (aItem: T, bItem: T): ReturnSortEvent => {
       const aValue = aItem[sortBy]
       const bValue = bItem[sortBy]
       return aValue > bValue ? 1 : aValue < bValue ? -1 : 0
     }
   } else {
-    sortEvent = (aItem: T, bItem: T): ReturnType<SortEvent> => {
+    sortEvent = (aItem: T, bItem: T): ReturnSortEvent => {
       const aValue = aItem[sortBy]
       const bValue = bItem[sortBy]
       return aValue > bValue ? -1 : aValue < bValue ? 1 : 0
