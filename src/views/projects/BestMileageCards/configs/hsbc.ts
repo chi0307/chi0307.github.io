@@ -2,7 +2,7 @@ import type { CardConfig } from '../CreditCard'
 
 const blackList: string[] = ['全聯']
 
-export const hsbcCards: CardConfig[] = [
+export const travelConfigs: CardConfig[] = [
   {
     name: '旅人無限卡',
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-infinite/',

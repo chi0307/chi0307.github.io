@@ -72,14 +72,12 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 
 import { removeDuplicates } from '@/utils'
 import { sortList, sortListByField } from '@/utils/sorts'
 
-import { hsbcCards } from '../configs/hsbc'
 import {
-  createCard,
   CreditCard,
   type Payment,
   type RewardMileInfo,
@@ -98,9 +96,8 @@ interface RewardItem {
   targetAirLines: string
 }
 
-const { showRewardMilesType, commonPaymentMethods } = storeToRefs(useBestMileageCardsStore())
+const { showRewardMilesType, commonPaymentMethods, cards } = storeToRefs(useBestMileageCardsStore())
 
-const cards = ref<CreditCard[]>([])
 const amount = ref<number>(0)
 const transactionStore = ref<string>('')
 const otherStore = '其他店家'
@@ -154,131 +151,6 @@ const rewardMilesList = computed((): RewardItem[] => {
   rewardCardListElement.value?.scrollTo({ top: 0, behavior: 'smooth' })
   return sortListByField(list, 'miles', 'desc')
 })
-
-onMounted(() => {
-  cards.value = [
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    createCard(hsbcCards[0]!),
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    createCard(hsbcCards[1]!),
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    createCard(hsbcCards[2]!),
-    createCube(),
-  ]
-})
-
-function createCube(): CreditCard {
-  return createCard({
-    name: 'Cube 卡',
-    cardUrl: null,
-    blackList: [],
-    updateAt: '2024-12-01T00:00:00.000Z',
-    airLines: 'EVA',
-    plans: [
-      {
-        name: '集精選',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: null,
-              pointBackRate: 2,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: ['台灣中油', '全聯', '7-11', '全家'],
-            payments: [
-              '信用卡',
-              'Apple Pay',
-              'Samsung Pay',
-              'Google Pay',
-              'Fitbit Pay',
-              'Garmin Pay',
-              'Hami Pay',
-            ],
-            transactionType: null,
-          },
-        ],
-      },
-      {
-        name: '來支付',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: null,
-              pointBackRate: 2,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: [],
-            payments: ['Line Pay'],
-            transactionType: null,
-          },
-        ],
-      },
-      {
-        name: '玩數位',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: null,
-              pointBackRate: 3,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: ['PChome', '蝦皮購物', '博客來', 'momo'],
-            payments: [
-              '信用卡',
-              'Apple Pay',
-              'Samsung Pay',
-              'Google Pay',
-              'Fitbit Pay',
-              'Garmin Pay',
-              'Hami Pay',
-            ],
-            transactionType: null,
-          },
-        ],
-      },
-      {
-        name: '樂饗購',
-        rewards: [
-          {
-            reward: {
-              type: 'RoundedPointsRewardPercentage',
-              name: null,
-              pointBackRate: 3,
-              pointsPerMile: 300,
-              milesPerUnit: 1000,
-            },
-            stores: [
-              'SOGO百貨',
-              '太平洋百貨',
-              '新光三越',
-              'Uber Eats',
-              'foodpanda',
-              '康是美',
-              '屈臣氏',
-            ],
-
-            payments: [
-              '信用卡',
-              'Apple Pay',
-              'Samsung Pay',
-              'Google Pay',
-              'Fitbit Pay',
-              'Garmin Pay',
-              'Hami Pay',
-            ],
-            transactionType: null,
-          },
-        ],
-      },
-    ],
-  })
-}
 </script>
 
 <style scoped>
