@@ -68,4 +68,7 @@ export default defineConfig({
       '@themes': fileURLToPath(new URL('./themes', import.meta.url)),
     },
   },
+  server: {
+    host: '0.0.0.0',
+  },
 })
