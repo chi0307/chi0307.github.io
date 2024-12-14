@@ -1,5 +1,5 @@
 <template>
-  <main class="m-24px flex-col gap-8px">
+  <main class="m-24px flex-col gap-8px mb-64px">
     <v-tabs v-model="selectedTab" align-tabs="center" color="deep-purple-accent-4">
       <v-tab v-for="({ id, title }, index) of tabs" :key="index" :value="id">
         {{ title }}
