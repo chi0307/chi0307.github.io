@@ -76,6 +76,8 @@ export interface CardConfig {
   cardUrl: string | null
   blackList: string[]
   plans: PlanConfig[]
+  /** 目標里程 */
+  airLines: AirLines
   /** 最後更新卡片權益的時間 */
   updateAt: DateISOString
 }

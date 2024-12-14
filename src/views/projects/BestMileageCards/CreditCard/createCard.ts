@@ -11,6 +11,7 @@ export function createCard({
   cardUrl,
   plans: planConfigs,
   updateAt,
+  airLines,
 }: CardConfig): CreditCard {
   const plans: Plan[] = planConfigs.map(
     ({ name, rewards }) =>
@@ -30,6 +31,7 @@ export function createCard({
     blackList: new Set(blackList),
     cardUrl,
     updateAt: new Date(updateAt),
+    airLines,
   })
 }
 

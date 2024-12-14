@@ -1,7 +1,5 @@
 import { roundByDigits } from '@/utils'
 
-import type { AirLines } from './type'
-
 const round = roundByDigits(2)
 
 interface BaseRewardParams<Type extends RewardType> {
@@ -11,8 +9,6 @@ interface BaseRewardParams<Type extends RewardType> {
   readonly pointsPerMile: number
   /** 可以換 N 哩里程 */
   readonly milesPerUnit: number
-  /** 目標里程 */
-  readonly airLines: AirLines
 }
 abstract class BaseReward<Type extends RewardType> {
   protected readonly _type: Type
@@ -21,21 +17,12 @@ abstract class BaseReward<Type extends RewardType> {
   protected readonly _pointsPerMile: number
   /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
   protected readonly _milesPerUnit: number
-  /** 目標里程 */
-  protected readonly _airLines: AirLines
 
-  public constructor({
-    type,
-    name,
-    pointsPerMile,
-    milesPerUnit,
-    airLines,
-  }: BaseRewardParams<Type>) {
+  public constructor({ type, name, pointsPerMile, milesPerUnit }: BaseRewardParams<Type>) {
     this._type = type
     this._name = name
     this._pointsPerMile = pointsPerMile
     this._milesPerUnit = milesPerUnit
-    this._airLines = airLines
   }
   /** 描述 */
   public abstract get description(): string
@@ -135,7 +122,6 @@ class RoundedPointsRewardPercentage<
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
       pointBackRate: this._pointBackRate,
-      airLines: this._airLines,
     }
   }
 }
@@ -179,7 +165,6 @@ class TruncatedPointsRewardPercentage<
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
       pointBackRate: this._pointBackRate,
-      airLines: this._airLines,
     }
   }
 }
@@ -221,7 +206,6 @@ class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseRe
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
       spendingPerPoint: this._spendingPerPoint,
-      airLines: this._airLines,
     }
   }
 }
@@ -260,7 +244,6 @@ class DirectMilesAccumulation<Type extends 'DirectMilesAccumulation'> extends Ba
       type: this._type,
       name: this._name,
       spendingPerMile: this._spendingPerMile,
-      airLines: this._airLines,
     }
   }
 }
@@ -299,7 +282,6 @@ class RoundedMilesAccumulation<Type extends 'RoundedMilesAccumulation'> extends 
       type: this._type,
       name: this._name,
       spendingPerMile: this._spendingPerMile,
-      airLines: this._airLines,
     }
   }
 }

@@ -51,7 +51,10 @@
       >
         <template #title>
           <div class="flex items-center justify-between">
-            {{ item.miles }}
+            <div class="flex items-end gap-4px">
+              {{ item.miles }}
+              <p class="text-12px opacity-50 p-4px">{{ item.targetAirLines }}</p>
+            </div>
             <i v-if="item.isSelectedPlan" class="fa-solid fa-circle-check" />
           </div>
         </template>
@@ -92,6 +95,7 @@ interface RewardItem {
   miles: number
   isSelectedPlan: boolean
   payments: readonly Payment[]
+  targetAirLines: string
 }
 
 const { showRewardMilesType, commonPaymentMethods } = storeToRefs(useBestMileageCardsStore())
@@ -140,6 +144,7 @@ const rewardMilesList = computed((): RewardItem[] => {
         rewardName: item.name,
         miles: item.miles,
         payments: item.payments,
+        targetAirLines: card.airLinesCode,
         isSelectedPlan:
           showRewardMilesType.value === 'AllPlanRewardMiles' && item.planId === card.selectedPlanId,
       }
@@ -168,6 +173,7 @@ function createCube(): CreditCard {
     cardUrl: null,
     blackList: [],
     updateAt: '2024-12-01T00:00:00.000Z',
+    airLines: 'EVA',
     plans: [
       {
         name: '集精選',
@@ -179,7 +185,6 @@ function createCube(): CreditCard {
               pointBackRate: 2,
               pointsPerMile: 300,
               milesPerUnit: 1000,
-              airLines: 'EVA',
             },
             stores: ['台灣中油', '全聯', '7-11', '全家'],
             payments: [
@@ -205,7 +210,6 @@ function createCube(): CreditCard {
               pointBackRate: 2,
               pointsPerMile: 300,
               milesPerUnit: 1000,
-              airLines: 'EVA',
             },
             stores: [],
             payments: ['Line Pay'],
@@ -223,7 +227,6 @@ function createCube(): CreditCard {
               pointBackRate: 3,
               pointsPerMile: 300,
               milesPerUnit: 1000,
-              airLines: 'EVA',
             },
             stores: ['PChome', '蝦皮購物', '博客來', 'momo'],
             payments: [
@@ -249,7 +252,6 @@ function createCube(): CreditCard {
               pointBackRate: 3,
               pointsPerMile: 300,
               milesPerUnit: 1000,
-              airLines: 'EVA',
             },
             stores: [
               'SOGO百貨',
@@ -280,7 +282,7 @@ function createCube(): CreditCard {
 </script>
 
 <style scoped>
-.v-card-text p {
-  @apply line-height-none;
+.v-card p {
+  @apply line-height-none h-fit;
 }
 </style>

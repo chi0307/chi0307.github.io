@@ -7,6 +7,7 @@ export const hsbcCards: CardConfig[] = [
     name: '旅人無限卡',
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-infinite/',
     blackList,
+    airLines: 'EVA',
     plans: [
       {
         name: null,
@@ -16,7 +17,6 @@ export const hsbcCards: CardConfig[] = [
               type: 'DirectMilesAccumulation',
               name: '國外消費',
               spendingPerMile: 10,
-              airLines: 'EVA',
             },
             stores: [],
             payments: [],
@@ -27,7 +27,6 @@ export const hsbcCards: CardConfig[] = [
               type: 'DirectMilesAccumulation',
               name: '國內消費',
               spendingPerMile: 18,
-              airLines: 'EVA',
             },
             stores: [],
             payments: [],
@@ -42,6 +41,7 @@ export const hsbcCards: CardConfig[] = [
     name: '旅人御璽卡',
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-signature/',
     blackList,
+    airLines: 'EVA',
     plans: [
       {
         name: null,
@@ -51,7 +51,6 @@ export const hsbcCards: CardConfig[] = [
               type: 'DirectMilesAccumulation',
               name: '國外消費',
               spendingPerMile: 15,
-              airLines: 'EVA',
             },
             stores: [],
             payments: [],
@@ -62,7 +61,6 @@ export const hsbcCards: CardConfig[] = [
               type: 'DirectMilesAccumulation',
               name: '國內消費',
               spendingPerMile: 18,
-              airLines: 'EVA',
             },
             stores: [],
             payments: [],
@@ -77,6 +75,7 @@ export const hsbcCards: CardConfig[] = [
     name: '旅人輕旅卡',
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-light/',
     blackList,
+    airLines: 'EVA',
     plans: [
       {
         name: null,
@@ -86,7 +85,6 @@ export const hsbcCards: CardConfig[] = [
               type: 'DirectMilesAccumulation',
               name: '國外消費',
               spendingPerMile: 20,
-              airLines: 'EVA',
             },
             stores: [],
             payments: [],
@@ -97,7 +95,6 @@ export const hsbcCards: CardConfig[] = [
               type: 'DirectMilesAccumulation',
               name: '國內消費',
               spendingPerMile: 20,
-              airLines: 'EVA',
             },
             stores: [],
             payments: [],

@@ -2,7 +2,13 @@ import type { UUID } from '@/types'
 import { generateUuid, removeDuplicates } from '@/utils'
 
 import { Plan } from './Plan'
-import type { TransactionInfo, RewardMileInfo, CardConfig } from './type'
+import {
+  type TransactionInfo,
+  type RewardMileInfo,
+  type CardConfig,
+  type AirLines,
+  airLinesObj,
+} from './type'
 
 interface CardParams {
   name: string
@@ -10,6 +16,7 @@ interface CardParams {
   blackList: Set<string>
   cardUrl: string | null
   updateAt: Date
+  airLines: AirLines
 }
 
 // TODO
@@ -27,19 +34,30 @@ export class CreditCard {
   /** 不回饋清單 */
   private readonly _blackList: ReadonlySet<string>
   private readonly _updateAt: Date
+  /** 目標里程 */
+  private readonly _airLines: AirLines
 
-  public constructor({ name, plans, blackList, cardUrl, updateAt }: CardParams) {
+  public constructor({ name, plans, blackList, cardUrl, updateAt, airLines }: CardParams) {
     this._name = name
     this._plans = new Map(plans.map((plan) => [generateUuid(), plan]))
     this._cardUrl = cardUrl
     this._blackList = blackList
     this._updateAt = updateAt
+    this._airLines = airLines
 
     const firstPlanKey = this._plans.keys().next().value
     if (this._plans.size === 0 || firstPlanKey === undefined) {
       throw new Error('this credit card no any plan')
     }
     this._selectedPlanId = firstPlanKey
+  }
+
+  public get airLines(): string {
+    return airLinesObj[this._airLines]
+  }
+
+  public get airLinesCode(): string {
+    return this._airLines
   }
 
   public get selectedPlan(): Plan {
@@ -131,6 +149,7 @@ export class CreditCard {
       blackList: [...this._blackList.values()],
       plans: [...this._plans.values()].map((plan) => plan.toJSON()),
       updateAt: this._updateAt.toISOString(),
+      airLines: this._airLines,
     }
   }
 }
