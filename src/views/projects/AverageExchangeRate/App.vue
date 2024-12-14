@@ -38,7 +38,7 @@
       </template>
     </v-data-table>
     <div class="fixed bottom-24px right-24px" @click="showAddItemDialog = true">
-      <v-btn icon="fas fa-plus" />
+      <v-btn icon="mdi-plus" />
     </div>
   </main>
   <v-dialog v-model="showAddItemDialog">
