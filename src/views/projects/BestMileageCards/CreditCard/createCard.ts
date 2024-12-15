@@ -23,13 +23,16 @@ export function createCard({
       generateUuid(),
       new Plan(
         name,
-        rewards.map(({ stores, payments, transactionType, reward, paymentBlackList }) => ({
-          reward: rewardFactory(reward),
-          paymentBlackList: new Set(paymentBlackList),
-          transactionType,
-          stores: new Set(stores),
-          payments: new Set(payments),
-        })),
+        rewards.map(
+          ({ stores, payments, transactionType, reward, paymentBlackList, storeBlackList }) => ({
+            reward: rewardFactory(reward),
+            stores: new Set(stores),
+            storeBlackList: new Set(storeBlackList),
+            payments: new Set(payments),
+            paymentBlackList: new Set(paymentBlackList),
+            transactionType,
+          }),
+        ),
       ),
     ]),
   )

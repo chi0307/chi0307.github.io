@@ -25,6 +25,10 @@ export const Payment = [
   'GOMAJI Pay',
   'friday wallet',
   'PayPal',
+  'PX Pay',
+  '中油Pay',
+  '台灣Pay',
+  '支付寶',
 ] as const
 export type Payment = (typeof Payment)[number]
 export type TransactionType = 'Domestic' | 'Foreign'
@@ -62,9 +66,10 @@ export interface RewardMileInfo {
 
 interface RewardRuleConfig {
   reward: RewardConfig
-  stores: string[]
   transactionType: TransactionType | null
-  payments: Payment[]
+  stores?: string[]
+  storeBlackList?: string[]
+  payments?: Payment[]
   paymentBlackList?: Payment[]
 }
 export interface PlanConfig {

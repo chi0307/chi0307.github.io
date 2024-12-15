@@ -3,12 +3,12 @@ import { roundByDigits } from '@/utils'
 const round = roundByDigits(2)
 
 interface BaseRewardParams<Type extends RewardType> {
-  readonly type: Type
-  readonly name: string | null
+  type: Type
+  name: string | null
   /** N 點可以換里程 */
-  readonly pointsPerMile: number
+  pointsPerMile: number
   /** 可以換 N 哩里程 */
-  readonly milesPerUnit: number
+  milesPerUnit: number
 }
 abstract class BaseReward<Type extends RewardType> {
   protected readonly _type: Type
@@ -94,7 +94,7 @@ class RoundedPointsRewardPercentage<
     ...superParams
   }: {
     /** N% 回饋（四捨五入） */
-    readonly pointBackRate: number
+    pointBackRate: number
   } & BaseRewardParams<Type>) {
     super(superParams)
     this._pointBackRate = pointBackRate
@@ -137,7 +137,7 @@ class TruncatedPointsRewardPercentage<
     ...superParams
   }: {
     /** N% 回饋（無條件捨去） */
-    readonly pointBackRate: number
+    pointBackRate: number
   } & BaseRewardParams<Type>) {
     super(superParams)
     this._pointBackRate = pointBackRate
@@ -178,7 +178,7 @@ class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseRe
     ...superParams
   }: {
     /** N 元累積一點 */
-    readonly spendingPerPoint: number
+    spendingPerPoint: number
   } & BaseRewardParams<Type>) {
     super(superParams)
     this._spendingPerPoint = spendingPerPoint
@@ -219,7 +219,7 @@ class DirectMilesAccumulation<Type extends 'DirectMilesAccumulation'> extends Ba
     ...superParams
   }: {
     /** N 元一哩 */
-    readonly spendingPerMile: number
+    spendingPerMile: number
   } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
     super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
     this._spendingPerMile = spendingPerMile
@@ -257,7 +257,7 @@ class RoundedMilesAccumulation<Type extends 'RoundedMilesAccumulation'> extends 
     ...superParams
   }: {
     /** N 元一哩 */
-    readonly spendingPerMile: number
+    spendingPerMile: number
   } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
     super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
     this._spendingPerMile = spendingPerMile
