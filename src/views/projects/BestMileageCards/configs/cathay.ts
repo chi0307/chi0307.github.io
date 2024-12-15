@@ -14,7 +14,7 @@ const payments: Payment[] = [
 ]
 
 function planSettings(
-  pointBackRate: number,
+  defaultBackRete: number,
   pointsPerMile: number,
   milesPerUnit: number,
 ): CardConfig['plans'] {
@@ -22,7 +22,7 @@ function planSettings(
     reward: {
       type: 'RoundedPointsRewardPercentage',
       name: null,
-      pointBackRate: 0.3,
+      pointBackRates: [{ rate: 0.3 }],
       pointsPerMile,
       milesPerUnit,
     },
@@ -36,7 +36,7 @@ function planSettings(
           reward: {
             type: 'RoundedPointsRewardPercentage',
             name: null,
-            pointBackRate: 2,
+            pointBackRates: [{ rate: 2 }],
             pointsPerMile,
             milesPerUnit,
           },
@@ -61,7 +61,7 @@ function planSettings(
           reward: {
             type: 'RoundedPointsRewardPercentage',
             name: null,
-            pointBackRate,
+            pointBackRates: [{ rate: defaultBackRete }],
             pointsPerMile,
             milesPerUnit,
           },
@@ -99,7 +99,7 @@ function planSettings(
           reward: {
             type: 'RoundedPointsRewardPercentage',
             name: null,
-            pointBackRate,
+            pointBackRates: [{ rate: defaultBackRete }],
             pointsPerMile,
             milesPerUnit,
           },
@@ -170,7 +170,7 @@ function planSettings(
           reward: {
             type: 'RoundedPointsRewardPercentage',
             name: null,
-            pointBackRate,
+            pointBackRates: [{ rate: defaultBackRete }],
             pointsPerMile,
             milesPerUnit,
           },
@@ -255,7 +255,7 @@ function planSettings(
           reward: {
             type: 'RoundedPointsRewardPercentage',
             name: null,
-            pointBackRate: 2,
+            pointBackRates: [{ rate: 2 }],
             pointsPerMile,
             milesPerUnit,
           },
@@ -272,7 +272,7 @@ function planSettings(
           reward: {
             type: 'RoundedPointsRewardPercentage',
             name: null,
-            pointBackRate: 10,
+            pointBackRates: [{ rate: 10 }],
             pointsPerMile,
             milesPerUnit,
           },
@@ -315,7 +315,7 @@ function planSettings(
           reward: {
             type: 'RoundedPointsRewardPercentage',
             name: null,
-            pointBackRate: 3.5,
+            pointBackRates: [{ rate: 3.5 }],
             pointsPerMile,
             milesPerUnit,
           },
