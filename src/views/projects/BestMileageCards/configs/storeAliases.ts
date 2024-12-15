@@ -40,7 +40,7 @@ export const storeAliases: Record<string, string[]> = {
   卡達航空: ['Qatar Airways', '卡航', 'QTR', 'QR'],
   可樂旅遊: ['Cola Travel', '可樂旅行社'],
   台北101: ['Taipei 101', '101大樓'],
-  '台灣中油-直營站': ['中油直營', '直營中油'],
+  '台灣中油-直營': ['中油直營', '直營中油'],
   台灣大車隊: ['Taiwan Taxi', '大車隊'],
   台灣虎航: ['Tigerair Taiwan', '台虎', 'TWA', 'IT'],
   台灣高鐵: ['Taiwan High Speed Rail'],

@@ -44,7 +44,7 @@ function planSettings(
             '家樂福',
             'LOPIA台灣',
             '全聯福利中心',
-            '台灣中油-直營站',
+            '台灣中油-直營',
             '7-ELEVEN',
             '全家便利商店',
             'IKEA宜家家居',

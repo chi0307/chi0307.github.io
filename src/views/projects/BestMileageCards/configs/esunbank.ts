@@ -26,7 +26,7 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國外消費',
               spendingPerMile: 5,
             },
@@ -35,7 +35,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國外消費',
               spendingPerMile: 10,
             },
@@ -43,7 +43,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國內消費',
               spendingPerMile: 20,
             },
@@ -68,7 +68,7 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國外消費',
               spendingPerMile: 7.5,
             },
@@ -77,7 +77,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國外消費',
               spendingPerMile: 15,
             },
@@ -85,7 +85,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國內消費',
               spendingPerMile: 25,
             },
@@ -110,7 +110,7 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國外消費',
               spendingPerMile: 20,
             },
@@ -118,7 +118,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'DirectMilesReward',
               name: '國內消費',
               spendingPerMile: 28,
             },
@@ -132,7 +132,7 @@ export const starLuxConfigs: CardConfig[] = [
 ]
 
 const uniCardStoreList = [
-  '台灣中油-直營店',
+  '台灣中油-直營',
   '台灣大車隊',
   '台鐵',
   '高鐵',
