@@ -78,7 +78,13 @@ export default tsEslint.config(
           format: ['PascalCase'],
         },
       ],
-      '@typescript-eslint/explicit-member-accessibility': 'error'
+      '@typescript-eslint/explicit-member-accessibility': 'error',
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        {
+          allowNumber: true,
+        },
+      ],
     },
   },
   {
