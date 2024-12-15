@@ -154,7 +154,7 @@ function planSettings(
             'foodpanda',
             'foodomo',
             '國內餐飲(不含餐券)',
-            '連鎖速食－麥當勞',
+            '麥當勞',
             '康是美',
             '屈臣氏',
           ],
