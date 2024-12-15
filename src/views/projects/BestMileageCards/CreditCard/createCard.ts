@@ -10,7 +10,9 @@ import type { CardConfig } from './modules/type'
 
 export function createCard({
   name,
-  blackList,
+  description,
+  storeBlackList,
+  paymentBlackList,
   cardUrl,
   plans: planConfigs,
   updateAt,
@@ -32,8 +34,10 @@ export function createCard({
   )
   return new CreditCard({
     name,
+    description,
     plans,
-    blackList: new Set(blackList),
+    storeBlackList: new Set(storeBlackList),
+    paymentBlackList: new Set(paymentBlackList),
     cardUrl,
     updateAt: new Date(updateAt),
     airLines,

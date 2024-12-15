@@ -73,8 +73,10 @@ export interface PlanConfig {
 }
 export interface CardConfig {
   name: string
+  description: string
   cardUrl: string | null
-  blackList: string[]
+  storeBlackList: string[]
+  paymentBlackList: Payment[]
   plans: PlanConfig[]
   /** 目標里程 */
   airLines: AirLines

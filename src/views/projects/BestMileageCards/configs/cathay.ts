@@ -1,11 +1,12 @@
 import type { CardConfig } from '../CreditCard'
 
-// TODO: cube 權益需要修正，目前只是暫時的
 export const cubeConfigs: CardConfig[] = [
   {
     name: 'Cube 卡',
+    description: '',
     cardUrl: null,
-    blackList: [],
+    storeBlackList: [],
+    paymentBlackList: [],
     updateAt: '2024-12-01T00:00:00.000Z',
     airLines: 'EVA',
     plans: [
