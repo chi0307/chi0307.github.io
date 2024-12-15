@@ -53,3 +53,7 @@ export function errorHandle(
 export function isTruthyString<T extends string>(text: T | null | undefined): text is T {
   return isNotNullishValue(text) && text !== ''
 }
+
+export function removeDuplicates<T>(list: T[]): T[] {
+  return [...new Set(list)]
+}
