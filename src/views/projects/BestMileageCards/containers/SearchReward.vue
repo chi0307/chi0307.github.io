@@ -1,12 +1,17 @@
 <template>
   <div class="flex-col gap-8px h-full">
     <v-text-field
-      v-model.number="amount"
+      :model-value="amount"
       class="flex-grow-0"
       density="comfortable"
       hide-details
       label="交易金額"
       inputmode="decimal"
+      :clearable="amount !== 0"
+      @update:model-value="
+        (numberString: string) =>
+          (amount = isNaN(parseFloat(numberString)) ? 0 : parseFloat(numberString))
+      "
     />
     <v-autocomplete
       ref="storeAutoComplete"
@@ -15,6 +20,8 @@
       class="flex-grow-0"
       density="comfortable"
       hide-details
+      item-value="store"
+      item-title="store"
       label="消費店家"
       :items="storeList"
       :clearable="transactionStore !== ''"
@@ -98,7 +105,9 @@ interface RewardItem {
   targetAirLines: string
 }
 
-const { showRewardMilesType, commonPaymentMethods, cards } = storeToRefs(useBestMileageCardsStore())
+const { showRewardMilesType, commonPaymentMethods, cards, conditionTypes } = storeToRefs(
+  useBestMileageCardsStore(),
+)
 
 const amount = ref<number>(0)
 const transactionStore = ref<string>('')
@@ -109,16 +118,16 @@ const rewardCardListElement = useTemplateRef<HTMLElement>('rewardCardList')
 const storeAutoCompleteElement = useTemplateRef<HTMLElement>('storeAutoComplete')
 
 interface Item {
-  title: string
+  store: string
   aliases?: string[]
 }
 const storeList = computed((): Item[] => {
   const stores = sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
-  const items = stores.map((title) => ({
-    title,
-    aliases: storeAliases[title] ?? [],
+  const items = stores.map((store) => ({
+    store,
+    aliases: storeAliases[store] ?? [],
   }))
-  return [{ title: otherStore }, ...items]
+  return [{ store: otherStore }, ...items]
 })
 
 function customSearchStore(
@@ -144,6 +153,7 @@ const rewardMilesList = computed((): RewardItem[] => {
     amount: amount.value,
     acceptedPayments: acceptedPayments.value,
     transactionAttributesType: transactionAttributesType.value,
+    currentConditions: [...conditionTypes.value],
   }
   if (transactionStore.value !== '') {
     paymentInfo.transactionStore = transactionStore.value

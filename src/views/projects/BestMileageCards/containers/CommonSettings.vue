@@ -16,7 +16,7 @@
     </div>
     <div>
       <v-select
-        :model-value="[...commonPaymentMethods]"
+        :model-value="commonPaymentMethods"
         :items="sortList(Payment, 'asc')"
         label="使用中的付款方式"
         multiple
@@ -25,6 +25,21 @@
           (list) => list !== null && bestMileageCardsStore.updateCommonPaymentMethods(list)
         "
       />
+    </div>
+    <div>
+      <v-label text="其他設定" />
+      <div class="flex mx-16px">
+        <v-switch
+          :model-value="conditionTypes"
+          label="生日中"
+          value="Birthday"
+          hide-details
+          color="blue"
+          @update:model-value="
+            (list) => list !== null && bestMileageCardsStore.updateConditionTypes(list)
+          "
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -37,5 +52,6 @@ import { Payment } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
 const bestMileageCardsStore = useBestMileageCardsStore()
-const { showRewardMilesType, commonPaymentMethods } = storeToRefs(bestMileageCardsStore)
+const { showRewardMilesType, commonPaymentMethods, conditionTypes } =
+  storeToRefs(bestMileageCardsStore)
 </script>

@@ -4,6 +4,7 @@ import { computed, onMounted, readonly, ref } from 'vue'
 import type { UUID } from '@/types'
 import { generateUuid } from '@/utils'
 import { defaultCardConfigs } from '@/views/projects/BestMileageCards/configs'
+import type { ConditionType } from '@/views/projects/BestMileageCards/CreditCard/modules/type'
 
 import { createCard, CreditCard, Payment, type CardConfig } from './CreditCard'
 import { type ShowRewardMilesType } from './types'
@@ -26,7 +27,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
   const commonPaymentMethods = ref<Payment[]>(
     storageManager.get('commonPaymentMethods') ?? ['信用卡', 'Apple Pay', 'Line Pay', '街口支付'],
   )
-  function updateCommonPaymentMethods(payments: Payment[]): void {
+  function updateCommonPaymentMethods([...payments]: readonly Payment[]): void {
     payments = [...new Set(payments)]
     storageManager.set('commonPaymentMethods', payments)
     commonPaymentMethods.value = payments
@@ -44,6 +45,12 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     storageManager.set('cardConfigs', [...cardConfigs.value.values()])
   }
 
+  const conditionTypes = ref<ConditionType[]>(storageManager.get('conditionTypes') ?? [])
+  function updateConditionTypes([...types]: readonly ConditionType[]): void {
+    conditionTypes.value = types
+    storageManager.set('conditionTypes', types)
+  }
+
   return {
     showRewardMilesType: readonly(showRewardMilesType),
     updateShowRewardMilesType,
@@ -51,5 +58,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     updateCommonPaymentMethods,
     cards,
     updateCardConfig,
+    conditionTypes: readonly(conditionTypes),
+    updateConditionTypes,
   }
 })
