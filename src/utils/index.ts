@@ -45,7 +45,7 @@ export function errorHandle(
   } else if (error instanceof Error) {
     event(`${message}, error: ${error.message}`)
   } else {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-base-to-string
     event(`${message}, unknown: ${error}`)
   }
 }
