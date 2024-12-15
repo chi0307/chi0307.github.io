@@ -7,6 +7,7 @@ interface PlanReward {
   readonly reward: Reward<RewardType>
   readonly stores: ReadonlySet<string>
   readonly payments: ReadonlySet<Payment>
+  readonly paymentBlackList: ReadonlySet<Payment>
   readonly transactionType: TransactionType | null
 }
 
@@ -41,17 +42,23 @@ export class Plan {
     transactionAttributesType: TransactionType
   }): PlanReward | null {
     return (
-      this._rewards.find(({ stores, payments, transactionType }: PlanReward): boolean => {
-        const isStore =
-          transactionStore === null || stores.size === 0 || stores.has(transactionStore)
-        const isPayment =
-          acceptedPayments.length === 0 ||
-          payments.size === 0 ||
-          acceptedPayments.some((payment) => payments.has(payment))
-        const isTransactionType =
-          transactionType === null || transactionAttributesType === transactionType
-        return isStore && isPayment && isTransactionType
-      }) ?? null
+      this._rewards.find(
+        ({ stores, payments, transactionType, paymentBlackList }: PlanReward): boolean => {
+          const isStore =
+            transactionStore === null || stores.size === 0 || stores.has(transactionStore)
+          const isPayment =
+            acceptedPayments.length === 0 ||
+            payments.size === 0 ||
+            acceptedPayments.some((payment) => payments.has(payment))
+          const haveAnyNotInPaymentBlackList =
+            acceptedPayments.length === 0 ||
+            paymentBlackList.size === 0 ||
+            acceptedPayments.some((item) => !paymentBlackList.has(item))
+          const isTransactionType =
+            transactionType === null || transactionAttributesType === transactionType
+          return isStore && isPayment && isTransactionType && haveAnyNotInPaymentBlackList
+        },
+      ) ?? null
     )
   }
 
@@ -76,19 +83,22 @@ export class Plan {
     return {
       name: reward.reward.name,
       miles: reward.reward.calculateMiles(amount),
-      payments,
+      payments: payments.filter((payment) => !reward.paymentBlackList.has(payment)),
     }
   }
 
   public toJSON(): PlanConfig {
     return {
       name: this._name,
-      rewards: this._rewards.map(({ reward, stores, payments, transactionType }) => ({
-        transactionType,
-        stores: [...stores.values()],
-        payments: [...payments.values()],
-        reward: reward.toJSON(),
-      })),
+      rewards: this._rewards.map(
+        ({ reward, stores, payments, transactionType, paymentBlackList }) => ({
+          transactionType,
+          stores: [...stores.values()],
+          payments: [...payments.values()],
+          reward: reward.toJSON(),
+          paymentBlackList: [...paymentBlackList.values()],
+        }),
+      ),
     }
   }
 }

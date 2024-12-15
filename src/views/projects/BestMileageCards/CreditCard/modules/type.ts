@@ -63,8 +63,9 @@ export interface RewardMileInfo {
 interface RewardRuleConfig {
   reward: RewardConfig
   stores: string[]
-  payments: Payment[]
   transactionType: TransactionType | null
+  payments: Payment[]
+  paymentBlackList?: Payment[]
 }
 export interface PlanConfig {
   name: string | null
@@ -75,8 +76,8 @@ export interface CardConfig {
   name: string
   description: string
   cardUrl: string | null
-  storeBlackList: string[]
-  paymentBlackList: Payment[]
+  storeBlackList?: string[]
+  paymentBlackList?: Payment[]
   plans: PlanConfig[]
   /** 目標里程 */
   airLines: AirLines

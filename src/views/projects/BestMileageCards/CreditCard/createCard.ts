@@ -23,8 +23,9 @@ export function createCard({
       generateUuid(),
       new Plan(
         name,
-        rewards.map(({ stores, payments, transactionType, reward }) => ({
+        rewards.map(({ stores, payments, transactionType, reward, paymentBlackList }) => ({
           reward: rewardFactory(reward),
+          paymentBlackList: new Set(paymentBlackList),
           transactionType,
           stores: new Set(stores),
           payments: new Set(payments),
