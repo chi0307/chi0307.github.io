@@ -138,6 +138,7 @@ export class CreditCard {
       name: null,
       miles: 0,
       payments: [],
+      reward: null,
     }
     const inStoreBlackList =
       paymentInfo.transactionStore !== undefined &&
@@ -148,14 +149,14 @@ export class CreditCard {
     if (inStoreBlackList || inPaymentBlackList) {
       return noneMatchRewardInfo
     }
-    const reward = plan.getRewardMiles(paymentInfo)
-    if (reward === null) {
+    const rewardInfo = plan.getRewardMiles(paymentInfo)
+    if (rewardInfo === null) {
       return noneMatchRewardInfo
     }
     return {
       planId,
       planName: plan.name,
-      ...reward,
+      ...rewardInfo,
     }
   }
 

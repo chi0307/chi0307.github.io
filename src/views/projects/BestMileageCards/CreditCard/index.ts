@@ -9,5 +9,10 @@ export {
   type CardConfig,
   AirLines,
   airLinesObj,
+  isRoundedPointsRewardPercentage,
+  isTruncatedPointsRewardPercentage,
+  isPointsRewardThreshold,
+  isDirectMilesAccumulation,
+  isRoundedMilesAccumulation,
 } from './modules/type'
 export { createCard, isCardConfig } from './createCard'

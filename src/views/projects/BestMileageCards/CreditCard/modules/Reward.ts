@@ -2,6 +2,11 @@ import { roundByDigits } from '@/utils'
 
 const round = roundByDigits(2)
 
+interface RateItem {
+  rate: number
+  limit?: number
+}
+
 interface BaseRewardParams<Type extends RewardType> {
   type: Type
   name: string | null
@@ -13,9 +18,7 @@ interface BaseRewardParams<Type extends RewardType> {
 abstract class BaseReward<Type extends RewardType> {
   protected readonly _type: Type
   protected readonly _name: string | null
-  /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
   protected readonly _pointsPerMile: number
-  /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
   protected readonly _milesPerUnit: number
 
   public constructor({ type, name, pointsPerMile, milesPerUnit }: BaseRewardParams<Type>) {
@@ -39,7 +42,7 @@ abstract class BaseReward<Type extends RewardType> {
   public abstract calculateMiles(amount: number): number
 
   /** 回饋類型 */
-  public get type(): string {
+  public get type(): Type {
     return this._type
   }
 
@@ -48,8 +51,18 @@ abstract class BaseReward<Type extends RewardType> {
     return this._name
   }
 
+  /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
+  public get pointsPerMile(): number {
+    return this._pointsPerMile
+  }
+
+  /** {{pointsPerMile}} 點換 {{ milesPerUnit }} 哩程 */
+  public get milesPerUnit(): number {
+    return this._milesPerUnit
+  }
+
   /** input: 點數, ouput: 里程 */
-  protected pointsConvertToMiles(points: number): number {
+  protected _pointsConvertToMiles(points: number): number {
     return (points * this._milesPerUnit) / this._pointsPerMile
   }
 
@@ -84,36 +97,45 @@ abstract class BaseReward<Type extends RewardType> {
 }
 
 /** 點數回饋 (N%回饋點數，四捨五入) */
-class RoundedPointsRewardPercentage<
+export class RoundedPointsRewardPercentage<
   Type extends 'RoundedPointsRewardPercentage',
 > extends BaseReward<Type> {
-  private readonly _pointBackRate: number
+  private readonly _pointBackRates: RateItem[]
 
   public constructor({
-    pointBackRate,
+    pointBackRates,
     ...superParams
   }: {
     /** N% 回饋（四捨五入） */
-    pointBackRate: number
+    pointBackRates: RateItem[]
   } & BaseRewardParams<Type>) {
     super(superParams)
-    this._pointBackRate = pointBackRate
+    this._pointBackRates = pointBackRates
+  }
+  public get pointBackRates(): RateItem[] {
+    return this._pointBackRates
+  }
+  private get _maxRete(): number {
+    return this._pointBackRates.reduce((total, { rate }) => total + rate, 0)
   }
   public get baselineCostPerMile(): number {
-    return round(100 / this.pointsConvertToMiles(this._pointBackRate))
+    return round(100 / this._pointsConvertToMiles(this._maxRete))
   }
   public get bestCaseCostPerMile(): number {
-    return round(Math.ceil(100 / this._pointBackRate / 2) / this.pointsConvertToMiles(1))
+    return round(Math.ceil(100 / this._maxRete / 2) / this._pointsConvertToMiles(1))
   }
   public get maximumCostPerMile(): number {
-    return round((Math.ceil(150 / this._pointBackRate) - 1) / this.pointsConvertToMiles(1))
+    return round((Math.ceil(150 / this._maxRete) - 1) / this._pointsConvertToMiles(1))
   }
   public get description(): string {
-    return `消費${this._pointBackRate.toString()}%回饋點數(四捨五入)，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
+    return `消費${this._pointBackRates.length > 1 ? '最高' : ''}${this._maxRete.toString()}%回饋點數(四捨五入)，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
   }
   public calculateMiles(amount: number): number {
-    const points = Math.round(amount * (this._pointBackRate / 100))
-    return round((points / this._pointsPerMile) * this._milesPerUnit)
+    let points = 0
+    for (const { rate, limit = Infinity } of this._pointBackRates) {
+      points += Math.min(Math.round(amount * (rate / 100)), limit)
+    }
+    return round(this._pointsConvertToMiles(points))
   }
   public toJSON(): RewardConfig {
     return {
@@ -121,42 +143,51 @@ class RoundedPointsRewardPercentage<
       name: this._name,
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
-      pointBackRate: this._pointBackRate,
+      pointBackRates: this._pointBackRates,
     }
   }
 }
 
 /** 點數回饋 (N%回饋點數，無條件捨去) */
-class TruncatedPointsRewardPercentage<
+export class TruncatedPointsRewardPercentage<
   Type extends 'TruncatedPointsRewardPercentage',
 > extends BaseReward<Type> {
-  private readonly _pointBackRate: number
+  private readonly _pointBackRates: RateItem[]
 
   public constructor({
-    pointBackRate,
+    pointBackRates,
     ...superParams
   }: {
     /** N% 回饋（無條件捨去） */
-    pointBackRate: number
+    pointBackRates: RateItem[]
   } & BaseRewardParams<Type>) {
     super(superParams)
-    this._pointBackRate = pointBackRate
+    this._pointBackRates = pointBackRates
+  }
+  public get pointBackRates(): RateItem[] {
+    return this._pointBackRates
+  }
+  private get _maxRete(): number {
+    return this._pointBackRates.reduce((total, { rate }) => total + rate, 0)
   }
   public get baselineCostPerMile(): number {
-    return round(100 / this.pointsConvertToMiles(this._pointBackRate))
+    return round(100 / this._pointsConvertToMiles(this._maxRete))
   }
   public get bestCaseCostPerMile(): number {
     return this.baselineCostPerMile
   }
   public get maximumCostPerMile(): number {
-    return round((Math.ceil(200 / this._pointBackRate) - 1) / this.pointsConvertToMiles(1))
+    return round((Math.ceil(200 / this._maxRete) - 1) / this._pointsConvertToMiles(1))
   }
   public get description(): string {
-    return `消費${this._pointBackRate.toString()}%回饋點數(無條件捨去)，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
+    return `消費${this._pointBackRates.length > 1 ? '最高' : ''}${this._maxRete.toString()}%回饋點數(無條件捨去)，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
   }
   public calculateMiles(amount: number): number {
-    const points = Math.floor(amount * (this._pointBackRate / 100))
-    return round((points / this._pointsPerMile) * this._milesPerUnit)
+    let points = 0
+    for (const { rate, limit = Infinity } of this._pointBackRates) {
+      points += Math.min(Math.floor(amount * (rate / 100)), limit)
+    }
+    return round(this._pointsConvertToMiles(points))
   }
   public toJSON(): RewardConfig {
     return {
@@ -164,13 +195,13 @@ class TruncatedPointsRewardPercentage<
       name: this._name,
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
-      pointBackRate: this._pointBackRate,
+      pointBackRates: this._pointBackRates,
     }
   }
 }
 
 /** 點數回饋 (消費N元累積一點) */
-class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseReward<Type> {
+export class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseReward<Type> {
   private readonly _spendingPerPoint: number
 
   public constructor({
@@ -183,21 +214,24 @@ class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseRe
     super(superParams)
     this._spendingPerPoint = spendingPerPoint
   }
+  public get spendingPerPoint(): number {
+    return this._spendingPerPoint
+  }
   public get baselineCostPerMile(): number {
-    return round(this._spendingPerPoint / this.pointsConvertToMiles(1))
+    return round(this._spendingPerPoint / this._pointsConvertToMiles(1))
   }
   public get bestCaseCostPerMile(): number {
     return this.baselineCostPerMile
   }
   public get maximumCostPerMile(): number {
-    return round((this._spendingPerPoint * 2 - 1) / this.pointsConvertToMiles(1))
+    return round((this._spendingPerPoint * 2 - 1) / this._pointsConvertToMiles(1))
   }
   public get description(): string {
     return `每消費${this._spendingPerPoint.toString()}元累積1點，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
   }
   public calculateMiles(amount: number): number {
     const points = Math.floor(amount / this._spendingPerPoint)
-    return round((points / this._pointsPerMile) * this._milesPerUnit)
+    return round(this._pointsConvertToMiles(points))
   }
   public toJSON(): RewardConfig {
     return {
@@ -211,7 +245,9 @@ class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseRe
 }
 
 /** 哩程回饋（累計）*/
-class DirectMilesAccumulation<Type extends 'DirectMilesAccumulation'> extends BaseReward<Type> {
+export class DirectMilesAccumulation<
+  Type extends 'DirectMilesAccumulation',
+> extends BaseReward<Type> {
   private readonly _spendingPerMile: number
 
   public constructor({
@@ -223,6 +259,9 @@ class DirectMilesAccumulation<Type extends 'DirectMilesAccumulation'> extends Ba
   } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
     super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
     this._spendingPerMile = spendingPerMile
+  }
+  public get spendingPerMile(): number {
+    return this._spendingPerMile
   }
   public get baselineCostPerMile(): number {
     return this._spendingPerMile
@@ -249,7 +288,9 @@ class DirectMilesAccumulation<Type extends 'DirectMilesAccumulation'> extends Ba
 }
 
 /** 哩程回饋（以單筆做無條件捨去到整數）*/
-class RoundedMilesAccumulation<Type extends 'RoundedMilesAccumulation'> extends BaseReward<Type> {
+export class RoundedMilesAccumulation<
+  Type extends 'RoundedMilesAccumulation',
+> extends BaseReward<Type> {
   private readonly _spendingPerMile: number
 
   public constructor({

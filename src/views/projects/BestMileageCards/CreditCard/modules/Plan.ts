@@ -112,7 +112,7 @@ export class Plan {
     amount,
     transactionAttributesType,
     currentConditions,
-  }: TransactionInfo): Pick<RewardMileInfo, 'name' | 'miles' | 'payments'> | null {
+  }: TransactionInfo): Pick<RewardMileInfo, 'name' | 'miles' | 'payments' | 'reward'> | null {
     const reward = this.getApplicableReward({
       acceptedPayments,
       transactionStore,
@@ -130,6 +130,7 @@ export class Plan {
       name: reward.reward.name,
       miles: reward.reward.calculateMiles(amount),
       payments: payments.filter((payment) => !reward.paymentBlackList.has(payment)),
+      reward: reward.reward,
     }
   }
 
