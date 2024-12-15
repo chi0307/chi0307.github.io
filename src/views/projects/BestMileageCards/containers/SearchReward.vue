@@ -23,7 +23,7 @@
       item-value="store"
       item-title="store"
       label="消費店家"
-      :items="storeList"
+      :items="searchStoreList"
       :clearable="transactionStore !== ''"
       placeholder="全部店家"
       @update:menu="(status: boolean) => !status && storeAutoCompleteElement?.blur()"
@@ -126,10 +126,8 @@
 import { storeToRefs } from 'pinia'
 import { computed, ref, useTemplateRef } from 'vue'
 
-import { removeDuplicates } from '@/utils'
-import { sortList, sortListByField } from '@/utils/sorts'
+import { sortListByField } from '@/utils/sorts'
 
-import { storeAliases } from '../configs/storeAliases'
 import {
   CreditCard,
   type Payment,
@@ -155,9 +153,14 @@ interface RewardItem {
   description: string
 }
 
-const { showRewardMilesType, commonPaymentMethods, cards, conditionTypes } = storeToRefs(
-  useBestMileageCardsStore(),
-)
+const {
+  showRewardMilesType,
+  commonPaymentMethods,
+  cards,
+  conditionTypes,
+  storeAliases,
+  storeList,
+} = storeToRefs(useBestMileageCardsStore())
 
 const amount = ref<number>(0)
 const transactionStore = ref<string>('')
@@ -171,11 +174,10 @@ interface Item {
   store: string
   aliases?: string[]
 }
-const storeList = computed((): Item[] => {
-  const stores = sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
-  const items = stores.map((store) => ({
+const searchStoreList = computed((): Item[] => {
+  const items = storeList.value.map((store) => ({
     store,
-    aliases: storeAliases[store] ?? [],
+    aliases: [...(storeAliases.value.get(store) ?? [])],
   }))
   return [{ store: otherStore }, ...items]
 })

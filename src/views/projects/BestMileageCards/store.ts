@@ -2,13 +2,15 @@ import { defineStore } from 'pinia'
 import { computed, onMounted, readonly, ref } from 'vue'
 
 import type { UUID } from '@/types'
-import { generateUuid } from '@/utils'
-import { defaultCardConfigs } from '@/views/projects/BestMileageCards/configs'
-import type { ConditionType } from '@/views/projects/BestMileageCards/CreditCard/modules/type'
+import { generateUuid, removeDuplicates } from '@/utils'
+import { sortList } from '@/utils/sorts'
 
+import { defaultCardConfigs } from './configs'
+import { defaultStoreAliases, type StoreAliases } from './configs/storeAliases'
 import { createCard, CreditCard, Payment, type CardConfig } from './CreditCard'
+import type { ConditionType } from './CreditCard/modules/type'
 import { type ShowRewardMilesType } from './types'
-import { storageManager } from './utils'
+import { aliasTypeList, storageManager, type AliasType } from './utils'
 
 export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
   onMounted(() => {
@@ -44,12 +46,45 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     cardConfigs.value.set(id, config)
     storageManager.set('cardConfigs', [...cardConfigs.value.values()])
   }
+  const storeList = computed(() => {
+    return sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
+  })
 
   const conditionTypes = ref<ConditionType[]>(storageManager.get('conditionTypes') ?? [])
   function updateConditionTypes([...types]: readonly ConditionType[]): void {
     conditionTypes.value = types
     storageManager.set('conditionTypes', types)
   }
+
+  const aliasType = ref<AliasType>(storageManager.get('aliasType') ?? 'default')
+  function updateAliasType(type: AliasType): void {
+    if (aliasTypeList.includes(type)) {
+      aliasType.value = type
+      storageManager.set('aliasType', type)
+    }
+  }
+
+  const customAliases = ref<StoreAliases | null>(storageManager.get('customAliases'))
+
+  const storeAliases = computed(() => {
+    const list: [string, readonly string[]][] = []
+    if (['default', 'additional'].includes(aliasType.value)) {
+      list.push(...defaultStoreAliases)
+    }
+    if (['additional', 'custom'].includes(aliasType.value) && customAliases.value !== null) {
+      list.push(...customAliases.value)
+    }
+
+    const storeAliasesMap = new Map<string, Set<string>>()
+    for (const [store, aliases] of list) {
+      const item = storeAliasesMap.get(store) ?? new Set<string>()
+      for (const alias of aliases) {
+        item.add(alias)
+      }
+      storeAliasesMap.set(store, item)
+    }
+    return storeAliasesMap
+  })
 
   return {
     showRewardMilesType: readonly(showRewardMilesType),
@@ -58,7 +93,12 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     updateCommonPaymentMethods,
     cards,
     updateCardConfig,
+    storeList: readonly(storeList),
     conditionTypes: readonly(conditionTypes),
     updateConditionTypes,
+    aliasType: readonly(aliasType),
+    storeAliases,
+    updateAliasType,
+    customAliases: readonly(customAliases),
   }
 })
