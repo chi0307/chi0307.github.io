@@ -41,7 +41,9 @@ export class Plan {
 
   /** 方便在前端做選單或 autocomplete 用的 */
   public get storeList(): string[] {
-    return removeDuplicates(this._rewards.flatMap((reward) => [...reward.stores]))
+    return removeDuplicates(
+      this._rewards.flatMap((reward) => [...reward.stores, ...reward.storeBlackList]),
+    )
   }
 
   public checkPlanIsVisible(currentConditions: ConditionType[] | null): boolean {
