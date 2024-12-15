@@ -64,14 +64,18 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     }
   }
 
-  const customAliases = ref<StoreAliases | null>(storageManager.get('customAliases'))
+  const customAliases = ref<StoreAliases>(storageManager.get('customAliases') ?? [])
+  function updateCustomAliases(list: StoreAliases): void {
+    customAliases.value = list
+    storageManager.remove('customAliases')
+  }
 
   const storeAliases = computed(() => {
     const list: [string, readonly string[]][] = []
     if (['default', 'additional'].includes(aliasType.value)) {
       list.push(...defaultStoreAliases)
     }
-    if (['additional', 'custom'].includes(aliasType.value) && customAliases.value !== null) {
+    if (['additional', 'custom'].includes(aliasType.value)) {
       list.push(...customAliases.value)
     }
 
@@ -100,5 +104,6 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     storeAliases,
     updateAliasType,
     customAliases: readonly(customAliases),
+    updateCustomAliases,
   }
 })
