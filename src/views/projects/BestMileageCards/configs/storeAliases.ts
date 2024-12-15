@@ -72,4 +72,6 @@ export const storeAliases: Record<string, string[]> = {
   長榮航空: ['EVA', 'BR', 'EVA Airlines', 'EVA Air'],
   阿聯酋航空: ['UAE', 'EK', 'Emirates'],
   麥當勞: ["McDonald's"],
+  IKEA: ['宜家家居'],
+  星巴克: ['starbucks'],
 }

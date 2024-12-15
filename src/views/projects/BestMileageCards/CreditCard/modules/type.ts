@@ -1,17 +1,6 @@
-import typia from 'typia'
-
 import type { DateISOString, UUID } from '@/types'
 
-import type {
-  CumulativeMilesReward,
-  PointsRewardPerThreshold,
-  Reward,
-  RewardConfig,
-  RewardType,
-  DirectMilesReward,
-  RoundedPointsReward,
-  TruncatedPointsReward,
-} from './Reward'
+import type { Reward, RewardConfig, RewardType } from './Reward'
 
 export const Payment = [
   '信用卡',
@@ -106,12 +95,3 @@ export interface CardConfig {
   /** 最後更新卡片權益的時間 */
   updateAt: DateISOString
 }
-
-export const isRoundedPointsReward = typia.createIs<RoundedPointsReward<'RoundedPointsReward'>>()
-export const isTruncatedPointsReward =
-  typia.createIs<TruncatedPointsReward<'TruncatedPointsReward'>>()
-export const isPointsRewardPerThreshold =
-  typia.createIs<PointsRewardPerThreshold<'PointsRewardPerThreshold'>>()
-export const isCumulativeMilesReward =
-  typia.createIs<CumulativeMilesReward<'CumulativeMilesReward'>>()
-export const isDirectMilesReward = typia.createIs<DirectMilesReward<'DirectMilesReward'>>()

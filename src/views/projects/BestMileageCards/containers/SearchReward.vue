@@ -56,23 +56,13 @@
         density="compact"
         class="mx-auto w-full flex-shrink-0"
         variant="outlined"
-        @click="
-          () => {
-            const { reward } = item
-            if (reward !== null) {
-              selectedRewardItem = {
-                ...item,
-                reward,
-              }
-            }
-          }
-        "
+        @click="() => (selectedRewardItem = item)"
       >
         <template #title>
           <div class="flex items-center justify-between">
             <div class="flex items-end gap-4px">
               {{ item.miles }}
-              <p class="text-12px opacity-50 p-4px">{{ item.targetAirLines }}</p>
+              <p class="text-12px opacity-50 p-4px">{{ item.airLinesCode }}</p>
             </div>
             <i v-if="item.isSelectedPlan" class="fa-solid fa-circle-check" />
           </div>
@@ -94,21 +84,34 @@
   >
     <v-card
       v-if="selectedRewardItem"
-      class="mx-auto"
+      class="mx-auto reward-detail-dialog"
       min-width="100%"
       :title="`${selectedRewardItem.cardName} ${selectedRewardItem.planName ?? ''} ${selectedRewardItem.rewardName ?? ''}`"
     >
       <template #subtitle>
         <p class="text-wrap">
-          {{ selectedRewardItem.reward?.description ?? '' }}
+          {{ selectedRewardItem.rewardDescription ?? '' }}
         </p>
       </template>
       <template #text>
         <div class="flex-col">
-          <p>消費金額: {{ amount }}</p>
-          <p>哩程預估: {{ selectedRewardItem.miles }}</p>
+          <p class="flex justify-between">
+            卡片說明：
+            <a
+              v-if="selectedRewardItem.cardUrl !== null"
+              target="_blank"
+              class="underline"
+              :href="selectedRewardItem.cardUrl"
+            >
+              網站
+            </a>
+          </p>
+          <p v-if="selectedRewardItem.description !== ''">{{ selectedRewardItem.description }}</p>
           <br />
-          <p v-for="(text, index) of rewardDetails" :key="index">
+          <p>消費金額: {{ amount }}</p>
+          <p>哩程預估: {{ selectedRewardItem.miles }}&ensp;{{ selectedRewardItem.airLinesCode }}</p>
+          <br />
+          <p v-for="(text, index) of selectedRewardItem.calculateDetail" :key="index">
             {{ text }}
           </p>
         </div>
@@ -135,8 +138,6 @@ import {
   type RewardType,
   type TransactionInfo,
   type TransactionType,
-  isRoundedPointsReward,
-  isTruncatedPointsReward,
 } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
@@ -147,8 +148,11 @@ interface RewardItem {
   miles: number
   isSelectedPlan: boolean
   payments: readonly Payment[]
-  targetAirLines: string
-  reward: Reward<RewardType> | null
+  airLinesCode: string
+  calculateDetail: string[]
+  rewardDescription: string | null
+  cardUrl: string | null
+  description: string
 }
 
 const { showRewardMilesType, commonPaymentMethods, cards, conditionTypes } = storeToRefs(
@@ -217,10 +221,13 @@ const rewardMilesList = computed((): RewardItem[] => {
         rewardName: item.name,
         miles: item.miles,
         payments: item.payments,
-        targetAirLines: card.airLinesCode,
+        airLinesCode: card.airLinesCode,
         isSelectedPlan:
           showRewardMilesType.value === 'AllPlanRewardMiles' && item.planId === card.selectedPlanId,
-        reward: item.reward,
+        calculateDetail: getRewardDetail(item.reward),
+        rewardDescription: item.reward?.description ?? null,
+        cardUrl: card.cardUrl,
+        description: card.description,
       }
       list.push(rewardItem)
     }
@@ -230,31 +237,62 @@ const rewardMilesList = computed((): RewardItem[] => {
 })
 
 const selectedRewardItem = ref<RewardItem | null>(null)
-const rewardDetails = computed((): string[] => {
-  const reward = selectedRewardItem.value?.reward
-  if (isRoundedPointsReward(reward) || isTruncatedPointsReward(reward)) {
-    const numberFormatEvent = reward.type === 'RoundedPointsReward' ? Math.round : Math.floor
-    let totalPoints = 0
-    return [
-      '回饋點數:',
-      ...reward.pointBackRates.map(({ rate, limit }) => {
-        const total = Math.min(numberFormatEvent((amount.value * rate) / 100), limit ?? Infinity)
-        totalPoints += total
-        const limitString = limit !== undefined ? ` (limit ${limit})` : ''
-        return `${amount.value} * ${rate}% = ${total}${limitString}`
-      }),
-      `總計 ${totalPoints} points`,
-      `${totalPoints} / ${reward.pointsPerMile} * ${reward.milesPerUnit} = ${
-        Math.round((totalPoints / reward.pointsPerMile) * reward.milesPerUnit * 100) / 100
-      } miles`,
-    ]
+function getRewardDetail(reward: Reward<RewardType> | null): string[] {
+  const title = '回饋計算:'
+  switch (reward?.type) {
+    case 'RoundedPointsReward':
+    case 'TruncatedPointsReward': {
+      const numberFormatEvent = reward.type === 'RoundedPointsReward' ? Math.round : Math.floor
+      let totalPoints = 0
+      return [
+        title,
+        ...reward.pointBackRates.map(({ rate, limit }) => {
+          const total = Math.min(numberFormatEvent((amount.value * rate) / 100), limit ?? Infinity)
+          totalPoints += total
+          const limitString = limit !== undefined ? ` (limit ${limit})` : ''
+          return `${amount.value} * ${rate}% = ${total}${limitString}`
+        }),
+        `總計 ${totalPoints} points`,
+        `${totalPoints} / ${reward.pointsPerMile} * ${reward.milesPerUnit} = ${
+          Math.round((totalPoints / reward.pointsPerMile) * reward.milesPerUnit * 100) / 100
+        } miles`,
+      ]
+    }
+    case 'PointsRewardPerThreshold': {
+      const points = Math.floor(amount.value / reward.spendingPerPoint)
+      return [
+        title,
+        `${amount.value} / ${reward.spendingPerPoint} = ${points} points`,
+        `${points} / ${reward.pointsPerMile} * ${reward.milesPerUnit} = ${
+          Math.round((points / reward.pointsPerMile) * reward.milesPerUnit * 100) / 100
+        } miles`,
+      ]
+    }
+    case 'CumulativeMilesReward': {
+      return [
+        title,
+        `${amount.value} / ${reward.spendingPerMile} = ${Math.round((amount.value / reward.spendingPerMile) * 100) / 100}`,
+      ]
+    }
+    case 'DirectMilesReward': {
+      return [
+        title,
+        `${amount.value} / ${reward.spendingPerMile} = ${Math.floor(amount.value / reward.spendingPerMile)} (小數省略)`,
+      ]
+    }
+    default: {
+      return []
+    }
   }
-  return []
-})
+}
 </script>
 
 <style scoped>
 .v-card p {
   @apply line-height-none h-fit;
+}
+
+.reward-detail-dialog p {
+  @apply line-height-125%;
 }
 </style>

@@ -110,6 +110,7 @@ export class RoundedPointsReward<Type extends 'RoundedPointsReward'> extends Bas
     super(superParams)
     this._pointBackRates = pointBackRates
   }
+  /** N% 回饋（四捨五入） */
   public get pointBackRates(): RateItem[] {
     return this._pointBackRates
   }
@@ -160,6 +161,7 @@ export class TruncatedPointsReward<Type extends 'TruncatedPointsReward'> extends
     super(superParams)
     this._pointBackRates = pointBackRates
   }
+  /** N% 回饋（無條件捨去） */
   public get pointBackRates(): RateItem[] {
     return this._pointBackRates
   }
@@ -212,6 +214,7 @@ export class PointsRewardPerThreshold<
     super(superParams)
     this._spendingPerPoint = spendingPerPoint
   }
+  /** N 元累積一點 */
   public get spendingPerPoint(): number {
     return this._spendingPerPoint
   }
@@ -256,6 +259,7 @@ export class CumulativeMilesReward<Type extends 'CumulativeMilesReward'> extends
     super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
     this._spendingPerMile = spendingPerMile
   }
+  /** N 元一哩 */
   public get spendingPerMile(): number {
     return this._spendingPerMile
   }
@@ -296,6 +300,10 @@ export class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseRew
   } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
     super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
     this._spendingPerMile = spendingPerMile
+  }
+  /** N 元一哩 */
+  public get spendingPerMile(): number {
+    return this._spendingPerMile
   }
   public get baselineCostPerMile(): number {
     return this._spendingPerMile
