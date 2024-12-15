@@ -37,12 +37,15 @@ import { ref } from 'vue'
 import CommonSettings from './containers/CommonSettings.vue'
 import CreditCardManagement from './containers/CreditCardManagement.vue'
 import SearchReward from './containers/SearchReward.vue'
+import StoreManagement from './containers/StoreManagement.vue'
 
 const componentList = {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   查詢回饋: SearchReward,
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   信用卡管理: CreditCardManagement,
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  商家管理: StoreManagement,
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   喜好設定: CommonSettings,
 } as const

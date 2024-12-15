@@ -78,7 +78,7 @@ import { computed, ref, useTemplateRef } from 'vue'
 import { removeDuplicates } from '@/utils'
 import { sortList, sortListByField } from '@/utils/sorts'
 
-import { storeCategories, storeAliases } from '../configs/storeAliases'
+import { storeAliases } from '../configs/storeAliases'
 import {
   CreditCard,
   type Payment,
@@ -114,18 +114,10 @@ interface Item {
 }
 const storeList = computed((): Item[] => {
   const stores = sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
-  const items = stores.map((store) => {
-    const aliases: string[] = storeAliases[store] ?? []
-    for (const { category, stores } of storeCategories) {
-      if (stores.includes(store)) {
-        aliases.push(category)
-      }
-    }
-    return {
-      title: store,
-      aliases,
-    }
-  })
+  const items = stores.map((title) => ({
+    title,
+    aliases: storeAliases[title] ?? [],
+  }))
   return [{ title: otherStore }, ...items]
 })
 

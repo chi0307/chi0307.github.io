@@ -1,1 +1,1 @@
-<template>信用卡管理</template>
+<template>管理信用卡的設定</template>
