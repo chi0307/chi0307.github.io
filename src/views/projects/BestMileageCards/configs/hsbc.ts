@@ -17,7 +17,7 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 10,
             },
@@ -25,7 +25,7 @@ export const travelConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國內消費',
               spendingPerMile: 18,
             },
@@ -49,7 +49,7 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 15,
             },
@@ -57,7 +57,7 @@ export const travelConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國內消費',
               spendingPerMile: 18,
             },
@@ -81,7 +81,7 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 20,
             },
@@ -89,7 +89,7 @@ export const travelConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國內消費',
               spendingPerMile: 20,
             },

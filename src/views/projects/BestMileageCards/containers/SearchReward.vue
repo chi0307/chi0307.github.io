@@ -135,8 +135,8 @@ import {
   type RewardType,
   type TransactionInfo,
   type TransactionType,
-  isRoundedPointsRewardPercentage,
-  isTruncatedPointsRewardPercentage,
+  isRoundedPointsReward,
+  isTruncatedPointsReward,
 } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
@@ -232,9 +232,8 @@ const rewardMilesList = computed((): RewardItem[] => {
 const selectedRewardItem = ref<RewardItem | null>(null)
 const rewardDetails = computed((): string[] => {
   const reward = selectedRewardItem.value?.reward
-  if (isRoundedPointsRewardPercentage(reward) || isTruncatedPointsRewardPercentage(reward)) {
-    const numberFormatEvent =
-      reward.type === 'RoundedPointsRewardPercentage' ? Math.round : Math.floor
+  if (isRoundedPointsReward(reward) || isTruncatedPointsReward(reward)) {
+    const numberFormatEvent = reward.type === 'RoundedPointsReward' ? Math.round : Math.floor
     let totalPoints = 0
     return [
       '回饋點數:',

@@ -97,9 +97,7 @@ abstract class BaseReward<Type extends RewardType> {
 }
 
 /** 點數回饋 (N%回饋點數，四捨五入) */
-export class RoundedPointsRewardPercentage<
-  Type extends 'RoundedPointsRewardPercentage',
-> extends BaseReward<Type> {
+export class RoundedPointsReward<Type extends 'RoundedPointsReward'> extends BaseReward<Type> {
   private readonly _pointBackRates: RateItem[]
 
   public constructor({
@@ -149,9 +147,7 @@ export class RoundedPointsRewardPercentage<
 }
 
 /** 點數回饋 (N%回饋點數，無條件捨去) */
-export class TruncatedPointsRewardPercentage<
-  Type extends 'TruncatedPointsRewardPercentage',
-> extends BaseReward<Type> {
+export class TruncatedPointsReward<Type extends 'TruncatedPointsReward'> extends BaseReward<Type> {
   private readonly _pointBackRates: RateItem[]
 
   public constructor({
@@ -201,7 +197,9 @@ export class TruncatedPointsRewardPercentage<
 }
 
 /** 點數回饋 (消費N元累積一點) */
-export class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends BaseReward<Type> {
+export class PointsRewardPerThreshold<
+  Type extends 'PointsRewardPerThreshold',
+> extends BaseReward<Type> {
   private readonly _spendingPerPoint: number
 
   public constructor({
@@ -244,10 +242,8 @@ export class PointsRewardThreshold<Type extends 'PointsRewardThreshold'> extends
   }
 }
 
-/** 哩程回饋（累計）*/
-export class DirectMilesAccumulation<
-  Type extends 'DirectMilesAccumulation',
-> extends BaseReward<Type> {
+/** 哩程回饋 (消費 N 元哩程回饋，累積) */
+export class CumulativeMilesReward<Type extends 'CumulativeMilesReward'> extends BaseReward<Type> {
   private readonly _spendingPerMile: number
 
   public constructor({
@@ -287,10 +283,8 @@ export class DirectMilesAccumulation<
   }
 }
 
-/** 哩程回饋（以單筆做無條件捨去到整數）*/
-export class RoundedMilesAccumulation<
-  Type extends 'RoundedMilesAccumulation',
-> extends BaseReward<Type> {
+/** 哩程回饋 (消費 N 元哩程回饋) */
+export class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Type> {
   private readonly _spendingPerMile: number
 
   public constructor({
@@ -328,11 +322,11 @@ export class RoundedMilesAccumulation<
 }
 
 const rewards = {
-  RoundedPointsRewardPercentage,
-  TruncatedPointsRewardPercentage,
-  PointsRewardThreshold,
-  DirectMilesAccumulation,
-  RoundedMilesAccumulation,
+  RoundedPointsReward,
+  TruncatedPointsReward,
+  PointsRewardPerThreshold,
+  CumulativeMilesReward,
+  DirectMilesReward,
 } as const
 export type RewardType = keyof typeof rewards
 export type Reward<Type extends RewardType> = InstanceType<(typeof rewards)[Type]>

@@ -3,14 +3,14 @@ import typia from 'typia'
 import type { DateISOString, UUID } from '@/types'
 
 import type {
-  DirectMilesAccumulation,
-  PointsRewardThreshold,
+  CumulativeMilesReward,
+  PointsRewardPerThreshold,
   Reward,
   RewardConfig,
   RewardType,
-  RoundedMilesAccumulation,
-  RoundedPointsRewardPercentage,
-  TruncatedPointsRewardPercentage,
+  DirectMilesReward,
+  RoundedPointsReward,
+  TruncatedPointsReward,
 } from './Reward'
 
 export const Payment = [
@@ -107,13 +107,11 @@ export interface CardConfig {
   updateAt: DateISOString
 }
 
-export const isRoundedPointsRewardPercentage =
-  typia.createIs<RoundedPointsRewardPercentage<'RoundedPointsRewardPercentage'>>()
-export const isTruncatedPointsRewardPercentage =
-  typia.createIs<TruncatedPointsRewardPercentage<'TruncatedPointsRewardPercentage'>>()
-export const isPointsRewardThreshold =
-  typia.createIs<PointsRewardThreshold<'PointsRewardThreshold'>>()
-export const isDirectMilesAccumulation =
-  typia.createIs<DirectMilesAccumulation<'DirectMilesAccumulation'>>()
-export const isRoundedMilesAccumulation =
-  typia.createIs<RoundedMilesAccumulation<'RoundedMilesAccumulation'>>()
+export const isRoundedPointsReward = typia.createIs<RoundedPointsReward<'RoundedPointsReward'>>()
+export const isTruncatedPointsReward =
+  typia.createIs<TruncatedPointsReward<'TruncatedPointsReward'>>()
+export const isPointsRewardPerThreshold =
+  typia.createIs<PointsRewardPerThreshold<'PointsRewardPerThreshold'>>()
+export const isCumulativeMilesReward =
+  typia.createIs<CumulativeMilesReward<'CumulativeMilesReward'>>()
+export const isDirectMilesReward = typia.createIs<DirectMilesReward<'DirectMilesReward'>>()

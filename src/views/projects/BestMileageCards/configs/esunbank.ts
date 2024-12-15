@@ -26,7 +26,7 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 5,
             },
@@ -35,7 +35,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 10,
             },
@@ -43,7 +43,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國內消費',
               spendingPerMile: 20,
             },
@@ -68,7 +68,7 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 7.5,
             },
@@ -77,7 +77,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 15,
             },
@@ -85,7 +85,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國內消費',
               spendingPerMile: 25,
             },
@@ -110,7 +110,7 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國外消費',
               spendingPerMile: 20,
             },
@@ -118,7 +118,7 @@ export const starLuxConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'DirectMilesAccumulation',
+              type: 'CumulativeMilesReward',
               name: '國內消費',
               spendingPerMile: 28,
             },
@@ -249,7 +249,7 @@ const uniCardStoreList = [
 ]
 const uniCardBaseReward: CardConfig['plans'][number]['rewards'][number] = {
   reward: {
-    type: 'TruncatedPointsRewardPercentage',
+    type: 'TruncatedPointsReward',
     name: null,
     pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }],
     pointsPerMile: 200,
@@ -270,7 +270,7 @@ export const uniCardConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'TruncatedPointsRewardPercentage',
+              type: 'TruncatedPointsReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2.5, limit: 500 }],
               pointsPerMile: 200,
@@ -281,7 +281,7 @@ export const uniCardConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'TruncatedPointsRewardPercentage',
+              type: 'TruncatedPointsReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2.5, limit: 500 }],
               pointsPerMile: 200,
@@ -297,7 +297,7 @@ export const uniCardConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'TruncatedPointsRewardPercentage',
+              type: 'TruncatedPointsReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2, limit: 500 }],
               pointsPerMile: 200,
@@ -308,7 +308,7 @@ export const uniCardConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'TruncatedPointsRewardPercentage',
+              type: 'TruncatedPointsReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2, limit: 500 }],
               pointsPerMile: 200,
@@ -324,7 +324,7 @@ export const uniCardConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'TruncatedPointsRewardPercentage',
+              type: 'TruncatedPointsReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 3.5, limit: 2000 }],
               pointsPerMile: 200,
@@ -335,7 +335,7 @@ export const uniCardConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'TruncatedPointsRewardPercentage',
+              type: 'TruncatedPointsReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 3.5, limit: 2000 }],
               pointsPerMile: 200,
