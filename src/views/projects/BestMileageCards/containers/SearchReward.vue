@@ -56,6 +56,17 @@
         density="compact"
         class="mx-auto w-full flex-shrink-0"
         variant="outlined"
+        @click="
+          () => {
+            const { reward } = item
+            if (reward !== null) {
+              selectedRewardItem = {
+                ...item,
+                reward,
+              }
+            }
+          }
+        "
       >
         <template #title>
           <div class="flex items-center justify-between">
@@ -77,6 +88,36 @@
       </v-card>
     </div>
   </div>
+  <v-dialog
+    :model-value="Boolean(selectedRewardItem)"
+    @update:model-value="selectedRewardItem = null"
+  >
+    <v-card
+      v-if="selectedRewardItem"
+      class="mx-auto"
+      min-width="100%"
+      :title="`${selectedRewardItem.cardName} ${selectedRewardItem.planName ?? ''} ${selectedRewardItem.rewardName ?? ''}`"
+    >
+      <template #subtitle>
+        <p class="text-wrap">
+          {{ selectedRewardItem.reward?.description ?? '' }}
+        </p>
+      </template>
+      <template #text>
+        <div class="flex-col">
+          <p>消費金額: {{ amount }}</p>
+          <p>哩程預估: {{ selectedRewardItem.miles }}</p>
+          <br />
+          <p v-for="(text, index) of rewardDetails" :key="index">
+            {{ text }}
+          </p>
+        </div>
+      </template>
+      <template #actions>
+        <v-btn class="ms-auto" text="Close" @click="selectedRewardItem = null" />
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
@@ -89,9 +130,13 @@ import { storeAliases } from '../configs/storeAliases'
 import {
   CreditCard,
   type Payment,
+  type Reward,
   type RewardMileInfo,
+  type RewardType,
   type TransactionInfo,
   type TransactionType,
+  isRoundedPointsRewardPercentage,
+  isTruncatedPointsRewardPercentage,
 } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
@@ -103,6 +148,7 @@ interface RewardItem {
   isSelectedPlan: boolean
   payments: readonly Payment[]
   targetAirLines: string
+  reward: Reward<RewardType> | null
 }
 
 const { showRewardMilesType, commonPaymentMethods, cards, conditionTypes } = storeToRefs(
@@ -174,12 +220,37 @@ const rewardMilesList = computed((): RewardItem[] => {
         targetAirLines: card.airLinesCode,
         isSelectedPlan:
           showRewardMilesType.value === 'AllPlanRewardMiles' && item.planId === card.selectedPlanId,
+        reward: item.reward,
       }
       list.push(rewardItem)
     }
   }
   rewardCardListElement.value?.scrollTo({ top: 0, behavior: 'smooth' })
-  return sortListByField(list, 'miles', 'desc')
+  return sortListByField(sortListByField(list, 'isSelectedPlan', 'desc'), 'miles', 'desc')
+})
+
+const selectedRewardItem = ref<RewardItem | null>(null)
+const rewardDetails = computed((): string[] => {
+  const reward = selectedRewardItem.value?.reward
+  if (isRoundedPointsRewardPercentage(reward) || isTruncatedPointsRewardPercentage(reward)) {
+    const numberFormatEvent =
+      reward.type === 'RoundedPointsRewardPercentage' ? Math.round : Math.floor
+    let totalPoints = 0
+    return [
+      '回饋點數:',
+      ...reward.pointBackRates.map(({ rate, limit }) => {
+        const total = Math.min(numberFormatEvent((amount.value * rate) / 100), limit ?? Infinity)
+        totalPoints += total
+        const limitString = limit !== undefined ? ` (limit ${limit})` : ''
+        return `${amount.value} * ${rate}% = ${total}${limitString}`
+      }),
+      `總計 ${totalPoints} points`,
+      `${totalPoints} / ${reward.pointsPerMile} * ${reward.milesPerUnit} = ${
+        Math.round((totalPoints / reward.pointsPerMile) * reward.milesPerUnit * 100) / 100
+      } miles`,
+    ]
+  }
+  return []
 })
 </script>
 
