@@ -32,6 +32,8 @@ export const Payment = [
 ] as const
 export type Payment = (typeof Payment)[number]
 export type TransactionType = 'Domestic' | 'Foreign'
+export const ConditionType = ['Birthday'] as const
+export type ConditionType = (typeof ConditionType)[number]
 
 export const airLinesObj = {
   SJX: '星宇航空',
@@ -52,6 +54,7 @@ export interface TransactionInfo {
   acceptedPayments?: Payment[]
   /** 交易屬性（國內交易、國外交易） */
   transactionAttributesType: TransactionType
+  currentConditions?: ConditionType[]
   amount: number
 }
 
@@ -64,18 +67,20 @@ export interface RewardMileInfo {
   readonly payments: readonly Payment[]
 }
 
-interface RewardRuleConfig {
+export interface RewardRuleConfig {
   reward: RewardConfig
-  transactionType: TransactionType | null
+  transactionType?: TransactionType | null
   stores?: string[]
   storeBlackList?: string[]
   payments?: Payment[]
   paymentBlackList?: Payment[]
+  condition?: ConditionType | null
 }
 export interface PlanConfig {
   name: string | null
   /** 回饋列表會有順序問題，前面的達成後就不會往下搜索，所以需要注意順序 */
   rewards: RewardRuleConfig[]
+  condition?: ConditionType | null
 }
 export interface CardConfig {
   name: string

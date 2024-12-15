@@ -19,18 +19,28 @@ export function createCard({
   airLines,
 }: CardConfig): CreditCard {
   const plans = new Map<UUID, Plan>(
-    planConfigs.map(({ name, rewards }) => [
+    planConfigs.map(({ name, condition, rewards }) => [
       generateUuid(),
       new Plan(
         name,
+        condition ?? null,
         rewards.map(
-          ({ stores, payments, transactionType, reward, paymentBlackList, storeBlackList }) => ({
+          ({
+            stores,
+            payments,
+            transactionType,
+            reward,
+            paymentBlackList,
+            storeBlackList,
+            condition,
+          }) => ({
             reward: rewardFactory(reward),
             stores: new Set(stores),
             storeBlackList: new Set(storeBlackList),
             payments: new Set(payments),
             paymentBlackList: new Set(paymentBlackList),
-            transactionType,
+            transactionType: transactionType ?? null,
+            condition: condition ?? null,
           }),
         ),
       ),

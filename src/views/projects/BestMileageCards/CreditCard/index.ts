@@ -2,6 +2,7 @@ export { CreditCard } from './modules/Card'
 export { type Reward, type RewardType, type RewardConfig } from './modules/Reward'
 export {
   Payment,
+  ConditionType,
   type TransactionType,
   type TransactionInfo,
   type RewardMileInfo,

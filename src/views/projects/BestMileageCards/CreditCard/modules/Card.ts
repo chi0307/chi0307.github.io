@@ -164,10 +164,15 @@ export class CreditCard {
   }
 
   public getAllPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo[] {
-    return [...this._plans.keys()].map((id) => this._rewardMilesWithPlan(id, paymentInfo))
+    return [...this._plans.keys()]
+      .filter((id) => {
+        const plan = this._getPlan(id)
+        return plan.checkPlanIsVisible(paymentInfo.currentConditions ?? null)
+      })
+      .map((id) => this._rewardMilesWithPlan(id, paymentInfo))
   }
 
-  public toJSON(): CardConfig {
+  public toJSON(): Required<CardConfig> {
     return {
       name: this._name,
       description: this._description,
