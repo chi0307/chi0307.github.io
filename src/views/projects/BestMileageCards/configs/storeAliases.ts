@@ -1,7 +1,7 @@
 import typia from 'typia'
 
-export type StoreAliases = [string, string[]][]
-export const isStoreAliases = typia.createIs<StoreAliases>()
+export type StoreAliases = [string, string[]]
+export const isStoreAliasesList = typia.createIs<StoreAliases[]>()
 
 export const defaultStoreAliases: readonly [string, readonly string[]][] = [
   ['7-ELEVEN', ['7-11', 'Seven Eleven', '統一超商', '小7']],
@@ -79,4 +79,4 @@ export const defaultStoreAliases: readonly [string, readonly string[]][] = [
   ['麥當勞', ["McDonald's"]],
   ['IKEA', ['宜家家居']],
   ['星巴克', ['starbucks']],
-] satisfies StoreAliases
+] satisfies StoreAliases[]

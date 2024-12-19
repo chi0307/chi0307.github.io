@@ -64,10 +64,18 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     }
   }
 
-  const customAliases = ref<StoreAliases>(storageManager.get('customAliases') ?? [])
-  function updateCustomAliases(list: StoreAliases): void {
-    customAliases.value = list
-    storageManager.remove('customAliases')
+  const customAliases = ref(new Map<string, string[]>(storageManager.get('customAliases') ?? []))
+  function updateCustomAliases(store: string, aliases: string[]): void {
+    if (aliases.length === 0) {
+      customAliases.value.delete(store)
+    } else {
+      customAliases.value.set(store, aliases)
+    }
+    storageManager.set('customAliases', [...customAliases.value])
+  }
+  function updateAllCustomAliases(list: StoreAliases[]): void {
+    customAliases.value = new Map(list)
+    storageManager.set('customAliases', list)
   }
 
   const storeAliases = computed(() => {
@@ -105,5 +113,6 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     updateAliasType,
     customAliases: readonly(customAliases),
     updateCustomAliases,
+    updateAllCustomAliases,
   }
 })
