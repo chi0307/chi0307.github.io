@@ -17,6 +17,13 @@ export function roundByDigits(digits: number): (num: number) => number {
   }
 }
 
+export function floorByDigits(digits: number): (num: number) => number {
+  return (num: number): number => {
+    const pow = Math.pow(10, digits)
+    return Math.floor(num * pow) / pow
+  }
+}
+
 export function isNotNullishValue<T>(data: T | null | undefined): data is T {
   return data !== null && data !== undefined
 }

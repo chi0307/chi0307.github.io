@@ -2,24 +2,25 @@ import type { UUID } from '@/types'
 import { removeDuplicates } from '@/utils'
 
 import { Plan } from './Plan'
-import {
-  type TransactionInfo,
-  type RewardMileInfo,
-  type CardConfig,
-  type AirLines,
-  airLinesObj,
-  Payment,
-} from './type'
+import type { PointExchangeStrategy } from './PointExchange'
+import { type TransactionInfo, type RewardInfo, type CardConfig, Payment } from './type'
 
 interface CardParams {
+  /** 卡片名稱 */
   readonly name: string
   readonly description: string
+  /** 全部的方案 (如果像旅人卡那樣，只有一種回饋方式這邊選項就會只有一個) */
   readonly plans: ReadonlyMap<UUID, Plan>
+  /** 信用卡的銀行網頁 */
   readonly cardUrl: string | null
-  readonly updateAt: Date
-  readonly airLines: AirLines
+  /** 不回饋商店清單 */
   readonly storeBlackList: ReadonlySet<string>
+  /** 不回饋支付方式清單 */
   readonly paymentBlackList: ReadonlySet<Payment>
+  /** 最後更新卡片回饋設定日期（不包含切換方案等使用者設定） */
+  readonly updateAt: Date
+  /** 點數交換策略 */
+  readonly pointExchangeStrategies: ReadonlyMap<UUID, PointExchangeStrategy>
 }
 
 // TODO
@@ -28,6 +29,8 @@ interface CardParams {
 export class CreditCard {
   /** 當前選擇的方案 */
   private _selectedPlanId: UUID
+  /** 當前選擇的交換方式 */
+  private _selectedPointExchangeStrategyId: UUID
   /** 卡片名稱 */
   private readonly _name: string
   private readonly _description: string
@@ -41,8 +44,8 @@ export class CreditCard {
   private readonly _paymentBlackList: ReadonlySet<Payment>
   /** 最後更新卡片回饋設定日期（不包含切換方案等使用者設定） */
   private readonly _updateAt: Date
-  /** 目標里程 */
-  private readonly _airLines: AirLines
+  /** 點數交換策略 */
+  private readonly _pointExchangeStrategies: ReadonlyMap<UUID, PointExchangeStrategy>
 
   public constructor({
     name,
@@ -52,7 +55,7 @@ export class CreditCard {
     paymentBlackList,
     cardUrl,
     updateAt,
-    airLines,
+    pointExchangeStrategies,
   }: CardParams) {
     this._name = name
     this._description = description
@@ -61,44 +64,44 @@ export class CreditCard {
     this._storeBlackList = storeBlackList
     this._paymentBlackList = paymentBlackList
     this._updateAt = updateAt
-    this._airLines = airLines
+    this._pointExchangeStrategies = pointExchangeStrategies
 
     const firstPlanKey = this._plans.keys().next().value
     if (this._plans.size === 0 || firstPlanKey === undefined) {
       throw new Error('this credit card no any plan')
     }
     this._selectedPlanId = firstPlanKey
+
+    const firstExchangeKey = this._pointExchangeStrategies.keys().next().value
+    if (this._plans.size === 0 || firstExchangeKey === undefined) {
+      throw new Error('this credit card no any exchange strategy')
+    }
+    this._selectedPointExchangeStrategyId = firstExchangeKey
   }
 
-  public get airLines(): string {
-    return airLinesObj[this._airLines]
-  }
-
-  public get airLinesCode(): string {
-    return this._airLines
-  }
-
-  public get selectedPlan(): Plan {
-    return this._getPlan(this._selectedPlanId)
-  }
-
+  /** 卡片名稱 */
   public get name(): string {
     return this._name
   }
-
   public get description(): string {
     return this._description
   }
-
   public get selectedPlanId(): UUID {
     return this._selectedPlanId
   }
-
+  public get selectedPlan(): Plan {
+    return this._getPlan(this._selectedPlanId)
+  }
+  public get selectedPointExchangeStrategyId(): UUID {
+    return this._selectedPointExchangeStrategyId
+  }
+  public get selectedPointExchangeStrategy(): PointExchangeStrategy {
+    return this._getPointExchangeStrategy(this._selectedPointExchangeStrategyId)
+  }
   /** 回傳 uuid 跟 plan name */
   public get selectablePlan(): { id: UUID; name: string | null }[] {
     return [...this._plans.entries()].map(([id, { name }]) => ({ id, name }))
   }
-
   /** 方便在前端做選單或 autocomplete 用的 */
   public get storeList(): string[] {
     return removeDuplicates([
@@ -106,18 +109,8 @@ export class CreditCard {
       ...this._storeBlackList,
     ])
   }
-
   public get cardUrl(): string | null {
     return this._cardUrl
-  }
-
-  public updatePlan(id: UUID): boolean {
-    const plan = this._plans.get(id)
-    if (plan) {
-      this._selectedPlanId = id
-      return true
-    }
-    return false
   }
 
   private _getPlan(id: UUID): Plan {
@@ -129,16 +122,29 @@ export class CreditCard {
     }
     return plan
   }
-
-  private _rewardMilesWithPlan(planId: UUID, paymentInfo: TransactionInfo): RewardMileInfo {
-    const plan = this._getPlan(planId)
-    const noneMatchRewardInfo: RewardMileInfo = {
-      planId: null,
+  private _getPointExchangeStrategy(id: UUID): PointExchangeStrategy {
+    const pointExchangeStrategy = this._pointExchangeStrategies.get(id)
+    if (pointExchangeStrategy === undefined) {
+      throw new Error(
+        `pointExchangeStrategy id ${id} not found. Available pointExchangeStrategies: ${[...this._plans.keys()].join(', ')}`,
+      )
+    }
+    return pointExchangeStrategy
+  }
+  private _rewardMilesWithPlan(
+    plan: Plan,
+    pointExchangeStrategy: PointExchangeStrategy,
+    paymentInfo: TransactionInfo,
+  ): RewardInfo {
+    const noneMatchRewardInfo: RewardInfo = {
       planName: plan.name,
-      name: null,
-      miles: 0,
+      rewardName: null,
+      rewardPoints: 0,
       payments: [],
-      reward: null,
+      rewardStrategy: null,
+      pointExchangeStrategy,
+      pointExchangeName: pointExchangeStrategy.name,
+      miles: 0,
     }
     const inStoreBlackList =
       paymentInfo.transactionStore !== undefined &&
@@ -154,35 +160,72 @@ export class CreditCard {
       return noneMatchRewardInfo
     }
     return {
-      planId,
       planName: plan.name,
+      pointExchangeStrategy,
+      pointExchangeName: pointExchangeStrategy.name,
+      miles: pointExchangeStrategy.calculateMiles(rewardInfo.rewardPoints),
       ...rewardInfo,
     }
   }
 
-  public currentPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo {
-    return this._rewardMilesWithPlan(this._selectedPlanId, paymentInfo)
+  public updatePlan(id: UUID): boolean {
+    const plan = this._plans.get(id)
+    if (plan) {
+      this._selectedPlanId = id
+      return true
+    }
+    return false
   }
-
-  public getAllPlanRewardMiles(paymentInfo: TransactionInfo): RewardMileInfo[] {
-    return [...this._plans.keys()]
-      .filter((id) => {
-        const plan = this._getPlan(id)
-        return plan.checkPlanIsVisible(paymentInfo.currentConditions ?? null)
-      })
-      .map((id) => this._rewardMilesWithPlan(id, paymentInfo))
+  public updatePointExchangeStrategy(id: UUID): boolean {
+    const pointExchangeStrategy = this._pointExchangeStrategies.get(id)
+    if (pointExchangeStrategy) {
+      this._selectedPointExchangeStrategyId = id
+      return true
+    }
+    return false
   }
-
+  public currentPlanRewardMiles(paymentInfo: TransactionInfo): RewardInfo {
+    return this._rewardMilesWithPlan(
+      this.selectedPlan,
+      this.selectedPointExchangeStrategy,
+      paymentInfo,
+    )
+  }
+  public getAllRewardInfo(
+    paymentInfo: TransactionInfo,
+    {
+      onlyCurrentPlan = false,
+      onlyCurrentExchangeStrategy = false,
+    }: { onlyCurrentPlan?: boolean; onlyCurrentExchangeStrategy?: boolean } = {},
+  ): RewardInfo[] {
+    const plans: Plan[] = onlyCurrentPlan ? [this.selectedPlan] : [...this._plans.values()]
+    const exchanges: PointExchangeStrategy[] = onlyCurrentExchangeStrategy
+      ? [this.selectedPointExchangeStrategy]
+      : [...this._pointExchangeStrategies.values()]
+    const eligiblePlans = plans.filter((plan) => {
+      return plan.checkPlanIsVisible(paymentInfo.currentConditions ?? null)
+    })
+    const rewardInfos: RewardInfo[] = []
+    for (const plan of eligiblePlans) {
+      for (const pointExchangeStrategy of exchanges) {
+        const rewardInfo = this._rewardMilesWithPlan(plan, pointExchangeStrategy, paymentInfo)
+        rewardInfos.push(rewardInfo)
+      }
+    }
+    return rewardInfos
+  }
   public toJSON(): Required<CardConfig> {
     return {
       name: this._name,
       description: this._description,
       cardUrl: this._cardUrl,
-      storeBlackList: [...this._storeBlackList.values()],
-      paymentBlackList: [...this._paymentBlackList.values()],
-      plans: [...this._plans.values()].map((plan) => plan.toJSON()),
+      storeBlackList: [...this._storeBlackList],
+      paymentBlackList: [...this._paymentBlackList],
+      plans: [...this._plans].map(([_id, plan]) => plan.toJSON()),
       updateAt: this._updateAt.toISOString(),
-      airLines: this._airLines,
+      pointExchangeStrategies: [...this._pointExchangeStrategies].map(([_id, strategy]) =>
+        strategy.toJSON(),
+      ),
     }
   }
 }

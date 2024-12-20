@@ -1,5 +1,6 @@
-import type { DateISOString, UUID } from '@/types'
+import type { DateISOString } from '@/types'
 
+import type { PointExchangeConfig, PointExchangeStrategy } from './PointExchange'
 import type { Reward, RewardConfig, RewardType } from './Reward'
 
 export const Payment = [
@@ -35,17 +36,6 @@ export type TransactionType = 'Domestic' | 'Foreign'
 export const ConditionType = ['Birthday'] as const
 export type ConditionType = (typeof ConditionType)[number]
 
-export const airLinesObj = {
-  SJX: '星宇航空',
-  EVA: '長榮航空',
-  ANA: '全日空',
-  JAL: '日航',
-  CPA: '國泰航空',
-  CAL: '華航',
-} as const
-export type AirLines = keyof typeof airLinesObj
-export const AirLines = Object.keys(airLinesObj) as AirLines[]
-
 /** input 的交易資料 */
 export interface TransactionInfo {
   /** 消費店家 */
@@ -59,17 +49,19 @@ export interface TransactionInfo {
 }
 
 /** 回饋哩程資訊 */
-export interface RewardMileInfo {
-  readonly planId: UUID | null
+export interface RewardInfo {
   readonly planName: string | null
-  readonly name: string | null
-  readonly miles: number
   readonly payments: readonly Payment[]
-  readonly reward: Reward<RewardType> | null
+  readonly rewardName: string | null
+  readonly rewardStrategy: Reward<RewardType> | null
+  readonly rewardPoints: number
+  readonly pointExchangeName: string | null
+  readonly pointExchangeStrategy: PointExchangeStrategy
+  readonly miles: number
 }
 
 export interface RewardRuleConfig {
-  reward: RewardConfig
+  rewardStrategy: RewardConfig
   transactionType?: TransactionType | null
   stores?: string[]
   storeBlackList?: string[]
@@ -90,8 +82,7 @@ export interface CardConfig {
   storeBlackList?: string[]
   paymentBlackList?: Payment[]
   plans: PlanConfig[]
-  /** 目標里程 */
-  airLines: AirLines
   /** 最後更新卡片權益的時間 */
   updateAt: DateISOString
+  pointExchangeStrategies: PointExchangeConfig[]
 }

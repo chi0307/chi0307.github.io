@@ -2,10 +2,11 @@ import typia from 'typia'
 
 import type { UUID } from '@/types'
 import { generateUuid } from '@/utils'
+import { PointExchangeStrategy } from '@/views/projects/BestMileageCards/CreditCard/modules/PointExchange'
 
 import { CreditCard } from './modules/Card'
 import { Plan } from './modules/Plan'
-import { rewardFactory } from './modules/Reward'
+import { rewardStrategyFactory } from './modules/Reward'
 import type { CardConfig } from './modules/type'
 
 export function createCard({
@@ -16,7 +17,7 @@ export function createCard({
   cardUrl,
   plans: planConfigs,
   updateAt,
-  airLines,
+  pointExchangeStrategies,
 }: CardConfig): CreditCard {
   const plans = new Map<UUID, Plan>(
     planConfigs.map(({ name, condition, rewards }) => [
@@ -29,12 +30,12 @@ export function createCard({
             stores,
             payments,
             transactionType,
-            reward,
+            rewardStrategy,
             paymentBlackList,
             storeBlackList,
             condition,
           }) => ({
-            reward: rewardFactory(reward),
+            rewardStrategy: rewardStrategyFactory(rewardStrategy),
             stores: new Set(stores),
             storeBlackList: new Set(storeBlackList),
             payments: new Set(payments),
@@ -54,7 +55,9 @@ export function createCard({
     paymentBlackList: new Set(paymentBlackList),
     cardUrl,
     updateAt: new Date(updateAt),
-    airLines,
+    pointExchangeStrategies: new Map(
+      pointExchangeStrategies.map((item) => [generateUuid(), new PointExchangeStrategy(item)]),
+    ),
   })
 }
 

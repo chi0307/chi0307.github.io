@@ -4,7 +4,7 @@ import { type Reward, type RewardType } from './Reward'
 import type {
   Payment,
   TransactionInfo,
-  RewardMileInfo,
+  RewardInfo,
   TransactionType,
   PlanConfig,
   ConditionType,
@@ -12,7 +12,7 @@ import type {
 } from './type'
 
 interface PlanReward {
-  readonly reward: Reward<RewardType>
+  readonly rewardStrategy: Reward<RewardType>
   readonly stores: ReadonlySet<string>
   readonly storeBlackList: ReadonlySet<string>
   readonly payments: ReadonlySet<Payment>
@@ -114,7 +114,10 @@ export class Plan {
     amount,
     transactionAttributesType,
     currentConditions,
-  }: TransactionInfo): Pick<RewardMileInfo, 'name' | 'miles' | 'payments' | 'reward'> | null {
+  }: TransactionInfo): Pick<
+    RewardInfo,
+    'rewardName' | 'rewardPoints' | 'payments' | 'rewardStrategy'
+  > | null {
     const reward = this.getApplicableReward({
       acceptedPayments,
       transactionStore,
@@ -129,10 +132,10 @@ export class Plan {
         ? [...reward.payments.values()]
         : acceptedPayments.filter((item) => reward.payments.has(item))
     return {
-      name: reward.reward.name,
-      miles: reward.reward.calculateMiles(amount),
+      rewardName: reward.rewardStrategy.name,
+      rewardPoints: reward.rewardStrategy.calculatePoints(amount),
       payments: payments.filter((payment) => !reward.paymentBlackList.has(payment)),
-      reward: reward.reward,
+      rewardStrategy: reward.rewardStrategy,
     }
   }
 
@@ -142,7 +145,7 @@ export class Plan {
       condition: this._condition,
       rewards: this._rewards.map(
         ({
-          reward,
+          rewardStrategy,
           stores,
           payments,
           transactionType,
@@ -150,11 +153,11 @@ export class Plan {
           storeBlackList,
           condition,
         }) => ({
-          reward: reward.toJSON(),
-          stores: [...stores.values()],
-          storeBlackList: [...storeBlackList.values()],
-          payments: [...payments.values()],
-          paymentBlackList: [...paymentBlackList.values()],
+          rewardStrategy: rewardStrategy.toJSON(),
+          stores: [...stores],
+          storeBlackList: [...storeBlackList],
+          payments: [...payments],
+          paymentBlackList: [...paymentBlackList],
           transactionType,
           condition,
         }),
