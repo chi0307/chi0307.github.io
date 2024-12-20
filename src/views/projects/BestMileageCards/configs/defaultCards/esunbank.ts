@@ -19,39 +19,40 @@ export const starLuxConfigs: CardConfig[] = [
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
     paymentBlackList,
-    airLines: 'SJX',
+    pointExchangeStrategies: [
+      {
+        name: '星宇航空哩程',
+        airlineCode: 'SJX',
+        pointsPerMile: 1,
+        milesPerUnit: 1,
+      },
+    ],
     plans: [
       {
         name: null,
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國外消費',
               spendingPerPoint: 5,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
             condition: 'Birthday',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國外消費',
               spendingPerPoint: 10,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國內消費',
               spendingPerPoint: 20,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -67,39 +68,40 @@ export const starLuxConfigs: CardConfig[] = [
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
     paymentBlackList,
-    airLines: 'SJX',
+    pointExchangeStrategies: [
+      {
+        name: '星宇航空哩程',
+        airlineCode: 'SJX',
+        pointsPerMile: 1,
+        milesPerUnit: 1,
+      },
+    ],
     plans: [
       {
         name: null,
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國外消費',
               spendingPerPoint: 7.5,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
             condition: 'Birthday',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國外消費',
               spendingPerPoint: 15,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國內消費',
               spendingPerPoint: 25,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -115,28 +117,31 @@ export const starLuxConfigs: CardConfig[] = [
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
     paymentBlackList,
-    airLines: 'SJX',
+    pointExchangeStrategies: [
+      {
+        name: '星宇航空哩程',
+        airlineCode: 'SJX',
+        pointsPerMile: 1,
+        milesPerUnit: 1,
+      },
+    ],
     plans: [
       {
         name: null,
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國外消費',
               spendingPerPoint: 20,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'FixedRatePointsReward',
               name: '國內消費',
               spendingPerPoint: 28,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -266,12 +271,10 @@ const uniCardStoreList = [
   '義大利實體店',
 ]
 const uniCardBaseReward: CardConfig['plans'][number]['rewards'][number] = {
-  reward: {
+  rewardStrategy: {
     type: 'TruncatedPercentageReward',
     name: null,
     pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }],
-    pointsPerMile: 200,
-    milesPerUnit: 300,
   },
 }
 export const uniCardConfigs: CardConfig[] = [
@@ -281,29 +284,32 @@ export const uniCardConfigs: CardConfig[] = [
     cardUrl: 'https://www.esunbank.com/zh-tw/personal/credit-card/intro/bank-card/unicard',
     storeBlackList,
     paymentBlackList,
-    airLines: 'EVA',
+    pointExchangeStrategies: [
+      {
+        name: '長榮航空哩程',
+        airlineCode: 'EVA',
+        pointsPerMile: 200,
+        milesPerUnit: 300,
+      },
+    ],
     plans: [
       {
         name: '任意選 (需要切換店家)',
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'TruncatedPercentageReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2.5, limit: 500 }],
-              pointsPerMile: 200,
-              milesPerUnit: 300,
             },
             stores: uniCardStoreList,
             payments: ['信用卡', 'Apple Pay', 'Samsung Pay', 'Google Pay'],
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'TruncatedPercentageReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2.5, limit: 500 }],
-              pointsPerMile: 200,
-              milesPerUnit: 300,
             },
             payments: ['Line Pay', '街口支付', '悠遊付', '橘子支付', 'icash pay'],
           },
@@ -314,23 +320,19 @@ export const uniCardConfigs: CardConfig[] = [
         name: '簡單選',
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'TruncatedPercentageReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2, limit: 500 }],
-              pointsPerMile: 200,
-              milesPerUnit: 300,
             },
             stores: uniCardStoreList,
             payments: ['信用卡', 'Apple Pay', 'Samsung Pay', 'Google Pay'],
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'TruncatedPercentageReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2, limit: 500 }],
-              pointsPerMile: 200,
-              milesPerUnit: 300,
             },
             payments: ['Line Pay', '街口支付', '悠遊付', '橘子支付', 'icash pay'],
           },
@@ -341,23 +343,19 @@ export const uniCardConfigs: CardConfig[] = [
         name: 'UP選',
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'TruncatedPercentageReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 3.5, limit: 2000 }],
-              pointsPerMile: 200,
-              milesPerUnit: 300,
             },
             stores: uniCardStoreList,
             payments: ['信用卡', 'Apple Pay', 'Samsung Pay', 'Google Pay'],
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'TruncatedPercentageReward',
               name: null,
               pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 3.5, limit: 2000 }],
-              pointsPerMile: 200,
-              milesPerUnit: 300,
             },
             payments: ['Line Pay', '街口支付', '悠遊付', '橘子支付', 'icash pay'],
           },

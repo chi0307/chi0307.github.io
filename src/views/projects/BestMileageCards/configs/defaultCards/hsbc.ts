@@ -10,28 +10,31 @@ export const travelConfigs: CardConfig[] = [
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-infinite/',
     storeBlackList,
     paymentBlackList,
-    airLines: 'EVA',
+    pointExchangeStrategies: [
+      {
+        name: '長榮航空哩程',
+        airlineCode: 'EVA',
+        pointsPerMile: 1,
+        milesPerUnit: 1,
+      },
+    ],
     plans: [
       {
         name: null,
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'AccumulatedPointsReward',
               name: '國外消費',
               spendingPerPoint: 10,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'AccumulatedPointsReward',
               name: '國內消費',
               spendingPerPoint: 18,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -46,28 +49,31 @@ export const travelConfigs: CardConfig[] = [
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-signature/',
     storeBlackList,
     paymentBlackList,
-    airLines: 'EVA',
+    pointExchangeStrategies: [
+      {
+        name: '長榮航空哩程',
+        airlineCode: 'EVA',
+        pointsPerMile: 1,
+        milesPerUnit: 1,
+      },
+    ],
     plans: [
       {
         name: null,
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'AccumulatedPointsReward',
               name: '國外消費',
               spendingPerPoint: 15,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'AccumulatedPointsReward',
               name: '國內消費',
               spendingPerPoint: 18,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -82,28 +88,31 @@ export const travelConfigs: CardConfig[] = [
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-light/',
     storeBlackList,
     paymentBlackList,
-    airLines: 'EVA',
+    pointExchangeStrategies: [
+      {
+        name: '長榮航空哩程',
+        airlineCode: 'EVA',
+        pointsPerMile: 1,
+        milesPerUnit: 1,
+      },
+    ],
     plans: [
       {
         name: null,
         rewards: [
           {
-            reward: {
+            rewardStrategy: {
               type: 'AccumulatedPointsReward',
               name: '國外消費',
               spendingPerPoint: 20,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
-            reward: {
+            rewardStrategy: {
               type: 'AccumulatedPointsReward',
               name: '國內消費',
               spendingPerPoint: 20,
-              pointsPerMile: 1,
-              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },

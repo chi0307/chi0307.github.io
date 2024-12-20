@@ -13,18 +13,12 @@ const payments: Payment[] = [
   'Hami Pay',
 ]
 
-function planSettings(
-  defaultBackRete: number,
-  pointsPerMile: number,
-  milesPerUnit: number,
-): CardConfig['plans'] {
+function planSettings(defaultBackRete: number): CardConfig['plans'] {
   const baseReward: CardConfig['plans'][number]['rewards'][number] = {
-    reward: {
+    rewardStrategy: {
       type: 'RoundedPercentageReward',
       name: null,
       pointBackRates: [{ rate: 0.3 }],
-      pointsPerMile,
-      milesPerUnit,
     },
   }
 
@@ -33,12 +27,10 @@ function planSettings(
       name: '集精選',
       rewards: [
         {
-          reward: {
+          rewardStrategy: {
             type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 2 }],
-            pointsPerMile,
-            milesPerUnit,
           },
           stores: [
             '家樂福',
@@ -58,12 +50,10 @@ function planSettings(
       name: '玩數位',
       rewards: [
         {
-          reward: {
+          rewardStrategy: {
             type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: defaultBackRete }],
-            pointsPerMile,
-            milesPerUnit,
           },
           stores: [
             'App Store',
@@ -96,12 +86,10 @@ function planSettings(
       name: '樂饗購',
       rewards: [
         {
-          reward: {
+          rewardStrategy: {
             type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: defaultBackRete }],
-            pointsPerMile,
-            milesPerUnit,
           },
           stores: [
             '遠東SOGO百貨',
@@ -167,12 +155,10 @@ function planSettings(
       name: '趣旅行',
       rewards: [
         {
-          reward: {
+          rewardStrategy: {
             type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: defaultBackRete }],
-            pointsPerMile,
-            milesPerUnit,
           },
           stores: [
             '海外實體消費',
@@ -252,12 +238,10 @@ function planSettings(
       name: '來支付',
       rewards: [
         {
-          reward: {
+          rewardStrategy: {
             type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 2 }],
-            pointsPerMile,
-            milesPerUnit,
           },
           payments: ['Line Pay'],
         },
@@ -269,12 +253,10 @@ function planSettings(
       condition: 'Birthday',
       rewards: [
         {
-          reward: {
+          rewardStrategy: {
             type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 10 }],
-            pointsPerMile,
-            milesPerUnit,
           },
           stores: [
             '東京迪士尼樂園',
@@ -312,12 +294,10 @@ function planSettings(
           ],
         },
         {
-          reward: {
+          rewardStrategy: {
             type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 3.5 }],
-            pointsPerMile,
-            milesPerUnit,
           },
           stores: [
             '新光三越',
@@ -337,6 +317,21 @@ function planSettings(
   ]
 }
 
+const pointExchangeStrategies: CardConfig['pointExchangeStrategies'] = [
+  {
+    name: '長榮航空哩程',
+    airlineCode: 'EVA',
+    pointsPerMile: 360,
+    milesPerUnit: 1000,
+  },
+  {
+    name: '長榮航空哩程 + 長榮世界卡',
+    airlineCode: 'EVA',
+    pointsPerMile: 300,
+    milesPerUnit: 1000,
+  },
+]
+
 export const cubeConfigs: CardConfig[] = [
   {
     name: 'Cube 卡',
@@ -345,8 +340,8 @@ export const cubeConfigs: CardConfig[] = [
     storeBlackList,
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
-    airLines: 'EVA',
-    plans: planSettings(2, 360, 1000),
+    plans: planSettings(2),
+    pointExchangeStrategies,
   },
   {
     name: 'Cube 卡',
@@ -355,8 +350,8 @@ export const cubeConfigs: CardConfig[] = [
     storeBlackList,
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
-    airLines: 'EVA',
-    plans: planSettings(3, 360, 1000),
+    plans: planSettings(3),
+    pointExchangeStrategies,
   },
   {
     name: 'Cube 卡',
@@ -365,37 +360,7 @@ export const cubeConfigs: CardConfig[] = [
     storeBlackList,
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
-    airLines: 'EVA',
-    plans: planSettings(3.3, 360, 1000),
-  },
-  {
-    name: 'Cube 卡',
-    description: 'Cube 卡 (Level 1) 回饋方案 + 長榮世界卡',
-    cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
-    storeBlackList,
-    paymentBlackList,
-    updateAt: '2024-12-01T00:00:00.000Z',
-    airLines: 'EVA',
-    plans: planSettings(2, 300, 1000),
-  },
-  {
-    name: 'Cube 卡',
-    description: 'Cube 卡 (Level 2) 回饋方案 + 長榮世界卡',
-    cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
-    storeBlackList,
-    paymentBlackList,
-    updateAt: '2024-12-01T00:00:00.000Z',
-    airLines: 'EVA',
-    plans: planSettings(3, 300, 1000),
-  },
-  {
-    name: 'Cube 卡',
-    description: 'Cube 卡 (Level 3) 回饋方案 + 長榮世界卡',
-    cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
-    storeBlackList,
-    paymentBlackList,
-    updateAt: '2024-12-01T00:00:00.000Z',
-    airLines: 'EVA',
-    plans: planSettings(3.3, 300, 1000),
+    plans: planSettings(3.3),
+    pointExchangeStrategies,
   },
 ]
