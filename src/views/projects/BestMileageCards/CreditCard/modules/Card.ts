@@ -11,7 +11,7 @@ interface CardParams {
   readonly description: string
   /** 全部的方案 (如果像旅人卡那樣，只有一種回饋方式這邊選項就會只有一個) */
   readonly plans: ReadonlyMap<UUID, Plan>
-  /** 信用卡的銀行網頁 */
+  /** 信用卡網頁 */
   readonly cardUrl: string | null
   /** 不回饋商店清單 */
   readonly storeBlackList: ReadonlySet<string>
