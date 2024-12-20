@@ -16,9 +16,12 @@ interface BaseRewardParams<Type extends RewardType> {
   milesPerUnit: number
 }
 abstract class BaseReward<Type extends RewardType> {
+  /** 回饋類型 */
   protected readonly _type: Type
   protected readonly _name: string | null
+  /** N 點可以換里程 */
   protected readonly _pointsPerMile: number
+  /** 可以換 N 哩里程 */
   protected readonly _milesPerUnit: number
 
   public constructor({ type, name, pointsPerMile, milesPerUnit }: BaseRewardParams<Type>) {
@@ -198,9 +201,9 @@ export class TruncatedPointsReward<Type extends 'TruncatedPointsReward'> extends
   }
 }
 
-/** 點數回饋 (消費N元累積一點) */
-export class PointsRewardPerThreshold<
-  Type extends 'PointsRewardPerThreshold',
+/** 哩程回饋 (消費 N 元取得一點，小數會累計) */
+export class CumulativePointsReward<
+  Type extends 'CumulativePointsReward',
 > extends BaseReward<Type> {
   private readonly _spendingPerPoint: number
 
@@ -208,27 +211,78 @@ export class PointsRewardPerThreshold<
     spendingPerPoint,
     ...superParams
   }: {
-    /** N 元累積一點 */
+    /** N 元一哩 */
     spendingPerPoint: number
   } & BaseRewardParams<Type>) {
-    super(superParams)
+    super({ ...superParams })
     this._spendingPerPoint = spendingPerPoint
   }
-  /** N 元累積一點 */
+  /** N 元一哩 */
   public get spendingPerPoint(): number {
     return this._spendingPerPoint
   }
   public get baselineCostPerMile(): number {
-    return round(this._spendingPerPoint / this._pointsConvertToMiles(1))
+    return round(this._pointsConvertToMiles(this._spendingPerPoint))
   }
   public get bestCaseCostPerMile(): number {
     return this.baselineCostPerMile
   }
   public get maximumCostPerMile(): number {
-    return round((this._spendingPerPoint * 2 - 1) / this._pointsConvertToMiles(1))
+    return this.baselineCostPerMile
   }
   public get description(): string {
-    return `每消費${this._spendingPerPoint.toString()}元累積1點，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
+    if (this._pointsPerMile === this._milesPerUnit) {
+      return `每消費${this._spendingPerPoint.toString()}元累積1哩程 (小數會累計)`
+    }
+    return `每消費${this._spendingPerPoint.toString()}元累積1點 (小數會累計)，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
+  }
+  public calculateMiles(amount: number): number {
+    const points = round(amount / this._spendingPerPoint)
+    return round(this._pointsConvertToMiles(points))
+  }
+  public toJSON(): RewardConfig {
+    return {
+      type: this._type,
+      name: this._name,
+      spendingPerPoint: this._spendingPerPoint,
+      pointsPerMile: this._pointsPerMile,
+      milesPerUnit: this._milesPerUnit,
+    }
+  }
+}
+
+/** 哩程回饋 (消費 N 元取得一點) */
+export class DirectPointsReward<Type extends 'DirectPointsReward'> extends BaseReward<Type> {
+  private readonly _spendingPerPoint: number
+
+  public constructor({
+    spendingPerPoint,
+    ...superParams
+  }: {
+    /** N 元一哩 */
+    spendingPerPoint: number
+  } & BaseRewardParams<Type>) {
+    super({ ...superParams })
+    this._spendingPerPoint = spendingPerPoint
+  }
+  /** N 元一哩 */
+  public get spendingPerPoint(): number {
+    return this._spendingPerPoint
+  }
+  public get baselineCostPerMile(): number {
+    return round(this._pointsConvertToMiles(this._spendingPerPoint))
+  }
+  public get bestCaseCostPerMile(): number {
+    return this.baselineCostPerMile
+  }
+  public get maximumCostPerMile(): number {
+    return round(this._pointsConvertToMiles(this._spendingPerPoint + this._spendingPerPoint - 1))
+  }
+  public get description(): string {
+    if (this._pointsPerMile === this._milesPerUnit) {
+      return `每消費${this._spendingPerPoint.toString()}元累積1哩程 (小數不累計)`
+    }
+    return `每消費${this._spendingPerPoint.toString()}元累積1點 (小數不累計)，${this._pointsPerMile.toString()}點兌換${this._milesPerUnit.toString()}哩程`
   }
   public calculateMiles(amount: number): number {
     const points = Math.floor(amount / this._spendingPerPoint)
@@ -238,93 +292,9 @@ export class PointsRewardPerThreshold<
     return {
       type: this._type,
       name: this._name,
+      spendingPerPoint: this._spendingPerPoint,
       pointsPerMile: this._pointsPerMile,
       milesPerUnit: this._milesPerUnit,
-      spendingPerPoint: this._spendingPerPoint,
-    }
-  }
-}
-
-/** 哩程回饋 (消費 N 元哩程回饋，累積) */
-export class CumulativeMilesReward<Type extends 'CumulativeMilesReward'> extends BaseReward<Type> {
-  private readonly _spendingPerMile: number
-
-  public constructor({
-    spendingPerMile,
-    ...superParams
-  }: {
-    /** N 元一哩 */
-    spendingPerMile: number
-  } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
-    super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
-    this._spendingPerMile = spendingPerMile
-  }
-  /** N 元一哩 */
-  public get spendingPerMile(): number {
-    return this._spendingPerMile
-  }
-  public get baselineCostPerMile(): number {
-    return this._spendingPerMile
-  }
-  public get bestCaseCostPerMile(): number {
-    return this.baselineCostPerMile
-  }
-  public get maximumCostPerMile(): number {
-    return this.baselineCostPerMile
-  }
-  public get description(): string {
-    return `每消費${this._spendingPerMile.toString()}元累積1哩程 (小數會進行累計)`
-  }
-  public calculateMiles(amount: number): number {
-    return round(amount / this._spendingPerMile)
-  }
-  public toJSON(): RewardConfig {
-    return {
-      type: this._type,
-      name: this._name,
-      spendingPerMile: this._spendingPerMile,
-    }
-  }
-}
-
-/** 哩程回饋 (消費 N 元哩程回饋) */
-export class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseReward<Type> {
-  private readonly _spendingPerMile: number
-
-  public constructor({
-    spendingPerMile,
-    ...superParams
-  }: {
-    /** N 元一哩 */
-    spendingPerMile: number
-  } & Omit<BaseRewardParams<Type>, 'pointsPerMile' | 'milesPerUnit'>) {
-    super({ ...superParams, pointsPerMile: 1, milesPerUnit: 1 })
-    this._spendingPerMile = spendingPerMile
-  }
-  /** N 元一哩 */
-  public get spendingPerMile(): number {
-    return this._spendingPerMile
-  }
-  public get baselineCostPerMile(): number {
-    return this._spendingPerMile
-  }
-  public get bestCaseCostPerMile(): number {
-    return this.baselineCostPerMile
-  }
-  public get maximumCostPerMile(): number {
-    return this._spendingPerMile + this._spendingPerMile - 1
-  }
-  public get description(): string {
-    return `每消費${this._spendingPerMile.toString()}元累積1哩程 (小數不累計)`
-  }
-  public calculateMiles(amount: number): number {
-    return Math.floor(amount / this._spendingPerMile)
-  }
-  public toJSON(): RewardConfig {
-    return {
-      type: this._type,
-      name: this._name,
-      spendingPerMile: this._spendingPerMile,
     }
   }
 }
@@ -332,9 +302,8 @@ export class DirectMilesReward<Type extends 'DirectMilesReward'> extends BaseRew
 const rewards = {
   RoundedPointsReward,
   TruncatedPointsReward,
-  PointsRewardPerThreshold,
-  CumulativeMilesReward,
-  DirectMilesReward,
+  CumulativePointsReward,
+  DirectPointsReward,
 } as const
 export type RewardType = keyof typeof rewards
 export type Reward<Type extends RewardType> = InstanceType<(typeof rewards)[Type]>

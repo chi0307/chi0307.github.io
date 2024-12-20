@@ -17,17 +17,21 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'CumulativePointsReward',
               name: '國外消費',
-              spendingPerMile: 10,
+              spendingPerPoint: 10,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'CumulativePointsReward',
               name: '國內消費',
-              spendingPerMile: 18,
+              spendingPerPoint: 18,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -49,17 +53,21 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'CumulativePointsReward',
               name: '國外消費',
-              spendingPerMile: 15,
+              spendingPerPoint: 15,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'CumulativePointsReward',
               name: '國內消費',
-              spendingPerMile: 18,
+              spendingPerPoint: 18,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -81,17 +89,21 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'CumulativePointsReward',
               name: '國外消費',
-              spendingPerMile: 20,
+              spendingPerPoint: 20,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
             reward: {
-              type: 'CumulativeMilesReward',
+              type: 'CumulativePointsReward',
               name: '國內消費',
-              spendingPerMile: 20,
+              spendingPerPoint: 20,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },

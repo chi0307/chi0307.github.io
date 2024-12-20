@@ -26,26 +26,32 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國外消費',
-              spendingPerMile: 5,
+              spendingPerPoint: 5,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
             condition: 'Birthday',
           },
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國外消費',
-              spendingPerMile: 10,
+              spendingPerPoint: 10,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國內消費',
-              spendingPerMile: 20,
+              spendingPerPoint: 20,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -68,26 +74,32 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國外消費',
-              spendingPerMile: 7.5,
+              spendingPerPoint: 7.5,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
             condition: 'Birthday',
           },
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國外消費',
-              spendingPerMile: 15,
+              spendingPerPoint: 15,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國內消費',
-              spendingPerMile: 25,
+              spendingPerPoint: 25,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
@@ -110,17 +122,21 @@ export const starLuxConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國外消費',
-              spendingPerMile: 20,
+              spendingPerPoint: 20,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Foreign',
           },
           {
             reward: {
-              type: 'DirectMilesReward',
+              type: 'DirectPointsReward',
               name: '國內消費',
-              spendingPerMile: 28,
+              spendingPerPoint: 28,
+              pointsPerMile: 1,
+              milesPerUnit: 1,
             },
             transactionType: 'Domestic',
           },
