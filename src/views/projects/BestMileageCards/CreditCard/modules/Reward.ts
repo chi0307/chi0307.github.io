@@ -100,7 +100,9 @@ abstract class BaseReward<Type extends RewardType> {
 }
 
 /** 點數回饋 (N%回饋點數，四捨五入) */
-export class RoundedPointsReward<Type extends 'RoundedPointsReward'> extends BaseReward<Type> {
+export class RoundedPercentageReward<
+  Type extends 'RoundedPercentageReward',
+> extends BaseReward<Type> {
   private readonly _pointBackRates: RateItem[]
 
   public constructor({
@@ -151,7 +153,9 @@ export class RoundedPointsReward<Type extends 'RoundedPointsReward'> extends Bas
 }
 
 /** 點數回饋 (N%回饋點數，無條件捨去) */
-export class TruncatedPointsReward<Type extends 'TruncatedPointsReward'> extends BaseReward<Type> {
+export class TruncatedPercentageReward<
+  Type extends 'TruncatedPercentageReward',
+> extends BaseReward<Type> {
   private readonly _pointBackRates: RateItem[]
 
   public constructor({
@@ -202,8 +206,8 @@ export class TruncatedPointsReward<Type extends 'TruncatedPointsReward'> extends
 }
 
 /** 哩程回饋 (消費 N 元取得一點，小數會累計) */
-export class CumulativePointsReward<
-  Type extends 'CumulativePointsReward',
+export class AccumulatedPointsReward<
+  Type extends 'AccumulatedPointsReward',
 > extends BaseReward<Type> {
   private readonly _spendingPerPoint: number
 
@@ -252,7 +256,7 @@ export class CumulativePointsReward<
 }
 
 /** 哩程回饋 (消費 N 元取得一點) */
-export class DirectPointsReward<Type extends 'DirectPointsReward'> extends BaseReward<Type> {
+export class FixedRatePointsReward<Type extends 'FixedRatePointsReward'> extends BaseReward<Type> {
   private readonly _spendingPerPoint: number
 
   public constructor({
@@ -300,10 +304,10 @@ export class DirectPointsReward<Type extends 'DirectPointsReward'> extends BaseR
 }
 
 const rewards = {
-  RoundedPointsReward,
-  TruncatedPointsReward,
-  CumulativePointsReward,
-  DirectPointsReward,
+  RoundedPercentageReward,
+  TruncatedPercentageReward,
+  AccumulatedPointsReward,
+  FixedRatePointsReward,
 } as const
 export type RewardType = keyof typeof rewards
 export type Reward<Type extends RewardType> = InstanceType<(typeof rewards)[Type]>

@@ -20,7 +20,7 @@ function planSettings(
 ): CardConfig['plans'] {
   const baseReward: CardConfig['plans'][number]['rewards'][number] = {
     reward: {
-      type: 'RoundedPointsReward',
+      type: 'RoundedPercentageReward',
       name: null,
       pointBackRates: [{ rate: 0.3 }],
       pointsPerMile,
@@ -34,7 +34,7 @@ function planSettings(
       rewards: [
         {
           reward: {
-            type: 'RoundedPointsReward',
+            type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 2 }],
             pointsPerMile,
@@ -59,7 +59,7 @@ function planSettings(
       rewards: [
         {
           reward: {
-            type: 'RoundedPointsReward',
+            type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: defaultBackRete }],
             pointsPerMile,
@@ -97,7 +97,7 @@ function planSettings(
       rewards: [
         {
           reward: {
-            type: 'RoundedPointsReward',
+            type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: defaultBackRete }],
             pointsPerMile,
@@ -168,7 +168,7 @@ function planSettings(
       rewards: [
         {
           reward: {
-            type: 'RoundedPointsReward',
+            type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: defaultBackRete }],
             pointsPerMile,
@@ -253,7 +253,7 @@ function planSettings(
       rewards: [
         {
           reward: {
-            type: 'RoundedPointsReward',
+            type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 2 }],
             pointsPerMile,
@@ -270,7 +270,7 @@ function planSettings(
       rewards: [
         {
           reward: {
-            type: 'RoundedPointsReward',
+            type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 10 }],
             pointsPerMile,
@@ -313,7 +313,7 @@ function planSettings(
         },
         {
           reward: {
-            type: 'RoundedPointsReward',
+            type: 'RoundedPercentageReward',
             name: null,
             pointBackRates: [{ rate: 3.5 }],
             pointsPerMile,

@@ -17,7 +17,7 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativePointsReward',
+              type: 'AccumulatedPointsReward',
               name: '國外消費',
               spendingPerPoint: 10,
               pointsPerMile: 1,
@@ -27,7 +27,7 @@ export const travelConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativePointsReward',
+              type: 'AccumulatedPointsReward',
               name: '國內消費',
               spendingPerPoint: 18,
               pointsPerMile: 1,
@@ -53,7 +53,7 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativePointsReward',
+              type: 'AccumulatedPointsReward',
               name: '國外消費',
               spendingPerPoint: 15,
               pointsPerMile: 1,
@@ -63,7 +63,7 @@ export const travelConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativePointsReward',
+              type: 'AccumulatedPointsReward',
               name: '國內消費',
               spendingPerPoint: 18,
               pointsPerMile: 1,
@@ -89,7 +89,7 @@ export const travelConfigs: CardConfig[] = [
         rewards: [
           {
             reward: {
-              type: 'CumulativePointsReward',
+              type: 'AccumulatedPointsReward',
               name: '國外消費',
               spendingPerPoint: 20,
               pointsPerMile: 1,
@@ -99,7 +99,7 @@ export const travelConfigs: CardConfig[] = [
           },
           {
             reward: {
-              type: 'CumulativePointsReward',
+              type: 'AccumulatedPointsReward',
               name: '國內消費',
               spendingPerPoint: 20,
               pointsPerMile: 1,

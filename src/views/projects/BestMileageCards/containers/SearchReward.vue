@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col gap-8px h-full">
+  <div class="gap-8px h-full flex-col">
     <v-text-field
       :model-value="amount"
       class="flex-grow-0"
@@ -42,14 +42,14 @@
         />
       </div>
     </div>
-    <div class="flex-center gap-8px">
+    <div class="gap-8px flex-center">
       <v-label text="交易類型" />
       <v-radio-group v-model="transactionAttributesType" hide-details inline>
         <v-radio density="compact" label="國內交易" value="Domestic" />
         <v-radio density="compact" label="國外交易" value="Foreign" />
       </v-radio-group>
     </div>
-    <div ref="rewardCardList" class="gap-4px flex-col flex-grow-1 overflow-y-auto">
+    <div ref="rewardCardList" class="flex-col gap-4px flex-grow-1 overflow-y-auto">
       <v-card
         v-for="(item, index) of rewardMilesList"
         :key="index"
@@ -60,7 +60,7 @@
       >
         <template #title>
           <div class="flex items-center justify-between">
-            <div class="flex items-end gap-4px">
+            <div class="flex gap-4px items-end">
               {{ item.miles }}
               <p class="text-12px opacity-50 p-4px">{{ item.airLinesCode }}</p>
             </div>
@@ -242,9 +242,9 @@ const selectedRewardItem = ref<RewardItem | null>(null)
 function getRewardDetail(reward: Reward<RewardType> | null): string[] {
   const title = '回饋計算:'
   switch (reward?.type) {
-    case 'RoundedPointsReward':
-    case 'TruncatedPointsReward': {
-      const numberFormatEvent = reward.type === 'RoundedPointsReward' ? Math.round : Math.floor
+    case 'RoundedPercentageReward':
+    case 'TruncatedPercentageReward': {
+      const numberFormatEvent = reward.type === 'RoundedPercentageReward' ? Math.round : Math.floor
       let totalPoints = 0
       return [
         title,
@@ -260,26 +260,16 @@ function getRewardDetail(reward: Reward<RewardType> | null): string[] {
         } miles`,
       ]
     }
-    case 'PointsRewardPerThreshold': {
-      const points = Math.floor(amount.value / reward.spendingPerPoint)
+    case 'AccumulatedPointsReward': {
       return [
         title,
-        `${amount.value} / ${reward.spendingPerPoint} = ${points} points`,
-        `${points} / ${reward.pointsPerMile} * ${reward.milesPerUnit} = ${
-          Math.round((points / reward.pointsPerMile) * reward.milesPerUnit * 100) / 100
-        } miles`,
+        `${amount.value} / ${reward.spendingPerPoint} = ${Math.round((amount.value / reward.spendingPerPoint) * 100) / 100}`,
       ]
     }
-    case 'CumulativeMilesReward': {
+    case 'FixedRatePointsReward': {
       return [
         title,
-        `${amount.value} / ${reward.spendingPerMile} = ${Math.round((amount.value / reward.spendingPerMile) * 100) / 100}`,
-      ]
-    }
-    case 'DirectMilesReward': {
-      return [
-        title,
-        `${amount.value} / ${reward.spendingPerMile} = ${Math.floor(amount.value / reward.spendingPerMile)} (小數省略)`,
+        `${amount.value} / ${reward.spendingPerPoint} = ${Math.floor(amount.value / reward.spendingPerPoint)} (小數省略)`,
       ]
     }
     default: {
