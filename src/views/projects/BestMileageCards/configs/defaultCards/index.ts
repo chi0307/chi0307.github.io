@@ -1,10 +1,17 @@
 import type { CardConfig } from '../../CreditCard'
-import { defaultCubeConfig } from './cathay'
-import { defaultUniCardConfig } from './esunbank'
-import { defaultTravelConfig } from './hsbc'
+import { cubeConfigs, exampleCubeConfig } from './cathay'
+import { exampleUniCardConfig, starLuxConfigs, uniCardConfigs } from './esunbank'
+import { exampleTravelConfig, travelConfigs } from './hsbc'
+
+export const exampleCardConfigs: CardConfig[] = [
+  exampleCubeConfig,
+  exampleTravelConfig,
+  exampleUniCardConfig,
+]
 
 export const defaultCardConfigs: CardConfig[] = [
-  defaultCubeConfig,
-  defaultTravelConfig,
-  defaultUniCardConfig,
+  ...cubeConfigs,
+  ...travelConfigs,
+  ...starLuxConfigs,
+  ...uniCardConfigs,
 ]

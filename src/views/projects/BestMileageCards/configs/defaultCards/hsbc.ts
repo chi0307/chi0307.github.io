@@ -124,4 +124,4 @@ export const travelConfigs: CardConfig[] = [
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-export const defaultTravelConfig: CardConfig = travelConfigs[2]!
+export const exampleTravelConfig: CardConfig = travelConfigs[2]!

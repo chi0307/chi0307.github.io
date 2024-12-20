@@ -365,7 +365,7 @@ export const cubeConfigs: CardConfig[] = [
   },
 ]
 
-export const defaultCubeConfig: CardConfig = {
+export const exampleCubeConfig: CardConfig = {
   name: 'Cube 卡',
   description: 'Cube 卡 (Level 2) 回饋方案',
   cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',

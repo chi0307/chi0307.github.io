@@ -368,4 +368,4 @@ export const uniCardConfigs: CardConfig[] = [
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-export const defaultUniCardConfig: CardConfig = uniCardConfigs[0]!
+export const exampleUniCardConfig: CardConfig = uniCardConfigs[0]!

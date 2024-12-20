@@ -5,7 +5,7 @@ import type { UUID } from '@/types'
 import { generateUuid, removeDuplicates } from '@/utils'
 import { sortList } from '@/utils/sorts'
 
-import { defaultCardConfigs } from './configs/defaultCards'
+import { exampleCardConfigs } from './configs/defaultCards'
 import { defaultStoreAliases, type StoreAliases } from './configs/storeAliases'
 import { createCard, CreditCard, Payment, type CardConfig } from './CreditCard'
 import type { ConditionType } from './CreditCard/modules/type'
@@ -39,7 +39,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
   const cardConfigs = ref(new Map<UUID, CardConfig>())
   const cards = computed((): CreditCard[] => {
     const cards =
-      cardConfigs.value.size === 0 ? defaultCardConfigs : [...cardConfigs.value.values()]
+      cardConfigs.value.size === 0 ? exampleCardConfigs : [...cardConfigs.value.values()]
     return cards.map((config) => createCard(config))
   })
   function updateCardConfig(id: UUID, config: CardConfig): void {
@@ -103,6 +103,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     updateShowRewardMilesType,
     commonPaymentMethods: readonly(commonPaymentMethods),
     updateCommonPaymentMethods,
+    cardConfigs: readonly(cardConfigs),
     cards,
     updateCardConfig,
     storeList: readonly(storeList),
