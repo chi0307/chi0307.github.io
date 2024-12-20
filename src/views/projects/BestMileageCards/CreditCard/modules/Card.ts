@@ -132,12 +132,14 @@ export class CreditCard {
     return pointExchangeStrategy
   }
   private _rewardMilesWithPlan(
-    plan: Plan,
-    pointExchangeStrategy: PointExchangeStrategy,
+    planId: UUID,
+    pointExchangeStrategyId: UUID,
     paymentInfo: TransactionInfo,
   ): RewardInfo {
+    const plan = this._getPlan(planId)
+    const pointExchangeStrategy = this._getPointExchangeStrategy(pointExchangeStrategyId)
     const noneMatchRewardInfo: RewardInfo = {
-      planId: plan.id,
+      planId,
       planName: plan.name,
       rewardName: null,
       rewardPoints: 0,
@@ -162,7 +164,7 @@ export class CreditCard {
       return noneMatchRewardInfo
     }
     return {
-      planId: plan.id,
+      planId,
       planName: plan.name,
       pointExchangeStrategy,
       pointExchangeName: pointExchangeStrategy.name,
@@ -195,17 +197,20 @@ export class CreditCard {
       onlyCurrentExchangeStrategy = false,
     }: { onlyCurrentPlan?: boolean; onlyCurrentExchangeStrategy?: boolean } = {},
   ): RewardInfo[] {
-    const plans: Plan[] = onlyCurrentPlan ? [this.selectedPlan] : [...this._plans.values()]
-    const exchanges: PointExchangeStrategy[] = onlyCurrentExchangeStrategy
-      ? [this.selectedPointExchangeStrategy]
-      : [...this._pointExchangeStrategies.values()]
-    const eligiblePlans = plans.filter((plan) => {
-      return plan.checkPlanIsVisible(paymentInfo.currentConditions ?? null)
-    })
+    const plans: [UUID, Plan][] = onlyCurrentPlan
+      ? [[this._selectedPlanId, this.selectedPlan]]
+      : [...this._plans.entries()]
+    const exchangeIds: UUID[] = onlyCurrentExchangeStrategy
+      ? [this._selectedPointExchangeStrategyId]
+      : [...this._pointExchangeStrategies.keys()]
     const rewardInfos: RewardInfo[] = []
-    for (const plan of eligiblePlans) {
-      for (const pointExchangeStrategy of exchanges) {
-        const rewardInfo = this._rewardMilesWithPlan(plan, pointExchangeStrategy, paymentInfo)
+    for (const [planId, plan] of plans) {
+      const planIsVisible = plan.checkPlanIsVisible(paymentInfo.currentConditions ?? null)
+      if (!planIsVisible) {
+        continue
+      }
+      for (const pointExchangeStrategyId of exchangeIds) {
+        const rewardInfo = this._rewardMilesWithPlan(planId, pointExchangeStrategyId, paymentInfo)
         rewardInfos.push(rewardInfo)
       }
     }
@@ -218,11 +223,13 @@ export class CreditCard {
       cardUrl: this._cardUrl,
       storeBlackList: [...this._storeBlackList],
       paymentBlackList: [...this._paymentBlackList],
-      plans: [...this._plans].map(([_id, plan]) => plan.toJSON()),
+      plans: [...this._plans]
+        .sort(([aId]) => (aId === this._selectedPlanId ? -1 : 1))
+        .map(([_id, plan]) => plan.toJSON()),
       updateAt: this._updateAt.toISOString(),
-      pointExchangeStrategies: [...this._pointExchangeStrategies].map(([_id, strategy]) =>
-        strategy.toJSON(),
-      ),
+      pointExchangeStrategies: [...this._pointExchangeStrategies]
+        .sort(([aId]) => (aId === this._selectedPointExchangeStrategyId ? -1 : 1))
+        .map(([_id, strategy]) => strategy.toJSON()),
     }
   }
 }

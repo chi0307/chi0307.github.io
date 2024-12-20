@@ -1,4 +1,3 @@
-import type { UUID } from '@/types'
 import { removeDuplicates } from '@/utils'
 
 import { type Reward, type RewardType } from './Reward'
@@ -23,18 +22,11 @@ interface PlanReward {
 }
 
 export class Plan {
-  private readonly _id: UUID
   private readonly _name: string | null
   private readonly _rewards: readonly PlanReward[]
   private readonly _condition: ConditionType | null
 
-  public constructor(
-    id: UUID,
-    name: string | null,
-    condition: ConditionType | null,
-    rewards: PlanReward[],
-  ) {
-    this._id = id
+  public constructor(name: string | null, condition: ConditionType | null, rewards: PlanReward[]) {
     this._name = name
     this._condition = condition
     if (rewards.length === 0) {
@@ -43,9 +35,6 @@ export class Plan {
     this._rewards = rewards
   }
 
-  public get id(): UUID {
-    return this._id
-  }
   public get name(): string | null {
     return this._name
   }
