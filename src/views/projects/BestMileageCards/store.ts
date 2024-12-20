@@ -5,7 +5,7 @@ import type { UUID } from '@/types'
 import { generateUuid, removeDuplicates } from '@/utils'
 import { sortList } from '@/utils/sorts'
 
-import { defaultCardConfigs } from './configs'
+import { defaultCardConfigs } from './configs/defaultCards'
 import { defaultStoreAliases, type StoreAliases } from './configs/storeAliases'
 import { createCard, CreditCard, Payment, type CardConfig } from './CreditCard'
 import type { ConditionType } from './CreditCard/modules/type'

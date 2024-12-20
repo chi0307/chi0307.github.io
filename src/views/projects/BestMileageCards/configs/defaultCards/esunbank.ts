@@ -1,4 +1,4 @@
-import type { CardConfig, Payment } from '../CreditCard'
+import type { CardConfig, Payment } from '../../CreditCard'
 
 const storeBlackList: string[] = [
   '政府稅款',

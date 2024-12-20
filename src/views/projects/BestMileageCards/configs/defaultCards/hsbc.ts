@@ -1,4 +1,4 @@
-import type { CardConfig, Payment } from '../CreditCard'
+import type { CardConfig, Payment } from '../../CreditCard'
 
 const storeBlackList: string[] = ['政府稅款', '公共事業代扣繳', '交通違規罰鍰', '分期付款']
 const paymentBlackList: Payment[] = ['全盈+PAY', 'icash pay', 'OPEN錢包', 'My FamiPay']

@@ -1,6 +1,6 @@
 import { isNotNullishValue } from '@/utils'
 
-import type { CardConfig } from '../CreditCard'
+import type { CardConfig } from '../../CreditCard'
 import { cubeConfigs } from './cathay'
 import { starLuxConfigs, uniCardConfigs } from './esunbank'
 import { travelConfigs } from './hsbc'
