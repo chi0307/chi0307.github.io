@@ -364,3 +364,21 @@ export const cubeConfigs: CardConfig[] = [
     pointExchangeStrategies,
   },
 ]
+
+export const defaultCubeConfig: CardConfig = {
+  name: 'Cube 卡',
+  description: 'Cube 卡 (Level 2) 回饋方案',
+  cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
+  storeBlackList,
+  paymentBlackList,
+  updateAt: '2024-12-01T00:00:00.000Z',
+  plans: planSettings(3),
+  pointExchangeStrategies: [
+    {
+      name: '長榮航空哩程',
+      airlineCode: 'EVA',
+      pointsPerMile: 360,
+      milesPerUnit: 1000,
+    },
+  ],
+}

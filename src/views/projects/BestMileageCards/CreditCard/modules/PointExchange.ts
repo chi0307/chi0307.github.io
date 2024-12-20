@@ -1,3 +1,7 @@
+import { roundByDigits } from '@/utils'
+
+const roundBy2 = roundByDigits(2)
+
 export class PointExchangeStrategy {
   /** 點數交換名稱 */
   private readonly _name: string | null
@@ -51,7 +55,7 @@ export class PointExchangeStrategy {
 
   /** input: 點數, output: 哩程 */
   public calculateMiles(points: number): number {
-    return (points * this._milesPerUnit) / this._pointsPerMile
+    return roundBy2((points * this._milesPerUnit) / this._pointsPerMile)
   }
 
   public toJSON(): PointExchangeConfig {

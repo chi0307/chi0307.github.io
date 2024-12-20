@@ -122,3 +122,6 @@ export const travelConfigs: CardConfig[] = [
     updateAt: new Date('2024/12/01 00:00:00').toISOString(),
   },
 ]
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const defaultTravelConfig: CardConfig = travelConfigs[2]!

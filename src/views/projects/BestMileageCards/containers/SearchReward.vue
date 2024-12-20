@@ -24,7 +24,7 @@
       item-title="store"
       label="消費店家"
       :items="searchStoreList"
-      :clearable="transactionStore !== ''"
+      :clearable="isTruthyString(transactionStore)"
       placeholder="全部店家"
       @update:menu="(status: boolean) => !status && storeAutoCompleteElement?.blur()"
     />
@@ -131,11 +131,10 @@
 import { storeToRefs } from 'pinia'
 import { computed, ref, useTemplateRef } from 'vue'
 
-import { roundByDigits, floorByDigits } from '@/utils'
+import { roundByDigits, floorByDigits, isTruthyString } from '@/utils'
 import { sortListByField } from '@/utils/sorts'
 
 import {
-  CreditCard,
   type Payment,
   type Reward,
   type RewardType,
@@ -174,7 +173,7 @@ const {
 } = storeToRefs(useBestMileageCardsStore())
 
 const amount = ref<number>(0)
-const transactionStore = ref<string>('')
+const transactionStore = ref<string | null>(null)
 const otherStore = '其他店家'
 const transactionAttributesType = ref<TransactionType>('Domestic')
 const acceptedPayments = ref<Payment[]>([])
@@ -210,14 +209,11 @@ const rewardMilesList = computed((): RewardItem[] => {
     transactionAttributesType: transactionAttributesType.value,
     currentConditions: [...conditionTypes.value],
   }
-  if (transactionStore.value !== '') {
+  if (isTruthyString(transactionStore.value)) {
     paymentInfo.transactionStore = transactionStore.value
   }
   const list: RewardItem[] = []
   for (const card of cards.value) {
-    if (!(card instanceof CreditCard)) {
-      continue
-    }
     const rewardMileList = card.getRewardInfos(
       paymentInfo,
       showRewardMilesType.value === 'CurrentPlanRewardMiles'
@@ -255,6 +251,8 @@ function getRewardDetail(
   reward: Reward<RewardType> | null,
   pointExchangeStrategy: PointExchangeStrategy,
 ): string[] {
+  const { pointsPerMile, milesPerUnit, airlineCode } = pointExchangeStrategy
+
   const title = '回饋計算:'
   switch (reward?.type) {
     case 'RoundedPercentageReward':
@@ -270,21 +268,23 @@ function getRewardDetail(
           return `${amount.value} * ${rate}% = ${total}${limitString}`
         }),
         `總計 ${totalPoints} points`,
-        `${totalPoints} / ${pointExchangeStrategy.pointsPerMile} * ${pointExchangeStrategy.milesPerUnit} = ${roundBy2(
-          (totalPoints / pointExchangeStrategy.pointsPerMile) * pointExchangeStrategy.milesPerUnit,
-        )} miles`,
+        `${totalPoints} / ${pointsPerMile} * ${milesPerUnit} = ${pointExchangeStrategy.calculateMiles(totalPoints)} ${airlineCode}`,
       ]
     }
     case 'AccumulatedPointsReward': {
+      const points = roundBy2(amount.value / reward.spendingPerPoint)
       return [
         title,
-        `${amount.value} / ${reward.spendingPerPoint} = ${roundBy2(amount.value / reward.spendingPerPoint)}`,
+        `${amount.value} / ${reward.spendingPerPoint} = ${points} points`,
+        `${points} / ${pointsPerMile} * ${milesPerUnit} = ${pointExchangeStrategy.calculateMiles(points)} ${airlineCode}`,
       ]
     }
     case 'FixedRatePointsReward': {
+      const points = floorBy0(amount.value / reward.spendingPerPoint)
       return [
         title,
-        `${amount.value} / ${reward.spendingPerPoint} = ${floorBy0(amount.value / reward.spendingPerPoint)} (小數省略)`,
+        `${amount.value} / ${reward.spendingPerPoint} = ${points} points (小數省略)`,
+        `${points} / ${pointsPerMile} * ${milesPerUnit} = ${pointExchangeStrategy.calculateMiles(points)} ${airlineCode}`,
       ]
     }
     default: {
