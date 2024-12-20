@@ -90,7 +90,7 @@
     >
       <template #subtitle>
         <p class="text-wrap">
-          {{ selectedRewardItem.rewardDescription ?? '' }}
+          {{ selectedRewardItem.description ?? '' }}
         </p>
       </template>
       <template #text>
@@ -106,7 +106,12 @@
               網站
             </a>
           </p>
-          <p v-if="selectedRewardItem.description !== ''">{{ selectedRewardItem.description }}</p>
+          <p v-if="selectedRewardItem.cardDescription !== ''">
+            {{ selectedRewardItem.cardDescription }}
+          </p>
+          <p v-if="selectedRewardItem.pointExchangeName !== ''">
+            {{ selectedRewardItem.pointExchangeName }}
+          </p>
           <br />
           <p>消費金額: {{ amount }}</p>
           <p>哩程預估: {{ selectedRewardItem.miles }}&ensp;{{ selectedRewardItem.airLinesCode }}</p>
@@ -126,18 +131,23 @@
 import { storeToRefs } from 'pinia'
 import { computed, ref, useTemplateRef } from 'vue'
 
+import { roundByDigits, floorByDigits } from '@/utils'
 import { sortListByField } from '@/utils/sorts'
 
 import {
   CreditCard,
   type Payment,
   type Reward,
-  type RewardMileInfo,
   type RewardType,
   type TransactionInfo,
   type TransactionType,
+  type PointExchangeStrategy,
 } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
+
+const roundBy0 = roundByDigits(0)
+const roundBy2 = roundByDigits(2)
+const floorBy0 = floorByDigits(0)
 
 interface RewardItem {
   cardName: string
@@ -148,9 +158,10 @@ interface RewardItem {
   payments: readonly Payment[]
   airLinesCode: string
   calculateDetail: string[]
-  rewardDescription: string | null
   cardUrl: string | null
-  description: string
+  cardDescription: string
+  description: string | null
+  pointExchangeName: string | null
 }
 
 const {
@@ -192,14 +203,6 @@ function customSearchStore(
   return list.some((item) => item.includes(searchQuery))
 }
 
-function getRewardMiles(card: CreditCard, paymentInfo: TransactionInfo): RewardMileInfo[] {
-  if (showRewardMilesType.value === 'CurrentPlanRewardMiles') {
-    return [card.currentPlanRewardMiles(paymentInfo)]
-  } else {
-    return card.getAllPlanRewardMiles(paymentInfo)
-  }
-}
-
 const rewardMilesList = computed((): RewardItem[] => {
   const paymentInfo: TransactionInfo = {
     amount: amount.value,
@@ -215,21 +218,30 @@ const rewardMilesList = computed((): RewardItem[] => {
     if (!(card instanceof CreditCard)) {
       continue
     }
-    const rewardMileList = getRewardMiles(card, paymentInfo)
+    const rewardMileList = card.getRewardInfos(
+      paymentInfo,
+      showRewardMilesType.value === 'CurrentPlanRewardMiles'
+        ? { onlyCurrentExchangeStrategy: true, onlyCurrentPlan: true }
+        : {},
+    )
     for (const item of rewardMileList) {
       const rewardItem: RewardItem = {
         cardName: card.name,
         planName: item.planName,
-        rewardName: item.name,
+        rewardName: item.rewardName,
         miles: item.miles,
         payments: item.payments,
-        airLinesCode: card.airLinesCode,
+        airLinesCode: item.airlineCode,
         isSelectedPlan:
           showRewardMilesType.value === 'AllPlanRewardMiles' && item.planId === card.selectedPlanId,
-        calculateDetail: getRewardDetail(item.reward),
-        rewardDescription: item.reward?.description ?? null,
+        calculateDetail: getRewardDetail(item.rewardStrategy, item.pointExchangeStrategy),
+        description:
+          item.rewardStrategy === null
+            ? null
+            : `${item.rewardStrategy.description}，${item.pointExchangeStrategy.description}`,
         cardUrl: card.cardUrl,
-        description: card.description,
+        cardDescription: card.description,
+        pointExchangeName: item.pointExchangeName,
       }
       list.push(rewardItem)
     }
@@ -239,12 +251,15 @@ const rewardMilesList = computed((): RewardItem[] => {
 })
 
 const selectedRewardItem = ref<RewardItem | null>(null)
-function getRewardDetail(reward: Reward<RewardType> | null): string[] {
+function getRewardDetail(
+  reward: Reward<RewardType> | null,
+  pointExchangeStrategy: PointExchangeStrategy,
+): string[] {
   const title = '回饋計算:'
   switch (reward?.type) {
     case 'RoundedPercentageReward':
     case 'TruncatedPercentageReward': {
-      const numberFormatEvent = reward.type === 'RoundedPercentageReward' ? Math.round : Math.floor
+      const numberFormatEvent = reward.type === 'RoundedPercentageReward' ? roundBy0 : floorBy0
       let totalPoints = 0
       return [
         title,
@@ -255,21 +270,21 @@ function getRewardDetail(reward: Reward<RewardType> | null): string[] {
           return `${amount.value} * ${rate}% = ${total}${limitString}`
         }),
         `總計 ${totalPoints} points`,
-        `${totalPoints} / ${reward.pointsPerMile} * ${reward.milesPerUnit} = ${
-          Math.round((totalPoints / reward.pointsPerMile) * reward.milesPerUnit * 100) / 100
-        } miles`,
+        `${totalPoints} / ${pointExchangeStrategy.pointsPerMile} * ${pointExchangeStrategy.milesPerUnit} = ${roundBy2(
+          (totalPoints / pointExchangeStrategy.pointsPerMile) * pointExchangeStrategy.milesPerUnit,
+        )} miles`,
       ]
     }
     case 'AccumulatedPointsReward': {
       return [
         title,
-        `${amount.value} / ${reward.spendingPerPoint} = ${Math.round((amount.value / reward.spendingPerPoint) * 100) / 100}`,
+        `${amount.value} / ${reward.spendingPerPoint} = ${roundBy2(amount.value / reward.spendingPerPoint)}`,
       ]
     }
     case 'FixedRatePointsReward': {
       return [
         title,
-        `${amount.value} / ${reward.spendingPerPoint} = ${Math.floor(amount.value / reward.spendingPerPoint)} (小數省略)`,
+        `${amount.value} / ${reward.spendingPerPoint} = ${floorBy0(amount.value / reward.spendingPerPoint)} (小數省略)`,
       ]
     }
     default: {

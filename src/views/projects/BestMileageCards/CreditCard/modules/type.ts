@@ -1,4 +1,4 @@
-import type { DateISOString } from '@/types'
+import type { DateISOString, UUID } from '@/types'
 
 import type { PointExchangeConfig, PointExchangeStrategy } from './PointExchange'
 import type { Reward, RewardConfig, RewardType } from './Reward'
@@ -50,6 +50,7 @@ export interface TransactionInfo {
 
 /** 回饋哩程資訊 */
 export interface RewardInfo {
+  readonly planId: UUID
   readonly planName: string | null
   readonly payments: readonly Payment[]
   readonly rewardName: string | null
@@ -57,6 +58,7 @@ export interface RewardInfo {
   readonly rewardPoints: number
   readonly pointExchangeName: string | null
   readonly pointExchangeStrategy: PointExchangeStrategy
+  readonly airlineCode: string
   readonly miles: number
 }
 

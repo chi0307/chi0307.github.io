@@ -33,6 +33,9 @@ export class PointExchangeStrategy {
   public get name(): string | null {
     return this._name
   }
+  public get description(): string {
+    return `${this._pointsPerMile}點可以交換${this._milesPerUnit}哩程`
+  }
   /** 航空代碼 */
   public get airlineCode(): string {
     return this._airlineCode

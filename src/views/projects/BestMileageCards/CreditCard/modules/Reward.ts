@@ -26,6 +26,16 @@ abstract class BaseRewardStrategy<Type extends RewardType> {
     this._name = name
   }
 
+  /** 回饋名稱 */
+  public get name(): string | null {
+    return this._name
+  }
+  /** 點數累積類型 */
+  public get type(): Type {
+    return this._type
+  }
+  public abstract get description(): string
+
   // TODO: 標準成本 baselineCostPerMile
   // TODO: 最優成本 bestCaseCostPerMile
   // TODO: 最差成本 maximumCostPerMile
@@ -35,16 +45,6 @@ abstract class BaseRewardStrategy<Type extends RewardType> {
    * @returns 回饋點數
    */
   public abstract calculatePoints(amount: number): number
-
-  /** 回饋名稱 */
-  public get name(): string | null {
-    return this._name
-  }
-  /** 點數累積類型 */
-  public get type(): Type {
-    return this._type
-  }
-
   public calculateRangePointsCost(
     minAmount: number,
     maxAmount: number,
@@ -71,7 +71,6 @@ abstract class BaseRewardStrategy<Type extends RewardType> {
       average: roundBy2(average),
     }
   }
-
   public abstract toJSON(): RewardConfig
 }
 
@@ -92,9 +91,14 @@ export class RoundedPercentageReward<
     super(superParams)
     this._pointBackRates = pointBackRates
   }
-
+  private get _maxRete(): number {
+    return this._pointBackRates.reduce((total, { rate }) => total + rate, 0)
+  }
   public get pointBackRates(): RateItem[] {
     return this._pointBackRates
+  }
+  public get description(): string {
+    return `消費${this._pointBackRates.length > 1 ? '最高' : ''}${this._maxRete.toString()}%回饋點數(四捨五入)`
   }
 
   public calculatePoints(amount: number): number {
@@ -131,9 +135,14 @@ export class TruncatedPercentageReward<
     super(superParams)
     this._pointBackRates = pointBackRates
   }
-
+  private get _maxRete(): number {
+    return this._pointBackRates.reduce((total, { rate }) => total + rate, 0)
+  }
   public get pointBackRates(): RateItem[] {
     return this._pointBackRates
+  }
+  public get description(): string {
+    return `消費${this._pointBackRates.length > 1 ? '最高' : ''}${this._maxRete.toString()}%回饋點數(無條件捨去)`
   }
 
   public calculatePoints(amount: number): number {
@@ -175,6 +184,9 @@ export class AccumulatedPointsReward<
   public get spendingPerPoint(): number {
     return this._spendingPerPoint
   }
+  public get description(): string {
+    return `每消費${this._spendingPerPoint.toString()}元累積1點 (小數會累計)`
+  }
 
   public calculatePoints(amount: number): number {
     return roundBy2(amount / this._spendingPerPoint)
@@ -210,6 +222,9 @@ export class FixedRatePointsReward<
   /** N 元一哩 */
   public get spendingPerPoint(): number {
     return this._spendingPerPoint
+  }
+  public get description(): string {
+    return `每消費${this._spendingPerPoint.toString()}元累積1點 (小數不累計)`
   }
 
   public calculatePoints(amount: number): number {

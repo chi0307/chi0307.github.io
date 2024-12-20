@@ -137,6 +137,7 @@ export class CreditCard {
     paymentInfo: TransactionInfo,
   ): RewardInfo {
     const noneMatchRewardInfo: RewardInfo = {
+      planId: plan.id,
       planName: plan.name,
       rewardName: null,
       rewardPoints: 0,
@@ -144,6 +145,7 @@ export class CreditCard {
       rewardStrategy: null,
       pointExchangeStrategy,
       pointExchangeName: pointExchangeStrategy.name,
+      airlineCode: pointExchangeStrategy.airlineCode,
       miles: 0,
     }
     const inStoreBlackList =
@@ -160,10 +162,12 @@ export class CreditCard {
       return noneMatchRewardInfo
     }
     return {
+      planId: plan.id,
       planName: plan.name,
       pointExchangeStrategy,
       pointExchangeName: pointExchangeStrategy.name,
       miles: pointExchangeStrategy.calculateMiles(rewardInfo.rewardPoints),
+      airlineCode: pointExchangeStrategy.airlineCode,
       ...rewardInfo,
     }
   }
@@ -184,14 +188,7 @@ export class CreditCard {
     }
     return false
   }
-  public currentPlanRewardMiles(paymentInfo: TransactionInfo): RewardInfo {
-    return this._rewardMilesWithPlan(
-      this.selectedPlan,
-      this.selectedPointExchangeStrategy,
-      paymentInfo,
-    )
-  }
-  public getAllRewardInfo(
+  public getRewardInfos(
     paymentInfo: TransactionInfo,
     {
       onlyCurrentPlan = false,

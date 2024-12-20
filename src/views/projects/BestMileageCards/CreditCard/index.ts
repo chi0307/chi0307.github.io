@@ -5,9 +5,8 @@ export {
   ConditionType,
   type TransactionType,
   type TransactionInfo,
-  type RewardMileInfo,
+  type RewardInfo,
   type CardConfig,
-  AirLines,
-  airLinesObj,
 } from './modules/type'
 export { createCard, isCardConfig } from './createCard'
+export { type PointExchangeStrategy } from './modules/PointExchange'
