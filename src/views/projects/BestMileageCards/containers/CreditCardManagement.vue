@@ -42,6 +42,25 @@
         <TextField v-model="selectedCard.config.name" label="卡片名稱" required />
         <TextField v-model="selectedCard.config.description" label="卡片描述" />
         <TextField v-model="selectedCard.config.cardUrl" is-url label="信用卡網頁" />
+        <div>
+          <v-btn
+            text="Delete"
+            @click="
+              store.openDialog({
+                text: '確定要刪除嗎？',
+                events: [
+                  {
+                    text: 'cancel',
+                  },
+                  {
+                    text: 'delete',
+                    event: deleteCardConfig,
+                  },
+                ],
+              })
+            "
+          />
+        </div>
       </div>
     </v-card>
   </v-dialog>

@@ -12,7 +12,23 @@ import type { ConditionType } from './CreditCard/modules/type'
 import { type ShowRewardMilesType } from './types'
 import { aliasTypeList, storageManager, type AliasType } from './utils'
 
+export interface DialogItem {
+  text: string
+  events: {
+    text: string
+    event?: () => Promise<void> | void
+  }[]
+}
+
 export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
+  const dialog = ref<DialogItem | null>(null)
+  function openDialog(item: DialogItem): void {
+    dialog.value = item
+  }
+  function closeDialog(): void {
+    dialog.value = null
+  }
+
   onMounted(() => {
     const configs = storageManager.get('cardConfigs') ?? []
     cardConfigs.value = new Map(configs.map((config) => [generateUuid(), config]))
@@ -103,6 +119,9 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
   })
 
   return {
+    dialog: readonly(dialog),
+    openDialog,
+    closeDialog,
     showRewardMilesType: readonly(showRewardMilesType),
     updateShowRewardMilesType,
     commonPaymentMethods: readonly(commonPaymentMethods),

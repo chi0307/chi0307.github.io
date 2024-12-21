@@ -30,14 +30,38 @@
       </KeepAlive>
     </main>
   </v-app>
+  <v-dialog :model-value="Boolean(dialog)" @update:model-value="store.closeDialog">
+    <v-card v-if="dialog !== null" class="mx-auto" min-width="100%" :text="dialog.text">
+      <template #actions>
+        <v-btn
+          v-for="(event, index) of dialog.events"
+          :key="index"
+          :text="event.text"
+          @click="
+            async () => {
+              if ('event' in event) {
+                await event.event()
+              }
+              store.closeDialog()
+            }
+          "
+        />
+      </template>
+    </v-card>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 import CommonSettings from './containers/CommonSettings.vue'
 import CreditCardManagement from './containers/CreditCardManagement.vue'
 import SearchReward from './containers/SearchReward.vue'
 import StoreAliasManagement from './containers/StoreAliasManagement.vue'
+import { useBestMileageCardsStore } from './store'
+
+const store = useBestMileageCardsStore()
+const { dialog } = storeToRefs(store)
 
 const componentList = {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
