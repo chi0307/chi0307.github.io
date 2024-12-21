@@ -3,4 +3,5 @@ export const colors: Record<string, `#${string}`> = {
   primary: '#f4ece6',
   white: '#fcfbfa',
   emphasis: '#5288FE',
+  red: '#B00020',
 }
