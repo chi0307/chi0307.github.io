@@ -46,6 +46,10 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     cardConfigs.value.set(id, config)
     storageManager.set('cardConfigs', [...cardConfigs.value.values()])
   }
+  function deleteCardConfig(id: UUID): void {
+    cardConfigs.value.delete(id)
+    storageManager.set('cardConfigs', [...cardConfigs.value.values()])
+  }
   const storeList = computed(() => {
     return sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
   })
@@ -106,6 +110,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     cardConfigs: readonly(cardConfigs),
     cards,
     updateCardConfig,
+    deleteCardConfig,
     storeList: readonly(storeList),
     conditionTypes: readonly(conditionTypes),
     updateConditionTypes,

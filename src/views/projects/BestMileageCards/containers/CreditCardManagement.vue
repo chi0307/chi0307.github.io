@@ -112,4 +112,12 @@ function saveCardConfig(): void {
   store.updateCardConfig(selectedCard.value.id, selectedCard.value.config)
   selectedCard.value = null
 }
+
+function deleteCardConfig(): void {
+  if (selectedCard.value === null) {
+    return
+  }
+  store.deleteCardConfig(selectedCard.value.id)
+  selectedCard.value = null
+}
 </script>
