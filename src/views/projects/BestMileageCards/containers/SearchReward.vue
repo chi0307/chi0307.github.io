@@ -106,7 +106,12 @@
               網站
             </a>
           </p>
-          <p v-if="selectedRewardItem.cardDescription !== ''">
+          <p
+            v-if="
+              selectedRewardItem.cardDescription !== '' ||
+              selectedRewardItem.cardDescription !== null
+            "
+          >
             {{ selectedRewardItem.cardDescription }}
           </p>
           <p v-if="selectedRewardItem.pointExchangeName !== ''">
@@ -158,7 +163,7 @@ interface RewardItem {
   airLinesCode: string
   calculateDetail: string[]
   cardUrl: string | null
-  cardDescription: string
+  cardDescription: string | null
   description: string | null
   pointExchangeName: string | null
 }
