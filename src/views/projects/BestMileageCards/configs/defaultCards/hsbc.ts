@@ -6,7 +6,7 @@ const paymentBlackList: Payment[] = ['全盈+PAY', 'icash pay', 'OPEN錢包', 'M
 export const travelConfigs: CardConfig[] = [
   {
     name: '旅人無限卡',
-    description: '',
+    description: null,
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-infinite/',
     storeBlackList,
     paymentBlackList,
@@ -45,7 +45,7 @@ export const travelConfigs: CardConfig[] = [
   },
   {
     name: '旅人御璽卡',
-    description: '',
+    description: null,
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-signature/',
     storeBlackList,
     paymentBlackList,
@@ -84,7 +84,7 @@ export const travelConfigs: CardConfig[] = [
   },
   {
     name: '旅人輕旅卡',
-    description: '',
+    description: null,
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-light/',
     storeBlackList,
     paymentBlackList,

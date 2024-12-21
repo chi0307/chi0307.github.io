@@ -8,7 +8,7 @@ import { type TransactionInfo, type RewardInfo, type CardConfig, Payment } from 
 interface CardParams {
   /** 卡片名稱 */
   readonly name: string
-  readonly description: string
+  readonly description: string | null
   /** 全部的方案 (如果像旅人卡那樣，只有一種回饋方式這邊選項就會只有一個) */
   readonly plans: ReadonlyMap<UUID, Plan>
   /** 信用卡網頁 */
@@ -33,7 +33,7 @@ export class CreditCard {
   private _selectedPointExchangeStrategyId: UUID
   /** 卡片名稱 */
   private readonly _name: string
-  private readonly _description: string
+  private readonly _description: string | null
   /** 全部的方案 (如果像旅人卡那樣，只有一種回饋方式這邊選項就會只有一個) */
   private readonly _plans: ReadonlyMap<UUID, Plan>
   /** 信用卡的銀行網頁 */
@@ -83,7 +83,7 @@ export class CreditCard {
   public get name(): string {
     return this._name
   }
-  public get description(): string {
+  public get description(): string | null {
     return this._description
   }
   public get selectedPlanId(): UUID {

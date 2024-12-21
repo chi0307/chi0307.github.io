@@ -14,7 +14,7 @@ const paymentBlackList: Payment[] = []
 export const starLuxConfigs: CardConfig[] = [
   {
     name: '星宇世界卡',
-    description: '',
+    description: null,
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -63,7 +63,7 @@ export const starLuxConfigs: CardConfig[] = [
   },
   {
     name: '星宇商務鈦金卡',
-    description: '',
+    description: null,
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -112,7 +112,7 @@ export const starLuxConfigs: CardConfig[] = [
   },
   {
     name: '星宇鈦金卡',
-    description: '',
+    description: null,
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -280,7 +280,7 @@ const uniCardBaseReward: CardConfig['plans'][number]['rewards'][number] = {
 export const uniCardConfigs: CardConfig[] = [
   {
     name: 'UniCard 卡',
-    description: '',
+    description: null,
     cardUrl: 'https://www.esunbank.com/zh-tw/personal/credit-card/intro/bank-card/unicard',
     storeBlackList,
     paymentBlackList,

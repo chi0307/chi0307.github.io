@@ -19,7 +19,7 @@
         class="mx-auto w-full flex-shrink-0"
         variant="outlined"
         :title="config.name"
-        :text="config.description"
+        :text="config.description ?? ''"
         @click="() => (selectedCard = { id, config: cloneDeep(config) })"
       />
     </div>

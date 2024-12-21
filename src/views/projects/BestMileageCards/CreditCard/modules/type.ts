@@ -79,7 +79,7 @@ export interface PlanConfig {
 }
 export interface CardConfig {
   name: string
-  description: string
+  description: string | null
   cardUrl: string | null
   storeBlackList?: string[]
   paymentBlackList?: Payment[]
