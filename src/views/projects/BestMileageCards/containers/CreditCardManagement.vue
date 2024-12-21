@@ -38,10 +38,10 @@
           <v-btn text="Save" @click="saveCardConfig" />
         </v-toolbar-items>
       </v-toolbar>
-      <div v-if="selectedCard" class="flex-col gap-4px m-8px">
-        <v-text-field v-model="selectedCard.config.name" hide-details label="卡片名稱" />
-        <v-text-field v-model="selectedCard.config.description" hide-details label="卡片描述" />
-        <v-text-field v-model="selectedCard.config.cardUrl" hide-details label="信用卡網頁" />
+      <div v-if="selectedCard" class="flex-col gap-2 m-16px">
+        <TextField v-model="selectedCard.config.name" label="卡片名稱" required />
+        <TextField v-model="selectedCard.config.description" label="卡片描述" />
+        <TextField v-model="selectedCard.config.cardUrl" is-url label="信用卡網頁" />
       </div>
     </v-card>
   </v-dialog>
@@ -83,6 +83,7 @@
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
+import TextField from '@/components/TextFiled.vue'
 import type { UUID } from '@/types'
 import { generateUuid } from '@/utils'
 import { cloneDeep } from '@/utils/cloneDeep'
