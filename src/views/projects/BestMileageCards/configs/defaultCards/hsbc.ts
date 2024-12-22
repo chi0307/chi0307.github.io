@@ -1,3 +1,5 @@
+import { generateUuid } from '@/utils'
+
 import type { CardConfig, Payment } from '../../CreditCard'
 
 const storeBlackList: string[] = ['政府稅款', '公共事業代扣繳', '交通違規罰鍰', '分期付款']
@@ -12,33 +14,39 @@ export const travelConfigs: CardConfig[] = [
     paymentBlackList,
     pointExchangeStrategies: [
       {
-        name: '長榮航空哩程',
-        airlineCode: 'EVA',
-        pointsPerMile: 1,
-        milesPerUnit: 1,
+        id: generateUuid(),
+        config: {
+          name: '長榮航空哩程',
+          airlineCode: 'EVA',
+          pointsPerMile: 1,
+          milesPerUnit: 1,
+        },
       },
     ],
     plans: [
       {
-        name: null,
-        rewards: [
-          {
-            rewardStrategy: {
-              type: 'AccumulatedPointsReward',
-              name: '國外消費',
-              spendingPerPoint: 10,
+        id: generateUuid(),
+        config: {
+          name: null,
+          rewards: [
+            {
+              rewardStrategy: {
+                type: 'AccumulatedPointsReward',
+                name: '國外消費',
+                spendingPerPoint: 10,
+              },
+              transactionType: 'Foreign',
             },
-            transactionType: 'Foreign',
-          },
-          {
-            rewardStrategy: {
-              type: 'AccumulatedPointsReward',
-              name: '國內消費',
-              spendingPerPoint: 18,
+            {
+              rewardStrategy: {
+                type: 'AccumulatedPointsReward',
+                name: '國內消費',
+                spendingPerPoint: 18,
+              },
+              transactionType: 'Domestic',
             },
-            transactionType: 'Domestic',
-          },
-        ],
+          ],
+        },
       },
     ],
     updateAt: new Date('2024/12/01 00:00:00').toISOString(),
@@ -51,33 +59,39 @@ export const travelConfigs: CardConfig[] = [
     paymentBlackList,
     pointExchangeStrategies: [
       {
-        name: '長榮航空哩程',
-        airlineCode: 'EVA',
-        pointsPerMile: 1,
-        milesPerUnit: 1,
+        id: generateUuid(),
+        config: {
+          name: '長榮航空哩程',
+          airlineCode: 'EVA',
+          pointsPerMile: 1,
+          milesPerUnit: 1,
+        },
       },
     ],
     plans: [
       {
-        name: null,
-        rewards: [
-          {
-            rewardStrategy: {
-              type: 'AccumulatedPointsReward',
-              name: '國外消費',
-              spendingPerPoint: 15,
+        id: generateUuid(),
+        config: {
+          name: null,
+          rewards: [
+            {
+              rewardStrategy: {
+                type: 'AccumulatedPointsReward',
+                name: '國外消費',
+                spendingPerPoint: 15,
+              },
+              transactionType: 'Foreign',
             },
-            transactionType: 'Foreign',
-          },
-          {
-            rewardStrategy: {
-              type: 'AccumulatedPointsReward',
-              name: '國內消費',
-              spendingPerPoint: 18,
+            {
+              rewardStrategy: {
+                type: 'AccumulatedPointsReward',
+                name: '國內消費',
+                spendingPerPoint: 18,
+              },
+              transactionType: 'Domestic',
             },
-            transactionType: 'Domestic',
-          },
-        ],
+          ],
+        },
       },
     ],
     updateAt: new Date('2024/12/01 00:00:00').toISOString(),
@@ -90,33 +104,39 @@ export const travelConfigs: CardConfig[] = [
     paymentBlackList,
     pointExchangeStrategies: [
       {
-        name: '長榮航空哩程',
-        airlineCode: 'EVA',
-        pointsPerMile: 1,
-        milesPerUnit: 1,
+        id: generateUuid(),
+        config: {
+          name: '長榮航空哩程',
+          airlineCode: 'EVA',
+          pointsPerMile: 1,
+          milesPerUnit: 1,
+        },
       },
     ],
     plans: [
       {
-        name: null,
-        rewards: [
-          {
-            rewardStrategy: {
-              type: 'AccumulatedPointsReward',
-              name: '國外消費',
-              spendingPerPoint: 20,
+        id: generateUuid(),
+        config: {
+          name: null,
+          rewards: [
+            {
+              rewardStrategy: {
+                type: 'AccumulatedPointsReward',
+                name: '國外消費',
+                spendingPerPoint: 20,
+              },
+              transactionType: 'Foreign',
             },
-            transactionType: 'Foreign',
-          },
-          {
-            rewardStrategy: {
-              type: 'AccumulatedPointsReward',
-              name: '國內消費',
-              spendingPerPoint: 20,
+            {
+              rewardStrategy: {
+                type: 'AccumulatedPointsReward',
+                name: '國內消費',
+                spendingPerPoint: 20,
+              },
+              transactionType: 'Domestic',
             },
-            transactionType: 'Domestic',
-          },
-        ],
+          ],
+        },
       },
     ],
     updateAt: new Date('2024/12/01 00:00:00').toISOString(),

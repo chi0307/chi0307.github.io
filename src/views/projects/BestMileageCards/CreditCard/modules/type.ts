@@ -83,8 +83,10 @@ export interface CardConfig {
   cardUrl: string | null
   storeBlackList?: string[]
   paymentBlackList?: Payment[]
-  plans: PlanConfig[]
+  selectedPlanId?: UUID
+  plans: { id: UUID; config: PlanConfig }[]
   /** 最後更新卡片權益的時間 */
   updateAt: DateISOString
-  pointExchangeStrategies: PointExchangeConfig[]
+  selectedPointExchangeStrategyId?: UUID
+  pointExchangeStrategies: { id: UUID; config: PointExchangeConfig }[]
 }
