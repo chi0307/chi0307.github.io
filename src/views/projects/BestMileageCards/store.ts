@@ -54,10 +54,14 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
 
   // TODO: 有空要再確認看看有沒有必要做 cache 避免浪費效能
   const cardConfigs = ref(new Map<UUID, CardConfig>())
-  const cards = computed((): CreditCard[] => {
-    const cards =
-      cardConfigs.value.size === 0 ? exampleCardConfigs : [...cardConfigs.value.values()]
-    return cards.map((config) => createCard(config))
+  const cards = computed((): Map<UUID, CreditCard> => {
+    return new Map([...cardConfigs.value.entries()].map(([id, config]) => [id, createCard(config)]))
+  })
+  const showCards = computed((): CreditCard[] => {
+    if (cards.value.size === 0) {
+      return exampleCardConfigs.map((config) => createCard(config))
+    }
+    return [...cards.value.values()]
   })
   function updateCardConfig(id: UUID, config: CardConfig): void {
     cardConfigs.value.set(id, config)
@@ -68,7 +72,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     storageManager.set('cardConfigs', [...cardConfigs.value.values()])
   }
   const storeList = computed(() => {
-    return sortList(removeDuplicates(cards.value.flatMap((card) => card.storeList)), 'asc')
+    return sortList(removeDuplicates(showCards.value.flatMap((card) => card.storeList)), 'asc')
   })
 
   const conditionTypes = ref<ConditionType[]>(storageManager.get('conditionTypes') ?? [])
@@ -129,6 +133,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     updateCommonPaymentMethods,
     cardConfigs: readonly(cardConfigs),
     cards,
+    showCards,
     updateCardConfig,
     deleteCardConfig,
     storeList: readonly(storeList),

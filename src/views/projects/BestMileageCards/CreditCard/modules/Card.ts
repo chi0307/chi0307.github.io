@@ -102,6 +102,9 @@ export class CreditCard {
   public get selectablePlan(): { id: UUID; name: string | null }[] {
     return [...this._plans.entries()].map(([id, { name }]) => ({ id, name }))
   }
+  public get selectablePointExchangeStrategy(): { id: UUID; name: string | null }[] {
+    return [...this._pointExchangeStrategies.entries()].map(([id, { name }]) => ({ id, name }))
+  }
   /** 方便在前端做選單或 autocomplete 用的 */
   public get storeList(): string[] {
     return removeDuplicates([

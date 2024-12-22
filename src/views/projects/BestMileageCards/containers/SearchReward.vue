@@ -171,7 +171,7 @@ interface RewardItem {
 const {
   showRewardMilesType,
   commonPaymentMethods,
-  cards,
+  showCards,
   conditionTypes,
   storeAliases,
   storeList,
@@ -218,7 +218,7 @@ const rewardMilesList = computed((): RewardItem[] => {
     paymentInfo.transactionStore = transactionStore.value
   }
   const list: RewardItem[] = []
-  for (const card of cards.value) {
+  for (const card of showCards.value) {
     const rewardMileList = card.getRewardInfos(
       paymentInfo,
       showRewardMilesType.value === 'CurrentPlanRewardMiles'

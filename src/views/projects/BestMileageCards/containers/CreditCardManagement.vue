@@ -20,6 +20,7 @@
         variant="outlined"
         :title="config.name"
         :text="config.description ?? ''"
+        @click="() => (switchPlanWithCardId = id)"
       >
         <template #title>
           <div class="flex items-center justify-between">
@@ -71,6 +72,68 @@
       </div>
     </v-card>
   </v-dialog>
+  <v-dialog
+    :model-value="Boolean(switchPlanWithCardId)"
+    @update:model-value="switchPlanWithCardId = null"
+  >
+    <v-card min-width="100%">
+      <v-card-text class="max-h-80dvh overflow-hidden flex !p-0">
+        <div class="overflow-y-auto w-full p-24px">
+          <div v-if="currentCardWithSwitchPan !== null" class="flex-col gap-8px">
+            切換方案
+            <v-card
+              v-for="(plan, index) of currentCardWithSwitchPan.selectablePlan ?? []"
+              :key="index"
+              density="compact"
+              class="mx-auto w-full flex-shrink-0"
+              variant="outlined"
+              @click="
+                () => {
+                  currentCardWithSwitchPan?.updatePlan(plan.id)
+                  updateCardSelectedPlanId()
+                }
+              "
+            >
+              <v-card-text class="h-3.6rem flex items-center justify-between">
+                {{ plan.name ?? '' }}
+                <span
+                  v-if="plan.id === currentCardSelectedPlanId"
+                  class="mdi mdi-check-circle text-24px"
+                />
+              </v-card-text>
+            </v-card>
+            切換回饋
+            <v-card
+              v-for="(
+                strategy, index
+              ) of currentCardWithSwitchPan.selectablePointExchangeStrategy ?? []"
+              :key="index"
+              density="compact"
+              class="mx-auto w-full flex-shrink-0"
+              variant="outlined"
+              @click="
+                () => {
+                  currentCardWithSwitchPan?.updatePointExchangeStrategy(strategy.id)
+                  updateCardSelectedPointExchangeStrategyId()
+                }
+              "
+            >
+              <v-card-text class="h-3.6rem flex items-center justify-between">
+                {{ strategy.name ?? '' }}
+                <span
+                  v-if="strategy.id === currentCardSelectedPointExchangeStrategyId"
+                  class="mdi mdi-check-circle text-24px"
+                />
+              </v-card-text>
+            </v-card>
+          </div>
+        </div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn class="ms-auto" text="Close" @click="switchPlanWithCardId = null" />
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
   <v-dialog v-model="showDefaultCardDialog" fullscreen>
     <v-card>
       <v-toolbar>
@@ -107,7 +170,7 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 import TextField from '@/components/TextFiled.vue'
 import type { UUID } from '@/types'
@@ -119,8 +182,43 @@ import type { CardConfig } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
 const store = useBestMileageCardsStore()
-const { cardConfigs } = storeToRefs(store)
+const { cardConfigs, cards } = storeToRefs(store)
 const editCard = ref<{ id: UUID; config: CardConfig } | null>(null)
+const switchPlanWithCardId = ref<UUID | null>(null)
+const currentCardWithSwitchPan = computed(() => {
+  const card =
+    switchPlanWithCardId.value === null
+      ? null
+      : (cards.value.get(switchPlanWithCardId.value) ?? null)
+  if (card === null) {
+    return null
+  }
+  updateCardSelectedPlanId()
+  updateCardSelectedPointExchangeStrategyId()
+  return card
+})
+
+const currentCardSelectedPlanId = ref<UUID | null>(null)
+function updateCardSelectedPlanId(): void {
+  const card =
+    switchPlanWithCardId.value === null
+      ? null
+      : (cards.value.get(switchPlanWithCardId.value) ?? null)
+  if (card !== null) {
+    currentCardSelectedPlanId.value = card.selectedPlanId
+  }
+}
+
+const currentCardSelectedPointExchangeStrategyId = ref<UUID | null>(null)
+function updateCardSelectedPointExchangeStrategyId(): void {
+  const card =
+    switchPlanWithCardId.value === null
+      ? null
+      : (cards.value.get(switchPlanWithCardId.value) ?? null)
+  if (card !== null) {
+    currentCardSelectedPointExchangeStrategyId.value = card.selectedPointExchangeStrategyId
+  }
+}
 
 const showDefaultCardDialog = ref(false)
 const needImportCardConfigs = ref<CardConfig[]>([])
