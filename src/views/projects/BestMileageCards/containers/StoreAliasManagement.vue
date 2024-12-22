@@ -58,7 +58,7 @@
     fullscreen
     @update:model-value="editStoreAliasData = null"
   >
-    <v-card v-if="editStoreAliasData" class="reward-detail-dialog">
+    <v-card v-if="editStoreAliasData">
       <v-toolbar>
         <v-btn icon="mdi-close" @click="editStoreAliasData = null"></v-btn>
         <v-toolbar-title>編輯商店別名</v-toolbar-title>

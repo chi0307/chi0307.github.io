@@ -31,21 +31,28 @@
     </main>
   </v-app>
   <v-dialog :model-value="Boolean(dialog)" @update:model-value="store.closeDialog">
-    <v-card v-if="dialog !== null" class="mx-auto" min-width="100%" :text="dialog.text">
+    <v-card v-if="dialog !== null" class="mx-auto" min-width="100%">
+      <template #text>
+        <div class="w-full text-center">{{ dialog.text }}</div>
+      </template>
       <template #actions>
-        <v-btn
-          v-for="(event, index) of dialog.events"
-          :key="index"
-          :text="event.text"
-          @click="
-            async () => {
-              if ('event' in event) {
-                await event.event()
+        <div class="w-full flex items-center justify-between px-8px">
+          <v-btn
+            v-for="(event, index) of dialog.events"
+            :key="index"
+            :text="event.text"
+            :class="event.class"
+            variant="elevated"
+            @click="
+              async () => {
+                if ('event' in event) {
+                  await event.event()
+                }
+                store.closeDialog()
               }
-              store.closeDialog()
-            }
-          "
-        />
+            "
+          />
+        </div>
       </template>
     </v-card>
   </v-dialog>

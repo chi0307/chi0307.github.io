@@ -20,41 +20,48 @@
         variant="outlined"
         :title="config.name"
         :text="config.description ?? ''"
-        @click="() => (selectedCard = { id, config: cloneDeep(config) })"
-      />
+      >
+        <template #title>
+          <div class="flex items-center justify-between">
+            {{ config.name }}
+            <span
+              class="mdi mdi-pencil absolute top-0 py-0.625rem px-1rem right-0"
+              @click="() => (editCard = { id, config: cloneDeep(config) })"
+            />
+          </div>
+        </template>
+      </v-card>
     </div>
   </div>
-  <v-dialog
-    :model-value="Boolean(selectedCard)"
-    fullscreen
-    @update:model-value="selectedCard = null"
-  >
-    <v-card class="reward-detail-dialog">
+  <v-dialog :model-value="Boolean(editCard)" fullscreen @update:model-value="editCard = null">
+    <v-card>
       <v-toolbar>
-        <v-btn icon="mdi-close" @click="selectedCard = null" />
+        <v-btn icon="mdi-close" @click="editCard = null" />
         <v-toolbar-title>編輯卡片</v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
           <v-btn text="Save" @click="saveCardConfig" />
         </v-toolbar-items>
       </v-toolbar>
-      <div v-if="selectedCard" class="flex-col gap-2 m-16px">
-        <TextField v-model="selectedCard.config.name" label="卡片名稱" required />
-        <TextField v-model="selectedCard.config.description" label="卡片描述" />
-        <TextField v-model="selectedCard.config.cardUrl" is-url label="信用卡網頁" />
+      <div v-if="editCard" class="flex-col gap-2 m-16px">
+        <TextField v-model="editCard.config.name" label="卡片名稱" required />
+        <TextField v-model="editCard.config.description" label="卡片描述" />
+        <TextField v-model="editCard.config.cardUrl" is-url label="信用卡網頁" />
         <div>
           <v-btn
-            text="Delete"
+            class="text-red"
+            text="刪除"
             @click="
               store.openDialog({
                 text: '確定要刪除嗎？',
                 events: [
                   {
-                    text: 'cancel',
+                    text: '取消',
                   },
                   {
-                    text: 'delete',
+                    text: '刪除',
                     event: deleteCardConfig,
+                    class: 'text-red',
                   },
                 ],
               })
@@ -65,7 +72,7 @@
     </v-card>
   </v-dialog>
   <v-dialog v-model="showDefaultCardDialog" fullscreen>
-    <v-card class="reward-detail-dialog">
+    <v-card>
       <v-toolbar>
         <v-btn icon="mdi-close" @click="showDefaultCardDialog = false" />
         <v-toolbar-title>請選擇卡片</v-toolbar-title>
@@ -113,7 +120,7 @@ import { useBestMileageCardsStore } from '../store'
 
 const store = useBestMileageCardsStore()
 const { cardConfigs } = storeToRefs(store)
-const selectedCard = ref<{ id: UUID; config: CardConfig } | null>(null)
+const editCard = ref<{ id: UUID; config: CardConfig } | null>(null)
 
 const showDefaultCardDialog = ref(false)
 const needImportCardConfigs = ref<CardConfig[]>([])
@@ -125,18 +132,18 @@ function importCardConfigs(): void {
 }
 
 function saveCardConfig(): void {
-  if (selectedCard.value === null) {
+  if (editCard.value === null) {
     return
   }
-  store.updateCardConfig(selectedCard.value.id, selectedCard.value.config)
-  selectedCard.value = null
+  store.updateCardConfig(editCard.value.id, editCard.value.config)
+  editCard.value = null
 }
 
 function deleteCardConfig(): void {
-  if (selectedCard.value === null) {
+  if (editCard.value === null) {
     return
   }
-  store.deleteCardConfig(selectedCard.value.id)
-  selectedCard.value = null
+  store.deleteCardConfig(editCard.value.id)
+  editCard.value = null
 }
 </script>

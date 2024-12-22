@@ -17,6 +17,7 @@ export interface DialogItem {
   events: {
     text: string
     event?: () => Promise<void> | void
+    class?: string
   }[]
 }
 
