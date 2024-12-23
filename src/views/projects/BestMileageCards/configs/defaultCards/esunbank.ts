@@ -21,7 +21,7 @@ export const starLuxConfigs: CardConfig[] = [
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
     paymentBlackList,
-    pointExchangeStrategies: [
+    pointExchanges: [
       {
         id: generateUuid(),
         config: {
@@ -76,7 +76,7 @@ export const starLuxConfigs: CardConfig[] = [
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
     paymentBlackList,
-    pointExchangeStrategies: [
+    pointExchanges: [
       {
         id: generateUuid(),
         config: {
@@ -131,7 +131,7 @@ export const starLuxConfigs: CardConfig[] = [
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
     paymentBlackList,
-    pointExchangeStrategies: [
+    pointExchanges: [
       {
         id: generateUuid(),
         config: {
@@ -304,7 +304,7 @@ export const uniCardConfigs: CardConfig[] = [
     cardUrl: 'https://www.esunbank.com/zh-tw/personal/credit-card/intro/bank-card/unicard',
     storeBlackList,
     paymentBlackList,
-    pointExchangeStrategies: [
+    pointExchanges: [
       {
         id: generateUuid(),
         config: {

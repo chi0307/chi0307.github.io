@@ -87,6 +87,6 @@ export interface CardConfig {
   plans: { id: UUID; config: PlanConfig }[]
   /** 最後更新卡片權益的時間 */
   updateAt: DateISOString
-  selectedPointExchangeStrategyId?: UUID
-  pointExchangeStrategies: { id: UUID; config: PointExchangeConfig }[]
+  selectedPointExchangeId?: UUID
+  pointExchanges: { id: UUID; config: PointExchangeConfig }[]
 }

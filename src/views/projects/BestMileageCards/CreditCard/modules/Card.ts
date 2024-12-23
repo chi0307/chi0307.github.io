@@ -20,7 +20,7 @@ interface CardParams {
   /** 最後更新卡片回饋設定日期（不包含切換方案等使用者設定） */
   readonly updateAt: Date
   /** 點數交換策略 */
-  readonly pointExchangeStrategies: ReadonlyMap<UUID, PointExchangeStrategy>
+  readonly pointExchanges: ReadonlyMap<UUID, PointExchangeStrategy>
   readonly selectedPlanId: UUID | null
   readonly selectedPointExchangeId: UUID | null
 }
@@ -32,7 +32,7 @@ export class CreditCard {
   /** 當前選擇的方案 */
   private _selectedPlanId: UUID
   /** 當前選擇的交換方式 */
-  private _selectedPointExchangeStrategyId: UUID
+  private _selectedPointExchangeId: UUID
   /** 卡片名稱 */
   private readonly _name: string
   private readonly _description: string | null
@@ -47,7 +47,7 @@ export class CreditCard {
   /** 最後更新卡片回饋設定日期（不包含切換方案等使用者設定） */
   private readonly _updateAt: Date
   /** 點數交換策略 */
-  private readonly _pointExchangeStrategies: ReadonlyMap<UUID, PointExchangeStrategy>
+  private readonly _pointExchanges: ReadonlyMap<UUID, PointExchangeStrategy>
 
   public constructor({
     name,
@@ -57,7 +57,7 @@ export class CreditCard {
     paymentBlackList,
     cardUrl,
     updateAt,
-    pointExchangeStrategies,
+    pointExchanges,
     selectedPlanId,
     selectedPointExchangeId,
   }: CardParams) {
@@ -68,7 +68,7 @@ export class CreditCard {
     this._storeBlackList = storeBlackList
     this._paymentBlackList = paymentBlackList
     this._updateAt = updateAt
-    this._pointExchangeStrategies = pointExchangeStrategies
+    this._pointExchanges = pointExchanges
 
     const planId = selectedPlanId ?? this._plans.keys().next().value ?? null
     if (planId === null) {
@@ -77,11 +77,11 @@ export class CreditCard {
     this._selectedPlanId = planId
 
     const pointExchangeId =
-      selectedPointExchangeId ?? this._pointExchangeStrategies.keys().next().value ?? null
+      selectedPointExchangeId ?? this._pointExchanges.keys().next().value ?? null
     if (pointExchangeId === null) {
       throw new Error(`this point exchange id ${pointExchangeId} not found`)
     }
-    this._selectedPointExchangeStrategyId = pointExchangeId
+    this._selectedPointExchangeId = pointExchangeId
   }
 
   /** 卡片名稱 */
@@ -97,19 +97,19 @@ export class CreditCard {
   public get selectedPlan(): Plan {
     return this._getPlan(this._selectedPlanId)
   }
-  public get selectedPointExchangeStrategyId(): UUID {
-    return this._selectedPointExchangeStrategyId
+  public get selectedPointExchangeId(): UUID {
+    return this._selectedPointExchangeId
   }
-  public get selectedPointExchangeStrategy(): PointExchangeStrategy {
-    return this._getPointExchangeStrategy(this._selectedPointExchangeStrategyId)
+  public get selectedPointExchange(): PointExchangeStrategy {
+    return this._getPointExchangeStrategy(this._selectedPointExchangeId)
   }
   /** 回傳 uuid 跟 plan name */
   public get selectablePlan(): { id: UUID; name: string | null }[] {
     // TODO: 要過濾 conditions
     return [...this._plans.entries()].map(([id, { name }]) => ({ id, name }))
   }
-  public get selectablePointExchangeStrategy(): { id: UUID; name: string | null }[] {
-    return [...this._pointExchangeStrategies.entries()].map(([id, { name }]) => ({ id, name }))
+  public get selectablePointExchange(): { id: UUID; name: string | null }[] {
+    return [...this._pointExchanges.entries()].map(([id, { name }]) => ({ id, name }))
   }
   /** 方便在前端做選單或 autocomplete 用的 */
   public get storeList(): string[] {
@@ -132,10 +132,10 @@ export class CreditCard {
     return plan
   }
   private _getPointExchangeStrategy(id: UUID): PointExchangeStrategy {
-    const pointExchangeStrategy = this._pointExchangeStrategies.get(id)
+    const pointExchangeStrategy = this._pointExchanges.get(id)
     if (pointExchangeStrategy === undefined) {
       throw new Error(
-        `pointExchangeStrategy id ${id} not found. Available pointExchangeStrategies: ${[...this._plans.keys()].join(', ')}`,
+        `pointExchangeStrategy id ${id} not found. Available pointExchanges: ${[...this._plans.keys()].join(', ')}`,
       )
     }
     return pointExchangeStrategy
@@ -194,8 +194,8 @@ export class CreditCard {
       ? [[this._selectedPlanId, this.selectedPlan]]
       : [...this._plans.entries()]
     const exchangeIds: UUID[] = onlyCurrentExchangeStrategy
-      ? [this._selectedPointExchangeStrategyId]
-      : [...this._pointExchangeStrategies.keys()]
+      ? [this._selectedPointExchangeId]
+      : [...this._pointExchanges.keys()]
     const rewardInfos: RewardInfo[] = []
     for (const [planId, plan] of plans) {
       const planIsVisible = plan.checkPlanIsVisible(paymentInfo.currentConditions ?? null)
@@ -219,8 +219,8 @@ export class CreditCard {
       selectedPlanId: this._selectedPlanId,
       plans: [...this._plans].map(([id, plan]) => ({ id, config: plan.toJSON() })),
       updateAt: this._updateAt.toISOString(),
-      selectedPointExchangeStrategyId: this._selectedPointExchangeStrategyId,
-      pointExchangeStrategies: [...this._pointExchangeStrategies].map(([id, strategy]) => ({
+      selectedPointExchangeId: this._selectedPointExchangeId,
+      pointExchanges: [...this._pointExchanges].map(([id, strategy]) => ({
         id,
         config: strategy.toJSON(),
       })),

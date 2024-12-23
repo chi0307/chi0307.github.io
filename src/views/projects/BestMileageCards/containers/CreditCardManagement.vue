@@ -104,9 +104,7 @@
             </v-card>
             切換回饋
             <v-card
-              v-for="(
-                strategy, index
-              ) of currentCardWithSwitchPan.selectablePointExchangeStrategy ?? []"
+              v-for="(strategy, index) of currentCardWithSwitchPan.selectablePointExchange ?? []"
               :key="index"
               density="compact"
               class="mx-auto w-full flex-shrink-0"
@@ -216,7 +214,7 @@ function updateCardSelectedPointExchangeStrategyId(): void {
       ? null
       : (cards.value.get(switchPlanWithCardId.value) ?? null)
   if (card !== null) {
-    currentCardSelectedPointExchangeStrategyId.value = card.selectedPointExchangeStrategyId
+    currentCardSelectedPointExchangeStrategyId.value = card.selectedPointExchangeId
   }
 }
 

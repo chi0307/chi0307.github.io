@@ -16,9 +16,9 @@ export function createCard({
   cardUrl,
   plans: planConfigs,
   updateAt,
-  pointExchangeStrategies,
+  pointExchanges,
   selectedPlanId,
-  selectedPointExchangeStrategyId,
+  selectedPointExchangeId,
 }: CardConfig): CreditCard {
   const plans = new Map<UUID, Plan>(
     planConfigs.map(({ id, config: { name, condition, rewards } }) => [
@@ -57,9 +57,9 @@ export function createCard({
     cardUrl,
     updateAt: new Date(updateAt),
     selectedPlanId: selectedPlanId ?? null,
-    selectedPointExchangeStrategyId: selectedPointExchangeStrategyId ?? null,
-    pointExchangeStrategies: new Map(
-      pointExchangeStrategies.map(({ id, config }) => [id, new PointExchangeStrategy(config)]),
+    selectedPointExchangeId: selectedPointExchangeId ?? null,
+    pointExchanges: new Map(
+      pointExchanges.map(({ id, config }) => [id, new PointExchangeStrategy(config)]),
     ),
   })
 }

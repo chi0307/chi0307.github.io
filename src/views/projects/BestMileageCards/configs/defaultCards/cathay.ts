@@ -337,7 +337,7 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
   ]
 }
 
-const pointExchangeStrategies: CardConfig['pointExchangeStrategies'] = [
+const pointExchanges: CardConfig['pointExchanges'] = [
   {
     id: generateUuid(),
     config: {
@@ -367,7 +367,7 @@ export const cubeConfigs: CardConfig[] = [
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
     plans: planSettings(2),
-    pointExchangeStrategies,
+    pointExchanges,
   },
   {
     name: 'Cube 卡',
@@ -377,7 +377,7 @@ export const cubeConfigs: CardConfig[] = [
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
     plans: planSettings(3),
-    pointExchangeStrategies,
+    pointExchanges,
   },
   {
     name: 'Cube 卡',
@@ -387,7 +387,7 @@ export const cubeConfigs: CardConfig[] = [
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
     plans: planSettings(3.3),
-    pointExchangeStrategies,
+    pointExchanges,
   },
 ]
 
@@ -399,5 +399,5 @@ export const exampleCubeConfig: CardConfig = {
   paymentBlackList,
   updateAt: '2024-12-01T00:00:00.000Z',
   plans: planSettings(3),
-  pointExchangeStrategies,
+  pointExchanges,
 }

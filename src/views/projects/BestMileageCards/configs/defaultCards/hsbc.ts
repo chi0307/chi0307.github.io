@@ -12,7 +12,7 @@ export const travelConfigs: CardConfig[] = [
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-infinite/',
     storeBlackList,
     paymentBlackList,
-    pointExchangeStrategies: [
+    pointExchanges: [
       {
         id: generateUuid(),
         config: {
@@ -57,7 +57,7 @@ export const travelConfigs: CardConfig[] = [
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-signature/',
     storeBlackList,
     paymentBlackList,
-    pointExchangeStrategies: [
+    pointExchanges: [
       {
         id: generateUuid(),
         config: {
@@ -102,7 +102,7 @@ export const travelConfigs: CardConfig[] = [
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-light/',
     storeBlackList,
     paymentBlackList,
-    pointExchangeStrategies: [
+    pointExchanges: [
       {
         id: generateUuid(),
         config: {
