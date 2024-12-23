@@ -79,47 +79,41 @@
     <v-card min-width="100%">
       <v-card-text class="max-h-80dvh overflow-hidden flex !p-0">
         <div class="overflow-y-auto w-full p-24px">
-          <div v-if="currentCardWithSwitchPan !== null" class="flex-col gap-8px">
+          <div v-if="currentCardWithSwitchPlan !== null" class="flex-col gap-8px">
             切換方案
             <v-card
-              v-for="(plan, index) of currentCardWithSwitchPan.selectablePlan ?? []"
+              v-for="(plan, index) of currentCardWithSwitchPlan.selectablePlan ?? []"
               :key="index"
               density="compact"
               class="mx-auto w-full flex-shrink-0"
               variant="outlined"
-              @click="
-                () => {
-                  currentCardWithSwitchPan?.updatePlan(plan.id)
-                  updateCardSelectedPlanId()
-                }
-              "
+              @click="() => switchPlanWithCardId && store.updatePlan(switchPlanWithCardId, plan.id)"
             >
               <v-card-text class="h-3.6rem flex items-center justify-between">
                 {{ plan.name ?? '' }}
                 <span
-                  v-if="plan.id === currentCardSelectedPlanId"
+                  v-if="plan.id === currentCardWithSwitchPlan.selectedPlanId"
                   class="mdi mdi-check-circle text-24px"
                 />
               </v-card-text>
             </v-card>
             切換回饋
             <v-card
-              v-for="(strategy, index) of currentCardWithSwitchPan.selectablePointExchange ?? []"
+              v-for="(strategy, index) of currentCardWithSwitchPlan.selectablePointExchange ?? []"
               :key="index"
               density="compact"
               class="mx-auto w-full flex-shrink-0"
               variant="outlined"
               @click="
-                () => {
-                  currentCardWithSwitchPan?.updatePointExchangeStrategy(strategy.id)
-                  updateCardSelectedPointExchangeStrategyId()
-                }
+                () =>
+                  switchPlanWithCardId &&
+                  store.updatePointExchange(switchPlanWithCardId, strategy.id)
               "
             >
               <v-card-text class="h-3.6rem flex items-center justify-between">
                 {{ strategy.name ?? '' }}
                 <span
-                  v-if="strategy.id === currentCardSelectedPointExchangeStrategyId"
+                  v-if="strategy.id === currentCardWithSwitchPlan.selectedPointExchangeId"
                   class="mdi mdi-check-circle text-24px"
                 />
               </v-card-text>
@@ -183,7 +177,7 @@ const store = useBestMileageCardsStore()
 const { cardConfigs, cards } = storeToRefs(store)
 const editCard = ref<{ id: UUID; config: CardConfig } | null>(null)
 const switchPlanWithCardId = ref<UUID | null>(null)
-const currentCardWithSwitchPan = computed(() => {
+const currentCardWithSwitchPlan = computed(() => {
   const card =
     switchPlanWithCardId.value === null
       ? null
@@ -191,32 +185,8 @@ const currentCardWithSwitchPan = computed(() => {
   if (card === null) {
     return null
   }
-  updateCardSelectedPlanId()
-  updateCardSelectedPointExchangeStrategyId()
   return card
 })
-
-const currentCardSelectedPlanId = ref<UUID | null>(null)
-function updateCardSelectedPlanId(): void {
-  const card =
-    switchPlanWithCardId.value === null
-      ? null
-      : (cards.value.get(switchPlanWithCardId.value) ?? null)
-  if (card !== null) {
-    currentCardSelectedPlanId.value = card.selectedPlanId
-  }
-}
-
-const currentCardSelectedPointExchangeStrategyId = ref<UUID | null>(null)
-function updateCardSelectedPointExchangeStrategyId(): void {
-  const card =
-    switchPlanWithCardId.value === null
-      ? null
-      : (cards.value.get(switchPlanWithCardId.value) ?? null)
-  if (card !== null) {
-    currentCardSelectedPointExchangeStrategyId.value = card.selectedPointExchangeId
-  }
-}
 
 const showDefaultCardDialog = ref(false)
 const needImportCardConfigs = ref<CardConfig[]>([])

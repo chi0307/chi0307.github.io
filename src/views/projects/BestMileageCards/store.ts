@@ -71,6 +71,32 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     cardConfigs.value.delete(id)
     storageManager.set('cardConfigs', [...cardConfigs.value.values()])
   }
+  function updatePlan(id: UUID, planId: UUID): boolean {
+    const config = cardConfigs.value.get(id)
+    if (config === undefined) {
+      return false
+    }
+    try {
+      cardConfigs.value.set(id, { ...config, selectedPlanId: planId })
+    } catch {
+      return false
+    }
+    storageManager.set('cardConfigs', [...cardConfigs.value.values()])
+    return true
+  }
+  function updatePointExchange(id: UUID, pointExchangeId: UUID): boolean {
+    const config = cardConfigs.value.get(id)
+    if (config === undefined) {
+      return false
+    }
+    try {
+      cardConfigs.value.set(id, { ...config, selectedPointExchangeId: pointExchangeId })
+    } catch {
+      return false
+    }
+    storageManager.set('cardConfigs', [...cardConfigs.value.values()])
+    return true
+  }
   const storeList = computed(() => {
     return sortList(removeDuplicates(showCards.value.flatMap((card) => card.storeList)), 'asc')
   })
@@ -136,6 +162,8 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     showCards,
     updateCardConfig,
     deleteCardConfig,
+    updatePlan,
+    updatePointExchange,
     storeList: readonly(storeList),
     conditionTypes: readonly(conditionTypes),
     updateConditionTypes,
