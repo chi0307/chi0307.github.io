@@ -1,7 +1,11 @@
 <template>
   <div class="flex-col gap-4px h-full overflow-hidden">
-    <div class="flex justify-between">
-      <v-label text="點擊鉛筆編輯卡片，點擊卡片切換方案" class="!text-0.9rem" />
+    <div class="flex">
+      <v-label class="!text-0.9rem ml-4px flex-grow">
+        點擊
+        <span class="mdi mdi-pencil mx-4px" />
+        編輯卡片，點擊卡片切換方案
+      </v-label>
       <v-btn
         text="匯入"
         @click="
@@ -88,19 +92,27 @@
               density="compact"
               class="mx-auto w-full flex-shrink-0"
               variant="outlined"
-              @click="() => switchPlanWithCardId && store.updatePlan(switchPlanWithCardId, plan.id)"
+              @click="
+                () =>
+                  switchPlanWithCardId &&
+                  currentCardWithSwitchPlan &&
+                  plan.id !== currentCardWithSwitchPlan.selectedPlanId &&
+                  store.updatePlan(switchPlanWithCardId, plan.id)
+              "
             >
-              <v-card-text class="h-3.6rem flex items-center justify-between">
-                {{ plan.name ?? '預設' }}
-                <span
-                  v-if="plan.id === currentCardWithSwitchPlan.selectedPlanId"
-                  class="mdi mdi-check-circle text-24px"
-                />
+              <v-card-text>
+                <div class="flex items-center justify-between min-h-1rem">
+                  {{ plan.name ?? '預設' }}
+                  <span
+                    v-if="plan.id === currentCardWithSwitchPlan.selectedPlanId"
+                    class="mdi mdi-check-circle text-24px"
+                  />
+                </div>
               </v-card-text>
             </v-card>
             切換點數交換方式
             <v-card
-              v-for="(strategy, index) of currentCardWithSwitchPlan.selectablePointExchange ?? []"
+              v-for="(exchange, index) of currentCardWithSwitchPlan.selectablePointExchange ?? []"
               :key="index"
               density="compact"
               class="mx-auto w-full flex-shrink-0"
@@ -108,15 +120,22 @@
               @click="
                 () =>
                   switchPlanWithCardId &&
-                  store.updatePointExchange(switchPlanWithCardId, strategy.id)
+                  currentCardWithSwitchPlan &&
+                  exchange.id !== currentCardWithSwitchPlan.selectedPointExchangeId &&
+                  store.updatePointExchange(switchPlanWithCardId, exchange.id)
               "
             >
-              <v-card-text class="h-3.6rem flex items-center justify-between">
-                {{ strategy.name ?? '預設' }}
-                <span
-                  v-if="strategy.id === currentCardWithSwitchPlan.selectedPointExchangeId"
-                  class="mdi mdi-check-circle text-24px"
-                />
+              <v-card-text>
+                <div class="flex items-center justify-between min-h-1rem gap-4px">
+                  <p class="flex-col gap-4px">
+                    {{ exchange.name ?? '預設' }}
+                    <span class="opacity-50 text-0.75rem">{{ exchange.description }}</span>
+                  </p>
+                  <span
+                    v-if="exchange.id === currentCardWithSwitchPlan.selectedPointExchangeId"
+                    class="mdi mdi-check-circle text-24px"
+                  />
+                </div>
               </v-card-text>
             </v-card>
           </div>

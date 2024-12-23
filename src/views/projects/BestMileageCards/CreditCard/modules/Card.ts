@@ -108,8 +108,16 @@ export class CreditCard {
     // TODO: 要過濾 conditions
     return [...this._plans.entries()].map(([id, { name }]) => ({ id, name }))
   }
-  public get selectablePointExchange(): { id: UUID; name: string | null }[] {
-    return [...this._pointExchanges.entries()].map(([id, { name }]) => ({ id, name }))
+  public get selectablePointExchange(): {
+    id: UUID
+    name: string | null
+    description: string
+  }[] {
+    return [...this._pointExchanges.entries()].map(([id, { name, description }]) => ({
+      id,
+      name,
+      description,
+    }))
   }
   /** 方便在前端做選單或 autocomplete 用的 */
   public get storeList(): string[] {
