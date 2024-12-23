@@ -1,6 +1,7 @@
 <template>
   <div class="flex-col gap-4px h-full overflow-hidden">
-    <div class="flex justify-end">
+    <div class="flex justify-between">
+      <v-label text="點擊鉛筆編輯卡片，點擊卡片切換方案" class="!text-0.9rem" />
       <v-btn
         text="匯入"
         @click="
@@ -27,7 +28,7 @@
             {{ config.name }}
             <span
               class="mdi mdi-pencil absolute top-0 py-0.625rem px-1rem right-0"
-              @click="() => (editCard = { id, config: cloneDeep(config) })"
+              @click.stop="() => (editCard = { id, config: cloneDeep(config) })"
             />
           </div>
         </template>

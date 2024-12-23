@@ -54,9 +54,11 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
 
   // TODO: 有空要再確認看看有沒有必要做 cache 避免浪費效能
   const cardConfigs = ref(new Map<UUID, CardConfig>())
+  /** 使用者的卡片資料 */
   const cards = computed((): Map<UUID, CreditCard> => {
     return new Map([...cardConfigs.value.entries()].map(([id, config]) => [id, createCard(config)]))
   })
+  /** 要顯示的卡片資料，當沒有卡片資料的時候會顯示預設值 */
   const showCards = computed((): CreditCard[] => {
     if (cards.value.size === 0) {
       return exampleCardConfigs.map((config) => createCard(config))
