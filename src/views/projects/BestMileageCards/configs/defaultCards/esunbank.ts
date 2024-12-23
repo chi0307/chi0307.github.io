@@ -41,7 +41,7 @@ export const starLuxConfigs: CardConfig[] = [
             {
               rewardStrategy: {
                 type: 'FixedRatePointsReward',
-                name: '國外消費',
+                name: '國外消費 (生日兩倍)',
                 spendingPerPoint: 5,
               },
               transactionType: 'Foreign',

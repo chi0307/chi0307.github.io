@@ -9,7 +9,6 @@ import { exampleCardConfigs } from './configs/defaultCards'
 import { defaultStoreAliases, type StoreAliases } from './configs/storeAliases'
 import { createCard, CreditCard, Payment, type CardConfig } from './CreditCard'
 import type { ConditionType } from './CreditCard/modules/type'
-import { type ShowRewardMilesType } from './types'
 import { aliasTypeList, storageManager, type AliasType } from './utils'
 
 export interface DialogItem {
@@ -35,12 +34,18 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     cardConfigs.value = new Map(configs.map((config) => [generateUuid(), config]))
   })
 
-  const showRewardMilesType = ref<ShowRewardMilesType>(
-    storageManager.get('showRewardMilesType') ?? 'AllPlanRewardMiles',
+  const onlyShowCurrentPlan = ref<boolean>(storageManager.get('onlyShowCurrentPlan') ?? false)
+  function updateOnlyShowCurrentPlan(status: boolean): void {
+    storageManager.set('onlyShowCurrentPlan', status)
+    onlyShowCurrentPlan.value = status
+  }
+
+  const onlyShowCurrentPointExchange = ref<boolean>(
+    storageManager.get('onlyShowCurrentPointExchange') ?? false,
   )
-  function updateShowRewardMilesType(type: ShowRewardMilesType): void {
-    storageManager.set('showRewardMilesType', type)
-    showRewardMilesType.value = type
+  function updateOnlyShowCurrentPointExchange(status: boolean): void {
+    storageManager.set('onlyShowCurrentPointExchange', status)
+    onlyShowCurrentPointExchange.value = status
   }
 
   const commonPaymentMethods = ref<Payment[]>(
@@ -155,8 +160,10 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     dialog: readonly(dialog),
     openDialog,
     closeDialog,
-    showRewardMilesType: readonly(showRewardMilesType),
-    updateShowRewardMilesType,
+    onlyShowCurrentPlan: readonly(onlyShowCurrentPlan),
+    updateOnlyShowCurrentPlan,
+    onlyShowCurrentPointExchange: readonly(onlyShowCurrentPointExchange),
+    updateOnlyShowCurrentPointExchange,
     commonPaymentMethods: readonly(commonPaymentMethods),
     updateCommonPaymentMethods,
     cardConfigs: readonly(cardConfigs),

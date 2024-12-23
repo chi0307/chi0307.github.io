@@ -1,18 +1,30 @@
 <template>
   <div class="flex-col gap-24px my-16px">
-    <div class="flex-center gap-8px">
-      <v-label text="回饋顯示" />
-      <v-radio-group
-        :model-value="showRewardMilesType"
+    <div class="gap-8px flex justify-around">
+      <v-switch
+        :model-value="onlyShowCurrentPlan"
         hide-details
-        inline
+        color="blue"
         @update:model-value="
-          (item) => item !== null && bestMileageCardsStore.updateShowRewardMilesType(item)
+          (data) => data !== null && bestMileageCardsStore.updateOnlyShowCurrentPlan(data)
         "
       >
-        <v-radio density="compact" label="全部方案" value="AllPlanRewardMiles" />
-        <v-radio density="compact" label="當前方案" value="CurrentPlanRewardMiles" />
-      </v-radio-group>
+        <template #label>
+          <p class="text-0.75rem">只顯示當前方案</p>
+        </template>
+      </v-switch>
+      <v-switch
+        :model-value="onlyShowCurrentPointExchange"
+        hide-details
+        color="blue"
+        @update:model-value="
+          (data) => data !== null && bestMileageCardsStore.updateOnlyShowCurrentPointExchange(data)
+        "
+      >
+        <template #label>
+          <p class="text-0.75rem">只顯示當前交換方式</p>
+        </template>
+      </v-switch>
     </div>
     <div>
       <v-select
@@ -52,6 +64,6 @@ import { Payment } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
 const bestMileageCardsStore = useBestMileageCardsStore()
-const { showRewardMilesType, commonPaymentMethods, conditionTypes } =
+const { onlyShowCurrentPlan, onlyShowCurrentPointExchange, commonPaymentMethods, conditionTypes } =
   storeToRefs(bestMileageCardsStore)
 </script>

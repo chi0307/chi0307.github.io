@@ -171,7 +171,8 @@ interface RewardItem {
 }
 
 const {
-  showRewardMilesType,
+  onlyShowCurrentPlan,
+  onlyShowCurrentPointExchange,
   commonPaymentMethods,
   showCards,
   conditionTypes,
@@ -221,12 +222,13 @@ const rewardMilesList = computed((): RewardItem[] => {
   }
   const list: RewardItem[] = []
   for (const card of showCards.value) {
-    const rewardMileList = card.getRewardInfos(
-      paymentInfo,
-      showRewardMilesType.value === 'CurrentPlanRewardMiles'
-        ? { onlyCurrentExchangeStrategy: true, onlyCurrentPlan: true }
-        : {},
-    )
+    const rewardMileList = card.getRewardInfos(paymentInfo, {
+      onlyCurrentPlan: onlyShowCurrentPlan.value,
+      onlyCurrentExchangeStrategy: onlyShowCurrentPointExchange.value,
+    })
+    const needShowIcon = !onlyShowCurrentPlan.value || !onlyShowCurrentPointExchange.value
+    const haveMultiplePointExchange =
+      !onlyShowCurrentPointExchange.value && card.selectablePointExchange.length > 1
     for (const item of rewardMileList) {
       const rewardItem: RewardItem = {
         cardName: card.name,
@@ -235,8 +237,7 @@ const rewardMilesList = computed((): RewardItem[] => {
         miles: item.miles,
         payments: item.payments,
         airLinesCode: item.airlineCode,
-        isSelectedPlan:
-          showRewardMilesType.value === 'AllPlanRewardMiles' && item.planId === card.selectedPlanId,
+        isSelectedPlan: needShowIcon && item.planId === card.selectedPlanId,
         calculateDetail: getRewardDetail(item.rewardStrategy, item.pointExchangeStrategy),
         description:
           item.rewardStrategy === null
@@ -244,7 +245,8 @@ const rewardMilesList = computed((): RewardItem[] => {
             : `${item.rewardStrategy.description}，${item.pointExchangeStrategy.description}`,
         cardUrl: card.cardUrl,
         cardDescription: card.description,
-        pointExchangeName: card.selectablePointExchange.length > 1 ? item.pointExchangeName : null,
+        /** 有多組點數交換計劃出現的時候才顯示文字，避免太混亂 */
+        pointExchangeName: haveMultiplePointExchange ? item.pointExchangeName : null,
       }
       list.push(rewardItem)
     }

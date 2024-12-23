@@ -91,14 +91,14 @@
               @click="() => switchPlanWithCardId && store.updatePlan(switchPlanWithCardId, plan.id)"
             >
               <v-card-text class="h-3.6rem flex items-center justify-between">
-                {{ plan.name ?? '' }}
+                {{ plan.name ?? '預設' }}
                 <span
                   v-if="plan.id === currentCardWithSwitchPlan.selectedPlanId"
                   class="mdi mdi-check-circle text-24px"
                 />
               </v-card-text>
             </v-card>
-            切換回饋
+            切換點數交換方式
             <v-card
               v-for="(strategy, index) of currentCardWithSwitchPlan.selectablePointExchange ?? []"
               :key="index"
@@ -112,7 +112,7 @@
               "
             >
               <v-card-text class="h-3.6rem flex items-center justify-between">
-                {{ strategy.name ?? '' }}
+                {{ strategy.name ?? '預設' }}
                 <span
                   v-if="strategy.id === currentCardWithSwitchPlan.selectedPointExchangeId"
                   class="mdi mdi-check-circle text-24px"
@@ -144,7 +144,9 @@
           v-model="needImportCardConfigs"
           :value="item"
           hide-details
+          color="blue"
           density="comfortable"
+          class="import-card-checkbox"
         >
           <template #label>
             <div class="flex-col">
@@ -214,3 +216,8 @@ function deleteCardConfig(): void {
   editCard.value = null
 }
 </script>
+<style scoped>
+.import-card-checkbox:deep(.v-label--clickable) {
+  @apply w-full;
+}
+</style>

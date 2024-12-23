@@ -4,10 +4,10 @@ import { CustomStorageManager } from '@/utils/StorageManager'
 
 import { isStoreAliasesList, type StoreAliases } from './configs/storeAliases'
 import { type CardConfig, type ConditionType, type Payment } from './CreditCard'
-import { isShowRewardMilesType, type ShowRewardMilesType } from './types'
 
 export const storageManager = new CustomStorageManager<{
-  showRewardMilesType: ShowRewardMilesType
+  onlyShowCurrentPlan: boolean
+  onlyShowCurrentPointExchange: boolean
   commonPaymentMethods: Payment[]
   cardConfigs: CardConfig[]
   conditionTypes: ConditionType[]
@@ -16,7 +16,8 @@ export const storageManager = new CustomStorageManager<{
 }>(
   localStorage,
   {
-    showRewardMilesType: isShowRewardMilesType,
+    onlyShowCurrentPlan: typia.createIs<boolean>(),
+    onlyShowCurrentPointExchange: typia.createIs<boolean>(),
     commonPaymentMethods: typia.createIs<Payment[]>(),
     cardConfigs: typia.createIs<CardConfig[]>(),
     conditionTypes: typia.createIs<ConditionType[]>(),
