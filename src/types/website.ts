@@ -5,7 +5,8 @@ export interface ResumeItem {
   endMonth: `${number}/${number}` | null
   title: string
   subTitle: string
-  description: string
+  descriptions: { title: string; text: string }[]
+  techStacks: string[]
 }
 
 export interface SkillGroup {

@@ -8,7 +8,8 @@
       :end-month="item.endMonth"
       :title="item.title"
       :sub-title="item.subTitle"
-      :description="item.description"
+      :descriptions="item.descriptions"
+      :tech-stacks="item.techStacks"
       class="card"
     />
     <p class="card-title">Educations</p>
@@ -19,7 +20,8 @@
       :end-month="item.endMonth"
       :title="item.title"
       :sub-title="item.subTitle"
-      :description="item.description"
+      :descriptions="item.descriptions"
+      :tech-stacks="item.techStacks"
       class="card"
     />
     <p class="card-title">Professional Skills</p>
