@@ -17,9 +17,9 @@ export interface ProjectItem {
   description: string
   image: `${string}.webp`
   previewUrl: URL | null
-  link: {
+  link?: {
     title: string
     url: URL
-  } | null
+  }
   deprecated?: true
 }

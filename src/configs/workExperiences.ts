@@ -22,6 +22,7 @@ export const workExperiences: ResumeItem[] = [
     endMonth: null,
     title: '全端工程師',
     subTitle: '愛進化科技股份有限公司',
-    description: '開發個人化手機殼網頁',
+    description:
+      '開發與維運個人化手機殼網頁，之後協助公司新專案開發，並且與官網部門溝通，讓新專案順利上線',
   },
 ]

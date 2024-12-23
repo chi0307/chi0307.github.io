@@ -7,7 +7,7 @@
       :description="item.description"
       :image="item.image"
       :preview-url="item.previewUrl"
-      :link="item.link"
+      :link="item.link ?? null"
       :deprecated="item.deprecated ?? false"
     />
   </section>

@@ -13,7 +13,7 @@
         {{ link.title }}
       </a>
     </div>
-    <img :src="image" alt="preview-image" />
+    <img :src="image" class="max-h-250px" alt="preview-image" />
     <p v-if="deprecated">Deprecated</p>
     <a
       v-else-if="previewUrl !== null"
