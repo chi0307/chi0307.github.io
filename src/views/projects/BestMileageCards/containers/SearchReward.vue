@@ -59,19 +59,21 @@
         @click="() => (selectedRewardItem = item)"
       >
         <template #title>
-          <div class="flex items-center justify-between">
-            <div class="flex gap-4px items-end">
-              {{ item.miles }}
-              <p class="text-12px opacity-50 p-4px">{{ item.airLinesCode }}</p>
-            </div>
+          <div class="flex items-center gap-4px overflow-hidden w-full">
+            {{ item.miles }}
+            <p class="text-12px opacity-50 truncate flex-grow-1">
+              {{ item.airLinesCode }}
+              {{ item.payments.length === 0 ? '' : ` (限定支付: ${item.payments.join(', ')})` }}
+            </p>
             <i v-if="item.isSelectedPlan" class="fa-solid fa-circle-check" />
           </div>
         </template>
         <template #text>
           <div class="flex-col gap-8px">
             <p class="text-0.75rem">
-              {{ `${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''}` }}
-              {{ item.payments.length === 0 ? '' : ` (支付方式: ${item.payments.join(', ')})` }}
+              {{
+                `${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''} ${item.pointExchangeName ?? ''}`
+              }}
             </p>
           </div>
         </template>
@@ -242,7 +244,7 @@ const rewardMilesList = computed((): RewardItem[] => {
             : `${item.rewardStrategy.description}，${item.pointExchangeStrategy.description}`,
         cardUrl: card.cardUrl,
         cardDescription: card.description,
-        pointExchangeName: item.pointExchangeName,
+        pointExchangeName: card.selectablePointExchange.length > 1 ? item.pointExchangeName : null,
       }
       list.push(rewardItem)
     }
