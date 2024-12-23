@@ -22,7 +22,7 @@ interface CardParams {
   /** 點數交換策略 */
   readonly pointExchangeStrategies: ReadonlyMap<UUID, PointExchangeStrategy>
   readonly selectedPlanId: UUID | null
-  readonly selectedPointExchangeStrategyId: UUID | null
+  readonly selectedPointExchangeId: UUID | null
 }
 
 // TODO
@@ -59,7 +59,7 @@ export class CreditCard {
     updateAt,
     pointExchangeStrategies,
     selectedPlanId,
-    selectedPointExchangeStrategyId,
+    selectedPointExchangeId,
   }: CardParams) {
     this._name = name
     this._description = description
@@ -70,23 +70,18 @@ export class CreditCard {
     this._updateAt = updateAt
     this._pointExchangeStrategies = pointExchangeStrategies
 
-    const defaultPlanId =
-      (selectedPlanId !== null && this._plans.get(selectedPlanId) ? selectedPlanId : null) ??
-      this._plans.keys().next().value
-    if (this._plans.size === 0 || defaultPlanId === undefined) {
-      throw new Error('this credit card no any plan')
+    const planId = selectedPlanId ?? this._plans.keys().next().value ?? null
+    if (planId === null) {
+      throw new Error(`this plan id ${planId} not found`)
     }
-    this._selectedPlanId = defaultPlanId
+    this._selectedPlanId = planId
 
-    const defaultPointExchangeId =
-      (selectedPointExchangeStrategyId !== null &&
-      this._pointExchangeStrategies.get(selectedPointExchangeStrategyId)
-        ? selectedPointExchangeStrategyId
-        : null) ?? this._pointExchangeStrategies.keys().next().value
-    if (this._plans.size === 0 || defaultPointExchangeId === undefined) {
-      throw new Error('this credit card no any exchange strategy')
+    const pointExchangeId =
+      selectedPointExchangeId ?? this._pointExchangeStrategies.keys().next().value ?? null
+    if (pointExchangeId === null) {
+      throw new Error(`this point exchange id ${pointExchangeId} not found`)
     }
-    this._selectedPointExchangeStrategyId = defaultPointExchangeId
+    this._selectedPointExchangeStrategyId = pointExchangeId
   }
 
   /** 卡片名稱 */
@@ -188,22 +183,6 @@ export class CreditCard {
     }
   }
 
-  public updatePlan(id: UUID): boolean {
-    const plan = this._plans.get(id)
-    if (plan) {
-      this._selectedPlanId = id
-      return true
-    }
-    return false
-  }
-  public updatePointExchangeStrategy(id: UUID): boolean {
-    const pointExchangeStrategy = this._pointExchangeStrategies.get(id)
-    if (pointExchangeStrategy) {
-      this._selectedPointExchangeStrategyId = id
-      return true
-    }
-    return false
-  }
   public getRewardInfos(
     paymentInfo: TransactionInfo,
     {
