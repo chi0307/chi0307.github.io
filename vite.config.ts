@@ -45,7 +45,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
+        cleanupOutdatedCaches: true,
         globPatterns: ['**/*'],
+        globIgnores: ['**/*.js.map'],
       },
       manifest: false,
     }),
