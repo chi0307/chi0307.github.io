@@ -9,6 +9,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 import { AllRoute, MiniSideProjectRoute } from './src/router/route'
 
+const fileName = '[name]-[hash].[ext]'
+const jsFileName = '[name]-[hash].js'
+
 function checkMiniSideProjectPathIsExists(): void {
   const errorFilePaths: string[] = Object.values(MiniSideProjectRoute).filter(
     (item) => !item.startsWith('/projects/'),
@@ -58,8 +61,18 @@ export default defineConfig({
       input,
       output: {
         format: 'es',
-        entryFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash].[ext]',
+        entryFileNames: `js/${jsFileName}`,
+        assetFileNames: (assetInfo) => {
+          const name = assetInfo.names[0]
+          if (name === undefined) {
+            return `assets/${fileName}`
+          }
+          if (name.endsWith('.css')) {
+            return `css/${fileName}`
+          }
+          return `assets/${fileName}`
+        },
+        chunkFileNames: `js/${jsFileName}`,
         dir: 'dist',
       },
     },
