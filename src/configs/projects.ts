@@ -2,12 +2,14 @@ import type { ProjectItem } from '@/types/website'
 
 export const projects: ProjectItem[] = [
   {
-    description: '快速查詢哪張信用卡轉換哩程的回饋率比較高',
+    description:
+      '幫助快速查詢與比較各種信用卡的哩程轉換回饋率，並根據不同的消費情境推薦最佳的回饋方案',
     image: '/best-mileage-cards-preview.webp',
     previewUrl: 'https://chi0307.github.io/projects/bestMileageCards',
   },
   {
-    description: '紀錄外幣購買紀錄，並且計算剩餘外幣的平均匯率',
+    description:
+      '幫助紀錄每次外幣購買的匯率與金額，並考慮實際使用掉的外幣量後，計算剩餘外幣的平均購買匯率',
     image: '/average-exchange-rate-preview.webp',
     previewUrl: 'https://chi0307.github.io/projects/averageExchangeRate',
   },
@@ -24,7 +26,8 @@ export const projects: ProjectItem[] = [
     description:
       '簡單的一個 chatbot 呈現畫面，<br/>嘗試用 PWA、Vue 3.0、TS 開發，<br/>目前僅用假資料，無串接後台。',
     image: '/chatbot-preview.webp',
-    previewUrl: 'https://chi0307.github.io/chatbot',
+    previewUrl: 'https://chi0307.github.io/chatbot/',
+    deprecated: true,
   },
   {
     description:
