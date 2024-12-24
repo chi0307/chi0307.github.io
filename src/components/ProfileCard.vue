@@ -2,7 +2,7 @@
   <div class="flex-col bg-primary shadow-profile-card">
     <div class="w-full flex-center my-30%">
       <img
-        src="/profile.webp"
+        src="/website/profile.webp"
         alt="profile-card"
         class="w-200px h-200px rounded-full object-cover"
       />
