@@ -6,8 +6,9 @@
       class="card"
       :description="item.description"
       :image="item.image"
-      :preview-url="item.previewUrl"
-      :link="item.link ?? null"
+      :demo="item.demo ?? null"
+      :repo="item.repo ?? null"
+      :links="item.links ?? []"
       :deprecated="item.deprecated ?? false"
     />
   </section>

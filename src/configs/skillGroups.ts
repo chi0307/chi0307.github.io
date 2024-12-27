@@ -3,7 +3,7 @@ import type { SkillGroup } from '@/types/website'
 export const skillGroups: SkillGroup[] = [
   {
     title: '前端',
-    skills: ['HTML', 'JavaScript', 'Vue.js', 'Vuex', 'Nuxt.js', 'SCSS', 'Webpack', 'gulp.js'],
+    skills: ['HTML', 'Vue.js', 'SCSS', 'Vite'],
   },
   {
     title: '後端',
@@ -12,8 +12,6 @@ export const skillGroups: SkillGroup[] = [
       'Node.js',
       'TypeScript',
       'Deno',
-      'Express.js',
-      'Adonis.js',
       'Socket.io',
       'Nginx',
       'Docker',
@@ -26,16 +24,10 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: '資料庫',
-    skills: ['MySQL', 'PostgreSQL', 'Redis', 'MongoDB', 'CouchDB'],
+    skills: ['MySQL', 'PostgreSQL', 'Redis', 'MongoDB'],
   },
   {
     title: '設計',
-    skills: [
-      'Adobe Photoshop',
-      'Adobe Illustrator',
-      'Adobe InDesign',
-      'Adobe After Effects',
-      'Figma',
-    ],
+    skills: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'Adobe After Effects'],
   },
 ]

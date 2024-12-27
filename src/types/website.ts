@@ -17,10 +17,12 @@ export interface SkillGroup {
 export interface ProjectItem {
   description: string
   image: `${string}.webp`
-  previewUrl: string | null
-  link?: {
+  demo?: string
+  repo?: URL
+  /** 如果 deprecated 的話，demo 網址就不會顯示了 */
+  deprecated?: true
+  links?: {
     title: string
     url: URL
-  }
-  deprecated?: true
+  }[]
 }
