@@ -60,6 +60,25 @@
           "
         />
         <TextField v-model="editCard.config.cardUrl" is-url label="信用卡網頁" />
+        <!-- TODO: 可以加上 Create XXX 顯示這樣最好了 -->
+        <ClipList
+          addable
+          label="卡片不回饋商店名單"
+          :model-value="editCard.config.storeBlackList ?? []"
+          :list="store.storeList"
+          @update:model-value="
+            (list) => (editCard === null ? null : (editCard.config.storeBlackList = list))
+          "
+        />
+        <!-- TODO: 回饋方式不能讓別人自己新增，要想辦法鎖掉不讓大家可以新增 -->
+        <ClipList
+          label="卡片不回饋支付方式"
+          :model-value="editCard.config.paymentBlackList ?? []"
+          :list="Payment"
+          @update:model-value="
+            (list) => (editCard === null ? null : (editCard.config.paymentBlackList = list))
+          "
+        />
         <div>
           <v-btn
             class="text-red"
@@ -193,13 +212,14 @@
 import { storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 
+import ClipList from '@/components/ClipList.vue'
 import TextField from '@/components/TextFiled.vue'
 import type { UUID } from '@/types'
 import { generateUuid } from '@/utils'
 import { cloneDeep } from '@/utils/cloneDeep'
 
 import { defaultCardConfigs } from '../configs/defaultCards'
-import type { CardConfig } from '../CreditCard'
+import { Payment, type CardConfig } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
 const store = useBestMileageCardsStore()
