@@ -73,13 +73,14 @@ export interface RewardRuleConfig {
 }
 export interface PlanConfig {
   name: string | null
+  description?: string | null
   /** 回饋列表會有順序問題，前面的達成後就不會往下搜索，所以需要注意順序 */
   rewards: RewardRuleConfig[]
   condition?: ConditionType | null
 }
 export interface CardConfig {
   name: string
-  description: string | null
+  description?: string | null
   cardUrl: string | null
   storeBlackList?: string[]
   paymentBlackList?: Payment[]

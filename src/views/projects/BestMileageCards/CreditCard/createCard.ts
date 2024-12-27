@@ -21,10 +21,11 @@ export function createCard({
   selectedPointExchangeId,
 }: CardConfig): CreditCard {
   const plans = new Map<UUID, Plan>(
-    planConfigs.map(({ id, config: { name, condition, rewards } }) => [
+    planConfigs.map(({ id, config: { name, description, condition, rewards } }) => [
       id,
       new Plan(
         name,
+        description ?? null,
         condition ?? null,
         rewards.map(
           ({
@@ -50,7 +51,7 @@ export function createCard({
   )
   return new CreditCard({
     name,
-    description,
+    description: description ?? null,
     plans,
     storeBlackList: new Set(storeBlackList),
     paymentBlackList: new Set(paymentBlackList),

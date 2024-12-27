@@ -1,6 +1,7 @@
 import { generateUuid } from '@/utils'
 
 import type { CardConfig, Payment } from '../../CreditCard'
+import { cardDescription } from './utils'
 
 const storeBlackList: string[] = ['政府稅款', '公共事業代扣繳', '交通違規罰鍰', '分期付款']
 const paymentBlackList: Payment[] = ['全盈+PAY', 'icash pay', 'OPEN錢包', 'My FamiPay']
@@ -8,7 +9,7 @@ const paymentBlackList: Payment[] = ['全盈+PAY', 'icash pay', 'OPEN錢包', 'M
 export const travelConfigs: CardConfig[] = [
   {
     name: '旅人無限卡',
-    description: null,
+    description: cardDescription,
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-infinite/',
     storeBlackList,
     paymentBlackList,
@@ -53,7 +54,7 @@ export const travelConfigs: CardConfig[] = [
   },
   {
     name: '旅人御璽卡',
-    description: null,
+    description: cardDescription,
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-signature/',
     storeBlackList,
     paymentBlackList,
@@ -98,7 +99,7 @@ export const travelConfigs: CardConfig[] = [
   },
   {
     name: '旅人輕旅卡',
-    description: null,
+    description: cardDescription,
     cardUrl: 'https://www.hsbc.com.tw/credit-cards/products/travel/visa-light/',
     storeBlackList,
     paymentBlackList,

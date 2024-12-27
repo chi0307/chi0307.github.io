@@ -23,11 +23,18 @@ interface PlanReward {
 
 export class Plan {
   private readonly _name: string | null
+  private readonly _description: string | null
   private readonly _rewards: readonly PlanReward[]
   private readonly _condition: ConditionType | null
 
-  public constructor(name: string | null, condition: ConditionType | null, rewards: PlanReward[]) {
+  public constructor(
+    name: string | null,
+    description: string | null,
+    condition: ConditionType | null,
+    rewards: PlanReward[],
+  ) {
     this._name = name
+    this._description = description
     this._condition = condition
     if (rewards.length === 0) {
       throw new Error(`Plan "${name ?? 'unknown'}" must have at least one reward rule.`)
@@ -37,6 +44,9 @@ export class Plan {
 
   public get name(): string | null {
     return this._name
+  }
+  public get description(): string | null {
+    return this._description
   }
   /** 方便在前端做選單或 autocomplete 用的 */
   public get storeList(): string[] {
@@ -141,6 +151,7 @@ export class Plan {
   public toJSON(): Required<PlanConfig> & { rewards: Required<RewardRuleConfig>[] } {
     return {
       name: this._name,
+      description: this._description,
       condition: this._condition,
       rewards: this._rewards.map(
         ({

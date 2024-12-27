@@ -1,6 +1,7 @@
 import { generateUuid } from '@/utils'
 
 import type { CardConfig, Payment } from '../../CreditCard'
+import { cardDescription } from './utils'
 
 const storeBlackList: string[] = ['分期付款']
 const paymentBlackList: Payment[] = []
@@ -29,6 +30,7 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
       id: generateUuid(),
       config: {
         name: '集精選',
+        description: '量販超市, 指定加油, 指定超商, 生活家居',
         rewards: [
           {
             rewardStrategy: {
@@ -55,6 +57,7 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
       id: generateUuid(),
       config: {
         name: '玩數位',
+        description: '數位/串流平台, 網購平台, 國際電商, 辦公神器',
         rewards: [
           {
             rewardStrategy: {
@@ -94,6 +97,7 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
       id: generateUuid(),
       config: {
         name: '樂饗購',
+        description: '國內指定百貨, 國內外送平台, 國內餐飲, 國內藥妝',
         rewards: [
           {
             rewardStrategy: {
@@ -166,6 +170,8 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
       id: generateUuid(),
       config: {
         name: '趣旅行',
+        description:
+          '指定海外消費, 日本指定遊樂園, 國內外交通, 指定航空公司, 指定飯店住宿, 旅遊/訂房平台, 指定旅行社',
         rewards: [
           {
             rewardStrategy: {
@@ -252,6 +258,7 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
       id: generateUuid(),
       config: {
         name: '來支付',
+        description: 'LINE Pay消費',
         rewards: [
           {
             rewardStrategy: {
@@ -269,6 +276,8 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
       id: generateUuid(),
       config: {
         name: '慶生月',
+        description:
+          '指定百貨/休閒娛樂/國內外送平台 3.5%, 國外精選遊樂園實體消費/國內人氣樂園/指定蛋糕甜點店/指定咖啡廳/指定國內餐廳/KTV/派對/電玩 10%',
         condition: 'Birthday',
         rewards: [
           {
@@ -361,7 +370,7 @@ const pointExchanges: CardConfig['pointExchanges'] = [
 export const cubeConfigs: CardConfig[] = [
   {
     name: 'Cube 卡',
-    description: 'Cube 卡 (Level 1) 回饋方案',
+    description: `Cube 卡 (Level 1) 回饋方案 (${cardDescription})`,
     cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
     storeBlackList,
     paymentBlackList,
@@ -371,7 +380,7 @@ export const cubeConfigs: CardConfig[] = [
   },
   {
     name: 'Cube 卡',
-    description: 'Cube 卡 (Level 2) 回饋方案',
+    description: `Cube 卡 (Level 2) 回饋方案 (${cardDescription})`,
     cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
     storeBlackList,
     paymentBlackList,
@@ -381,7 +390,7 @@ export const cubeConfigs: CardConfig[] = [
   },
   {
     name: 'Cube 卡',
-    description: 'Cube 卡 (Level 3) 回饋方案',
+    description: `Cube 卡 (Level 3) 回饋方案 (${cardDescription})`,
     cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
     storeBlackList,
     paymentBlackList,
@@ -391,13 +400,5 @@ export const cubeConfigs: CardConfig[] = [
   },
 ]
 
-export const exampleCubeConfig: CardConfig = {
-  name: 'Cube 卡',
-  description: 'Cube 卡 (Level 2) 回饋方案',
-  cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/cube/',
-  storeBlackList,
-  paymentBlackList,
-  updateAt: '2024-12-01T00:00:00.000Z',
-  plans: planSettings(3),
-  pointExchanges,
-}
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const exampleCubeConfig: CardConfig = cubeConfigs[1]!

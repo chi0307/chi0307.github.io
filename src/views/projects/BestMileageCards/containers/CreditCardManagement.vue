@@ -51,7 +51,14 @@
       </v-toolbar>
       <div v-if="editCard" class="flex-col gap-2 m-16px">
         <TextField v-model="editCard.config.name" label="卡片名稱" required />
-        <TextField v-model="editCard.config.description" label="卡片描述" />
+        <TextField
+          :model-value="editCard.config.description ?? ''"
+          label="卡片描述"
+          @update:model-value="
+            (description) =>
+              editCard === null ? null : (editCard.config.description = description)
+          "
+        />
         <TextField v-model="editCard.config.cardUrl" is-url label="信用卡網頁" />
         <div>
           <v-btn

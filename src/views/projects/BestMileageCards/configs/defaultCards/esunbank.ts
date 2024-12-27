@@ -1,6 +1,7 @@
 import { generateUuid } from '@/utils'
 
 import type { CardConfig, Payment } from '../../CreditCard'
+import { oldCardDescription } from './utils'
 
 const storeBlackList: string[] = [
   '政府稅款',
@@ -16,7 +17,7 @@ const paymentBlackList: Payment[] = []
 export const starLuxConfigs: CardConfig[] = [
   {
     name: '星宇世界卡',
-    description: null,
+    description: oldCardDescription,
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -71,7 +72,7 @@ export const starLuxConfigs: CardConfig[] = [
   },
   {
     name: '星宇商務鈦金卡',
-    description: null,
+    description: oldCardDescription,
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -126,7 +127,7 @@ export const starLuxConfigs: CardConfig[] = [
   },
   {
     name: '星宇鈦金卡',
-    description: null,
+    description: oldCardDescription,
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -300,7 +301,7 @@ const uniCardBaseReward: CardConfig['plans'][number]['config']['rewards'][number
 export const uniCardConfigs: CardConfig[] = [
   {
     name: 'UniCard 卡',
-    description: null,
+    description: oldCardDescription,
     cardUrl: 'https://www.esunbank.com/zh-tw/personal/credit-card/intro/bank-card/unicard',
     storeBlackList,
     paymentBlackList,
@@ -320,6 +321,7 @@ export const uniCardConfigs: CardConfig[] = [
         id: generateUuid(),
         config: {
           name: '任意選 (需要切換店家)',
+          description: '玉山Wallet設定8家特店',
           rewards: [
             {
               rewardStrategy: {
@@ -372,6 +374,7 @@ export const uniCardConfigs: CardConfig[] = [
         id: generateUuid(),
         config: {
           name: 'UP選',
+          description: '完成指定任務或99點玉山e point訂閱',
           rewards: [
             {
               rewardStrategy: {
