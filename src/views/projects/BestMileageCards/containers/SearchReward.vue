@@ -29,7 +29,7 @@
       @update:menu="(status: boolean) => !status && storeAutoCompleteElement?.blur()"
     />
     <div>
-      <v-label text="支援的付款方式" />
+      <v-label text="店家可使用的付款方式" />
       <div class="flex items-center flex-wrap gap-x-8px">
         <v-checkbox
           v-for="(payment, index) of commonPaymentMethods"
