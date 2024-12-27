@@ -49,7 +49,7 @@
           <v-btn text="Save" @click="saveCardConfig" />
         </v-toolbar-items>
       </v-toolbar>
-      <div v-if="editCard" class="flex-col gap-2 m-16px">
+      <div v-if="editCard" class="flex-col gap-2 overflow-y-auto p-16px">
         <TextField v-model="editCard.config.name" label="卡片名稱" required />
         <TextField
           :model-value="editCard.config.description ?? ''"
