@@ -12,6 +12,8 @@ import { AllRoute, MiniSideProjectRoute } from './src/router/route'
 const fileName = '[name]-[hash].[ext]'
 const jsFileName = '[name]-[hash].js'
 
+const distDirectory = 'dist'
+
 function checkMiniSideProjectPathIsExists(): void {
   const errorFilePaths: string[] = Object.values(MiniSideProjectRoute).filter(
     (item) => !item.startsWith('/projects/'),
@@ -47,9 +49,13 @@ export default defineConfig({
     UnoCSS(),
     VitePWA({
       registerType: 'autoUpdate',
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       workbox: {
+        globDirectory: distDirectory,
         cleanupOutdatedCaches: true,
-        globPatterns: ['**/*'],
+        globPatterns: ['{assets,css,js,projects}/**/*'],
         globIgnores: ['**/*.js.map'],
       },
       manifest: false,
@@ -73,7 +79,7 @@ export default defineConfig({
           return `assets/${fileName}`
         },
         chunkFileNames: `js/${jsFileName}`,
-        dir: 'dist',
+        dir: distDirectory,
       },
     },
   },
