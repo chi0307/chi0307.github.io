@@ -18,7 +18,7 @@
     <a
       v-else-if="previewUrl !== null"
       target="_blank"
-      :href="previewUrl"
+      :href="convertUrl(previewUrl)"
       class="text-emphasis decoration-underline"
     >
       Preview
@@ -31,11 +31,15 @@ import type { URL } from '@/types'
 const { description, previewUrl, link, image, deprecated } = defineProps<{
   description: string
   image: string
-  previewUrl: URL | null
+  previewUrl: string | null
   link: {
     title: string
     url: URL
   } | null
   deprecated: boolean
 }>()
+
+function convertUrl(urlString: string): string {
+  return new URL(urlString, window.location.href).toString()
+}
 </script>

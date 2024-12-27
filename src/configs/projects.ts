@@ -5,13 +5,13 @@ export const projects: ProjectItem[] = [
     description:
       '幫助快速查詢與比較各種信用卡的哩程轉換回饋率，並根據不同的消費情境推薦最佳的回饋方案',
     image: '/website/best-mileage-cards-preview.webp',
-    previewUrl: 'https://chi0307.github.io/projects/bestMileageCards',
+    previewUrl: '/projects/bestMileageCards',
   },
   {
     description:
       '幫助紀錄每次外幣購買的匯率與金額，並考慮實際使用掉的外幣量後，計算剩餘外幣的平均購買匯率',
     image: '/website/average-exchange-rate-preview.webp',
-    previewUrl: 'https://chi0307.github.io/projects/averageExchangeRate',
+    previewUrl: '/projects/averageExchangeRate',
   },
   {
     description: '開發一個 FB、Line 訊息共用的套件，<br/>搭配使用畫面產生 JSON 結構',
