@@ -26,18 +26,16 @@
         </template>
       </v-switch>
     </div>
-    <div>
-      <v-select
-        :model-value="commonPaymentMethods"
-        :items="sortList(Payment, 'asc')"
-        label="使用中的付款方式"
-        multiple
-        hide-details
-        @update:model-value="
-          (list) => list !== null && bestMileageCardsStore.updateCommonPaymentMethods(list)
-        "
-      />
-    </div>
+    <ClipList
+      label="使用中的付款方式"
+      :model-value="[...commonPaymentMethods]"
+      :list="Payment"
+      show-selected
+      hide-details
+      @update:model-value="
+        (list) => list !== null && bestMileageCardsStore.updateCommonPaymentMethods(list)
+      "
+    />
     <div>
       <v-label text="其他設定" />
       <div class="flex mx-16px">
@@ -58,7 +56,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
-import { sortList } from '@/utils/sorts'
+import ClipList from '@/components/ClipList.vue'
 
 import { Payment } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'

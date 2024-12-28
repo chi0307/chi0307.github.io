@@ -63,16 +63,16 @@
         <!-- TODO: 可以加上 Create XXX 顯示這樣最好了 -->
         <ClipList
           addable
-          label="卡片不回饋商店名單"
+          label="卡片不回饋清單"
           :model-value="editCard.config.storeBlackList ?? []"
           :list="store.storeList"
           @update:model-value="
             (list) => (editCard === null ? null : (editCard.config.storeBlackList = list))
           "
         />
-        <!-- TODO: 回饋方式不能讓別人自己新增，要想辦法鎖掉不讓大家可以新增 -->
         <ClipList
           label="卡片不回饋支付方式"
+          searchable
           :model-value="editCard.config.paymentBlackList ?? []"
           :list="Payment"
           @update:model-value="
