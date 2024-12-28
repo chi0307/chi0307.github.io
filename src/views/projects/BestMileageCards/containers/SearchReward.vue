@@ -22,7 +22,6 @@
       hide-details
       item-value="store"
       item-title="store"
-      label="消費店家"
       :items="searchStoreList"
       :clearable="isTruthyString(transactionStore)"
       placeholder="全部店家"
