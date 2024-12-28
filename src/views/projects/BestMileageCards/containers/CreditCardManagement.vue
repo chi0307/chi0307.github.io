@@ -90,7 +90,7 @@
           >
             <v-card-text>
               <div class="flex items-center justify-between gap-4px min-h-1rem">
-                <p>{{ plan.config.name }}</p>
+                {{ plan.config.name ?? '預設' }}
                 <span class="mdi mdi-delete text-24px" />
               </div>
             </v-card-text>
