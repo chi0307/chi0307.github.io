@@ -79,27 +79,73 @@
             (list) => (editCard === null ? null : (editCard.config.paymentBlackList = list))
           "
         />
-        <div>
-          <v-btn
-            class="text-red"
-            text="刪除"
-            @click="
-              store.openDialog({
-                text: '確定要刪除嗎？',
-                events: [
-                  {
-                    text: '取消',
-                  },
-                  {
-                    text: '刪除',
-                    event: deleteCardConfig,
-                    class: 'text-red',
-                  },
-                ],
-              })
-            "
-          />
+        <div class="flex-col gap-8px mb-8">
+          <v-label class="flex-shrink-0 w-full" text="方案設定" />
+          <v-card
+            v-for="(plan, index) of editCard.config.plans"
+            :key="index"
+            density="compact"
+            class="mx-auto w-full flex-shrink-0"
+            variant="outlined"
+          >
+            <v-card-text>
+              <div class="flex items-center justify-between gap-4px min-h-1rem">
+                {{ plan.config.name }}
+                <span class="mdi mdi-delete text-24px" />
+              </div>
+            </v-card-text>
+          </v-card>
+          <v-card density="compact" class="mx-auto w-full flex-shrink-0" variant="outlined">
+            <v-card-text>
+              <div class="flex items-center justify-center min-h-1rem">
+                <span class="mdi mdi-plus text-24px" />
+              </div>
+            </v-card-text>
+          </v-card>
         </div>
+        <div class="flex-col gap-8px mb-8">
+          <v-label class="flex-shrink-0 w-full" text="點數交換方式" />
+          <v-card
+            v-for="(exchange, index) of editCard.config.pointExchanges"
+            :key="index"
+            density="compact"
+            class="mx-auto w-full flex-shrink-0"
+            variant="outlined"
+          >
+            <v-card-text>
+              <div class="flex items-center justify-between gap-4px min-h-1rem">
+                {{ exchange.config.name }}
+                <span class="mdi mdi-delete text-24px" />
+              </div>
+            </v-card-text>
+          </v-card>
+          <v-card density="compact" class="mx-auto w-full flex-shrink-0" variant="outlined">
+            <v-card-text>
+              <div class="flex items-center justify-center min-h-1rem">
+                <span class="mdi mdi-plus text-24px" />
+              </div>
+            </v-card-text>
+          </v-card>
+        </div>
+        <v-btn
+          class="text-red"
+          text="刪除"
+          @click="
+            store.openDialog({
+              text: '確定要刪除嗎？',
+              events: [
+                {
+                  text: '取消',
+                },
+                {
+                  text: '刪除',
+                  event: deleteCardConfig,
+                  class: 'text-red',
+                },
+              ],
+            })
+          "
+        />
       </div>
     </v-card>
   </v-dialog>
@@ -128,7 +174,7 @@
             >
               <v-card-text>
                 <div class="flex items-center justify-between gap-4px min-h-1rem">
-                  <p class="flex-col gap-4px">
+                  <p class="flex-col gap-1">
                     {{ plan.name ?? '預設' }}
                     <span v-if="plan.description" class="opacity-50 text-0.75rem">
                       {{ plan.description }}
