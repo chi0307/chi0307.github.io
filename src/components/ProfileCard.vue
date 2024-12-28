@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-col bg-primary shadow-profile-card">
+  <div class="bg-primary shadow-profile-card flex-col">
     <div class="w-full flex-center my-30%">
       <img
         src="/website/profile.webp"

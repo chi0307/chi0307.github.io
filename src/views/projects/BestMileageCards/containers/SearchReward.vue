@@ -48,7 +48,7 @@
         <v-radio density="compact" label="國外交易" value="Foreign" />
       </v-radio-group>
     </div>
-    <div ref="rewardCardList" class="flex-col gap-4px flex-grow-1 overflow-y-auto">
+    <div ref="rewardCardList" class="flex-col gap-4px overflow-y-auto flex-grow-1">
       <v-card
         v-for="(item, index) of rewardMilesList"
         :key="index"
@@ -60,7 +60,7 @@
         <template #title>
           <div class="flex items-center gap-4px overflow-hidden w-full">
             {{ item.miles }}
-            <p class="text-12px opacity-50 truncate flex-grow-1">
+            <p class="opacity-50 flex-grow-1 text-12px truncate">
               {{ item.airLinesCode }}
               {{ item.payments.length === 0 ? '' : ` (限定支付: ${item.payments.join(', ')})` }}
             </p>

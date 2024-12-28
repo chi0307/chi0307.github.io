@@ -2,7 +2,7 @@
   <div class="flex-col items-center gap-8px">
     <div class="w-full">{{ description }}</div>
     <img :src="image" class="max-h-250px" alt="preview-image" />
-    <div class="flex items-center justify-center gap-16px">
+    <div class="flex items-center gap-16px justify-center">
       <template v-for="(button, index) of buttons" :key="index">
         <p v-if="button.url === undefined">{{ button.title }}</p>
         <a

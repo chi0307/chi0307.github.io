@@ -1,6 +1,6 @@
 <template>
   <header
-    class="w-full flex items-center relative z-100 bg-white justify-between"
+    class="w-full relative z-100 bg-white flex items-center justify-between"
     :class="{
       'px-64px': isDesktop,
       'px-16px': isMobile,
@@ -24,7 +24,7 @@
         {{ item.title }}
       </p>
     </div>
-    <p v-else class="flex-center w-32px h-32px cursor-pointer" @click="showMenu = true">
+    <p v-else class="flex-center cursor-pointer w-32px h-32px" @click="showMenu = true">
       <i class="text-1.5rem fa-solid fa-bars" />
     </p>
   </header>

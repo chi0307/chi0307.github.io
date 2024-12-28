@@ -1,7 +1,7 @@
 <template>
   <div class="flex-col gap-4px h-full overflow-hidden">
     <div class="flex">
-      <v-label class="!text-0.9rem ml-4px flex-grow">
+      <v-label class="ml-4px flex-grow !text-0.9rem">
         點擊
         <span class="mdi mdi-pencil mx-4px" />
         編輯卡片，點擊卡片切換方案
@@ -49,7 +49,7 @@
           <v-btn text="Save" @click="saveCardConfig" />
         </v-toolbar-items>
       </v-toolbar>
-      <div v-if="editCard" class="flex-col gap-2 overflow-y-auto p-16px">
+      <div v-if="editCard" class="flex-col overflow-y-auto gap-2 p-16px">
         <TextField v-model="editCard.config.name" label="卡片名稱" required />
         <TextField
           :model-value="editCard.config.description ?? ''"
@@ -98,7 +98,7 @@
           <v-card density="compact" class="mx-auto w-full flex-shrink-0" variant="outlined">
             <v-card-text>
               <div class="flex items-center justify-center min-h-1rem">
-                <span class="mdi mdi-plus text-24px" />
+                <span class="mdi text-24px mdi-plus" />
               </div>
             </v-card-text>
           </v-card>
@@ -154,7 +154,7 @@
     @update:model-value="switchPlanWithCardId = null"
   >
     <v-card min-width="100%">
-      <v-card-text class="max-h-80dvh overflow-hidden flex !p-0">
+      <v-card-text class="overflow-hidden flex max-h-80dvh !p-0">
         <div class="overflow-y-auto w-full p-24px">
           <div v-if="currentCardWithSwitchPlan !== null" class="flex-col gap-8px">
             切換方案
@@ -182,7 +182,7 @@
                   </p>
                   <span
                     v-if="plan.id === currentCardWithSwitchPlan.selectedPlanId"
-                    class="mdi mdi-check-circle text-24px"
+                    class="mdi text-24px mdi-check-circle"
                   />
                 </div>
               </v-card-text>

@@ -1,18 +1,18 @@
 <template>
-  <main class="m-24px flex-col gap-8px mb-64px">
+  <main class="flex-col gap-8px m-24px mb-64px">
     <v-tabs v-model="selectedTab" align-tabs="center" color="deep-purple-accent-4">
       <v-tab v-for="({ id, title }, index) of tabs" :key="index" :value="id">
         {{ title }}
         <p
           v-if="id === selectedTab"
-          class="w-24px h-24px flex-center"
+          class="flex-center w-24px h-24px"
           @click="showEditTabDialog = true"
         >
           <i class="fa-solid fa-pen ml-4px" />
         </p>
       </v-tab>
       <v-tab @click="addTab">
-        <i class="fas fa-plus text-16px" />
+        <i class="fas text-16px fa-plus" />
       </v-tab>
     </v-tabs>
     <div class="flex-center w-full gap-4px">

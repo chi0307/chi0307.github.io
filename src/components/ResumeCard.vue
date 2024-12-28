@@ -22,7 +22,7 @@
         :class="{
           'w-60% pl-16px': isDesktop,
         }"
-        class="text-0.9rem flex-col gap-16px"
+        class="flex-col gap-16px text-0.9rem"
       >
         <div v-for="(item, index) of descriptions" :key="index">
           <p class="font-bold">{{ item.title }}</p>
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <p class="text-0.8rem opacity-50" :class="{ 'mb-16px': isDesktop }">
+    <p class="opacity-50 text-0.8rem" :class="{ 'mb-16px': isDesktop }">
       技術組合: <br />{{ techStacks.join(', ') }}
     </p>
   </div>

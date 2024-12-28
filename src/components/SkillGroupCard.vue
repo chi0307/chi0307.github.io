@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-300px flex-col">
+  <div class="flex-col min-h-300px">
     <div
       v-for="({ title, skills }, index) of list"
       :key="index"

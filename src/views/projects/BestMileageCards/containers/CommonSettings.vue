@@ -30,8 +30,8 @@
       label="使用中的付款方式"
       :model-value="[...commonPaymentMethods]"
       :list="Payment"
-      show-selected
       hide-details
+      show-selected
       @update:model-value="
         (list) => list !== null && bestMileageCardsStore.updateCommonPaymentMethods(list)
       "
