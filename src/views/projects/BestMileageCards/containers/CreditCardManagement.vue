@@ -127,8 +127,13 @@
               "
             >
               <v-card-text>
-                <div class="flex items-center justify-between min-h-1rem">
-                  {{ plan.name ?? '預設' }}
+                <div class="flex items-center justify-between gap-4px min-h-1rem">
+                  <p class="flex-col gap-4px">
+                    {{ plan.name ?? '預設' }}
+                    <span v-if="plan.description" class="opacity-50 text-0.75rem">
+                      {{ plan.description }}
+                    </span>
+                  </p>
                   <span
                     v-if="plan.id === currentCardWithSwitchPlan.selectedPlanId"
                     class="mdi mdi-check-circle text-24px"

@@ -104,9 +104,13 @@ export class CreditCard {
     return this._getPointExchangeStrategy(this._selectedPointExchangeId)
   }
   /** 回傳 uuid 跟 plan name */
-  public get selectablePlan(): { id: UUID; name: string | null }[] {
+  public get selectablePlan(): { id: UUID; name: string | null; description: string | null }[] {
     // TODO: 要過濾 conditions
-    return [...this._plans.entries()].map(([id, { name }]) => ({ id, name }))
+    return [...this._plans.entries()].map(([id, { name, description }]) => ({
+      id,
+      name,
+      description,
+    }))
   }
   public get selectablePointExchange(): {
     id: UUID
