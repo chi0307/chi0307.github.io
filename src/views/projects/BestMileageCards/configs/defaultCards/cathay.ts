@@ -16,7 +16,7 @@ const payments: Payment[] = [
   'Hami Pay',
 ]
 
-function planSettings(defaultBackRete: number): CardConfig['plans'] {
+function cubePlanSettings(defaultBackRete: number): CardConfig['plans'] {
   const baseReward: CardConfig['plans'][number]['config']['rewards'][number] = {
     rewardStrategy: {
       type: 'RoundedPercentageReward',
@@ -349,7 +349,7 @@ function planSettings(defaultBackRete: number): CardConfig['plans'] {
   ]
 }
 
-const pointExchanges: CardConfig['pointExchanges'] = [
+const cubePointExchanges: CardConfig['pointExchanges'] = [
   {
     id: generateUuid(),
     config: {
@@ -378,8 +378,8 @@ export const cubeConfigs: CardConfig[] = [
     storeBlackList,
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
-    plans: planSettings(2),
-    pointExchanges,
+    plans: cubePlanSettings(2),
+    pointExchanges: cubePointExchanges,
   },
   {
     name: 'Cube 卡',
@@ -388,8 +388,8 @@ export const cubeConfigs: CardConfig[] = [
     storeBlackList,
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
-    plans: planSettings(3),
-    pointExchanges,
+    plans: cubePlanSettings(3),
+    pointExchanges: cubePointExchanges,
   },
   {
     name: 'Cube 卡',
@@ -398,10 +398,162 @@ export const cubeConfigs: CardConfig[] = [
     storeBlackList,
     paymentBlackList,
     updateAt: '2024-12-01T00:00:00.000Z',
-    plans: planSettings(3.3),
-    pointExchanges,
+    plans: cubePlanSettings(3.3),
+    pointExchanges: cubePointExchanges,
   },
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 export const exampleCubeConfig: CardConfig = cubeConfigs[1]!
+
+function evaPlanSettings(defaultSpendingPerPoint: number): CardConfig['plans'] {
+  return [
+    {
+      id: generateUuid(),
+      config: {
+        name: null,
+        description: '部分回饋需要另外登錄',
+        rewards: [
+          // TODO: 有空再想想要怎麼分開做要登錄跟不用登錄的計算
+          {
+            rewardStrategy: {
+              type: 'FixedRatePointsReward',
+              name: 'Expedia專屬網頁線上訂房 (權益 ~2025/12/31)',
+              spendingPerPoint: 8,
+            },
+            stores: ['Expedia'],
+            payments: [
+              'Apple Pay',
+              'Samsung Pay',
+              'Google Pay',
+              'Fitbit Pay',
+              'Garmin Pay',
+              'Hami Pay',
+            ],
+          },
+          {
+            rewardStrategy: {
+              type: 'FixedRatePointsReward',
+              name: '長榮官網購票/機上免稅品',
+              spendingPerPoint: 10,
+            },
+            stores: ['長榮機上免稅品', '長榮官網購票'],
+          },
+          {
+            rewardStrategy: {
+              type: 'FixedRatePointsReward',
+              name: '海外消費',
+              spendingPerPoint: 10,
+            },
+            transactionType: 'Foreign',
+          },
+          {
+            rewardStrategy: {
+              type: 'FixedRatePointsReward',
+              name: '國內旅行社 (需登錄) 銀行並未公告符合商家',
+              spendingPerPoint: 10,
+            },
+            transactionType: 'Domestic',
+            stores: [
+              '雄獅旅遊',
+              '可樂旅遊',
+              '東南旅遊',
+              '五福旅遊',
+              '燦星旅遊',
+              '山富旅遊',
+              '長汎假期',
+              '鳳凰旅行社',
+              'Ezfly易飛網',
+              '理想旅遊',
+              '永利旅行社',
+              '三賀旅行社',
+            ],
+          },
+          {
+            rewardStrategy: {
+              type: 'FixedRatePointsReward',
+              name: '國外自由行、團體旅遊 (需登錄) 銀行並未公告符合商家',
+              spendingPerPoint: 10,
+            },
+            transactionType: 'Foreign',
+          },
+          {
+            rewardStrategy: {
+              type: 'FixedRatePointsReward',
+              name: '一般消費',
+              spendingPerPoint: defaultSpendingPerPoint,
+            },
+          },
+        ],
+      },
+    },
+  ]
+}
+
+const evaPointExchanges: CardConfig['pointExchanges'] = [
+  {
+    id: generateUuid(),
+    config: {
+      name: '長榮航空哩程 (每1000哩為單位自動轉換至哩程帳戶)',
+      airlineCode: 'EVA',
+      pointsPerMile: 1000,
+      milesPerUnit: 1000,
+    },
+  },
+]
+
+const evaCardDescription = '權益 2025/1/1~3/31'
+export const evaConfigs: CardConfig[] = [
+  {
+    name: '長榮極致無限卡',
+    cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/eva/',
+    description: evaCardDescription,
+    updateAt: '2024-12-29T00:00:00.000Z',
+    plans: evaPlanSettings(20),
+    pointExchanges: evaPointExchanges,
+  },
+  {
+    name: '長榮無限卡',
+    cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/eva/',
+    description: evaCardDescription,
+    updateAt: '2024-12-29T00:00:00.000Z',
+    plans: evaPlanSettings(22),
+    pointExchanges: evaPointExchanges,
+  },
+  {
+    name: '長榮極致御璽卡',
+    cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/eva/',
+    description: evaCardDescription,
+    updateAt: '2024-12-29T00:00:00.000Z',
+    plans: evaPlanSettings(30),
+    pointExchanges: evaPointExchanges,
+  },
+  {
+    name: '長榮御璽卡',
+    cardUrl: 'https://www.cathaybk.com.tw/cathaybk/personal/product/credit-card/cards/eva/',
+    description: evaCardDescription,
+    updateAt: '2024-12-29T00:00:00.000Z',
+    plans: [
+      {
+        id: generateUuid(),
+        config: {
+          name: null,
+          description: null,
+          rewards: [
+            {
+              rewardStrategy: {
+                type: 'FixedRatePointsReward',
+                name: '一般消費',
+                spendingPerPoint: 30,
+              },
+            },
+          ],
+        },
+      },
+    ],
+    pointExchanges: evaPointExchanges,
+  },
+]
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const exampleEvaConfig: CardConfig = evaConfigs[1]!

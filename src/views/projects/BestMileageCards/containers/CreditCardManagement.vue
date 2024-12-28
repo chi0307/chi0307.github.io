@@ -233,7 +233,7 @@
           <v-btn text="匯入" @click="importCardConfigs" />
         </v-toolbar-items>
       </v-toolbar>
-      <div class="flex-col gap-4px m-8px">
+      <div class="flex-col gap-2 p-16px overflow-y-auto">
         <v-checkbox
           v-for="(item, index) of defaultCardConfigs"
           :key="index"
