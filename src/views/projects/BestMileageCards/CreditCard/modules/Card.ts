@@ -114,7 +114,7 @@ export class CreditCard {
   }
   public get selectablePointExchange(): {
     id: UUID
-    name: string | null
+    name: string
     description: string
   }[] {
     return [...this._pointExchanges.entries()].map(([id, { name, description }]) => ({

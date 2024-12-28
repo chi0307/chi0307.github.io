@@ -56,7 +56,7 @@ export interface RewardInfo {
   readonly rewardName: string | null
   readonly rewardStrategy: Reward<RewardType> | null
   readonly rewardPoints: number
-  readonly pointExchangeName: string | null
+  readonly pointExchangeName: string
   readonly pointExchangeStrategy: PointExchangeStrategy
   readonly airlineCode: string
   readonly miles: number

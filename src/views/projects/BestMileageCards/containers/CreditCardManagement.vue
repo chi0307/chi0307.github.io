@@ -205,7 +205,7 @@
               <v-card-text>
                 <div class="flex items-center justify-between min-h-1rem gap-4px">
                   <p class="flex-col gap-4px">
-                    {{ exchange.name ?? '預設' }}
+                    {{ exchange.name }}
                     <span class="opacity-50 text-0.75rem">{{ exchange.description }}</span>
                   </p>
                   <span

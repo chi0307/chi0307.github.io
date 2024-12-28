@@ -71,7 +71,7 @@
           <div class="flex-col gap-8px">
             <p class="text-0.75rem">
               {{
-                `${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''} ${item.pointExchangeName ?? ''}`
+                `${item.cardName} ${item.planName ?? ''} ${item.rewardName ?? ''} ${item.pointExchangeName}`
               }}
             </p>
           </div>
@@ -166,7 +166,7 @@ interface RewardItem {
   cardUrl: string | null
   cardDescription: string | null
   description: string | null
-  pointExchangeName: string | null
+  pointExchangeName: string
 }
 
 const {
@@ -245,7 +245,7 @@ const rewardMilesList = computed((): RewardItem[] => {
         cardUrl: card.cardUrl,
         cardDescription: card.description,
         /** 有多組點數交換計劃出現的時候才顯示文字，避免太混亂 */
-        pointExchangeName: haveMultiplePointExchange ? item.pointExchangeName : null,
+        pointExchangeName: haveMultiplePointExchange ? item.pointExchangeName : '',
       }
       list.push(rewardItem)
     }

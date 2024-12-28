@@ -4,7 +4,7 @@ const roundBy2 = roundByDigits(2)
 
 export class PointExchangeStrategy {
   /** 點數交換名稱 */
-  private readonly _name: string | null
+  private readonly _name: string
   /** 航空代碼 */
   private readonly _airlineCode: string
   /** N 點可以換里程 */
@@ -19,7 +19,7 @@ export class PointExchangeStrategy {
     milesPerUnit,
   }: {
     /** 點數交換名稱 */
-    name: string | null
+    name: string
     /** 航空代碼 */
     airlineCode: string
     /** N 點可以換里程 */
@@ -34,7 +34,7 @@ export class PointExchangeStrategy {
   }
 
   /** 點數交換名稱 */
-  public get name(): string | null {
+  public get name(): string {
     return this._name
   }
   public get description(): string {
