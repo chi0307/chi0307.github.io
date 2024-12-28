@@ -1,7 +1,7 @@
 import { generateUuid } from '@/utils'
 
 import type { CardConfig, Payment } from '../../CreditCard'
-import { cardDescription } from './utils'
+import { cardDescription, getRewardDescription } from './utils'
 
 const storeBlackList: string[] = ['分期付款']
 const paymentBlackList: Payment[] = []
@@ -418,7 +418,7 @@ function evaPlanSettings(defaultSpendingPerPoint: number): CardConfig['plans'] {
           {
             rewardStrategy: {
               type: 'FixedRatePointsReward',
-              name: 'Expedia專屬網頁線上訂房 (權益 ~2025/12/31)',
+              name: `Expedia專屬網頁線上訂房 ${getRewardDescription('2025/12/31')}`,
               spendingPerPoint: 8,
             },
             stores: ['Expedia'],
@@ -502,7 +502,7 @@ const evaPointExchanges: CardConfig['pointExchanges'] = [
   },
 ]
 
-const evaCardDescription = '權益 2025/1/1~3/31'
+const evaCardDescription = getRewardDescription('2025/3/31', '2025/1/1')
 export const evaConfigs: CardConfig[] = [
   {
     name: '長榮極致無限卡',
