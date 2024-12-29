@@ -36,8 +36,7 @@ jobs:
       - name: Upgrade npm packages
         run: |
           pnpm install -g npm-check-updates
-          ncu -u
-          pnpm install --no-frozen-lockfile
+          ncu --doctor -u --doctorInstall "pnpm install" --doctorTest "pnpm run check"
 
       - name: Set branch name
         id: set_branch_name
