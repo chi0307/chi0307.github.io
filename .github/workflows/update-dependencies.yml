@@ -2,7 +2,7 @@ name: Auto Update Dependencies
 
 on:
   schedule:
-    - cron: '0 0 */14 * *'
+    - cron: '0 0 */7 * *'
   workflow_dispatch:
     branches:
       - master
@@ -36,7 +36,7 @@ jobs:
       - name: Upgrade npm packages
         run: |
           pnpm install -g npm-check-updates
-          ncu --doctor -u --doctorInstall "pnpm install" --doctorTest "pnpm run check"
+          ncu --doctor -u --doctorInstall "pnpm install" --doctorTest "pnpm run check" --peer
 
       - name: Set branch name
         id: set_branch_name
