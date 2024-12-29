@@ -63,6 +63,7 @@
             density="compact"
             class="mx-auto w-full flex-shrink-0"
             variant="outlined"
+            @click="() => (editCardPlan = cloneDeep(plan))"
           >
             <v-card-text>
               <div class="flex items-center justify-between gap-4px min-h-1rem">
@@ -91,7 +92,12 @@
               </div>
             </v-card-text>
           </v-card>
-          <v-card density="compact" class="mx-auto w-full flex-shrink-0" variant="outlined">
+          <v-card
+            density="compact"
+            class="mx-auto w-full flex-shrink-0"
+            variant="outlined"
+            @click="() => (editCardPlan = generateEmptyCardPlanConfig())"
+          >
             <v-card-text>
               <div class="flex items-center justify-center min-h-1rem">
                 <span class="mdi text-24px mdi-plus" />
@@ -107,6 +113,7 @@
             density="compact"
             class="mx-auto w-full flex-shrink-0"
             variant="outlined"
+            @click="() => (editCardPointExchange = cloneDeep(exchange))"
           >
             <v-card-text>
               <div class="flex items-center justify-between gap-4px min-h-1rem">
@@ -135,7 +142,12 @@
               </div>
             </v-card-text>
           </v-card>
-          <v-card density="compact" class="mx-auto w-full flex-shrink-0" variant="outlined">
+          <v-card
+            density="compact"
+            class="mx-auto w-full flex-shrink-0"
+            variant="outlined"
+            @click="() => (editCardPointExchange = generateEmptyCardPointExchangeConfig())"
+          >
             <v-card-text>
               <div class="flex items-center justify-center min-h-1rem">
                 <span class="mdi mdi-plus text-24px" />
@@ -162,6 +174,42 @@
             })
           "
         />
+      </div>
+    </template>
+  </FullscreenDialog>
+  <FullscreenDialog
+    v-model="editCardPlan"
+    title="編輯方案"
+    btn-title="儲存"
+    :btn-event="saveCardConfigPlan"
+  >
+    <template #default="{ data }">
+      <TextField v-model="data.config.name" label="方案名稱" />
+      <TextField v-model="data.config.description" label="方案描述" />
+      TODO...
+    </template>
+  </FullscreenDialog>
+  <FullscreenDialog
+    v-model="editCardPointExchange"
+    title="編輯交換方式"
+    btn-title="儲存"
+    :btn-event="saveCardConfigPointExchange"
+  >
+    <template #default="{ data }">
+      <TextField v-model="data.config.name" label="名稱" required />
+      <TextField v-model="data.config.airlineCode" label="目標里程" required />
+      <div class="flex gap-4px items-center justify-center">
+        <div class="flex-1">
+          <NumberField v-model="data.config.pointsPerMile" label="points" required />
+        </div>
+        <span class="mdi mdi-arrow-right-thick text-24px mb-16px" />
+        <div class="flex-1">
+          <NumberField
+            v-model="data.config.milesPerUnit"
+            :label="`${data.config.airlineCode} 哩程`"
+            required
+          />
+        </div>
       </div>
     </template>
   </FullscreenDialog>
@@ -275,10 +323,11 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, type UnwrapRef } from 'vue'
 
 import ClipList from '@/components/ClipList.vue'
 import FullscreenDialog from '@/components/FullscreenDialog.vue'
+import NumberField from '@/components/NumberField.vue'
 import TextField from '@/components/TextFiled.vue'
 import type { UUID } from '@/types'
 import { generateUuid } from '@/utils'
@@ -286,11 +335,14 @@ import { cloneDeep } from '@/utils/cloneDeep'
 
 import { defaultCardConfigs } from '../configs/defaultCards'
 import { isCardConfig, Payment, type CardConfig } from '../CreditCard'
+import { isCardPlanConfig, isCardPointExchangeConfig } from '../CreditCard/createCard'
 import { useBestMileageCardsStore } from '../store'
 
 const store = useBestMileageCardsStore()
 const { cardConfigs, cards } = storeToRefs(store)
 const editCard = ref<{ id: UUID; config: CardConfig } | null>(null)
+const editCardPlan = ref<CardConfig['plans'][number] | null>(null)
+const editCardPointExchange = ref<CardConfig['pointExchanges'][number] | null>(null)
 const switchPlanWithCardId = ref<UUID | null>(null)
 const currentCardWithSwitchPlan = computed(() => {
   const card =
@@ -316,6 +368,71 @@ function saveCardConfig({ id, config }: Exclude<UnwrapRef<typeof editCard>, null
     return false
   }
   store.updateCardConfig(id, config)
+  return true
+}
+
+function generateEmptyCardPlanConfig(): Exclude<UnwrapRef<typeof editCardPlan>, null> {
+  return {
+    id: generateUuid(),
+    config: {
+      name: null,
+      description: null,
+      rewards: [],
+    },
+  }
+}
+
+function saveCardConfigPlan({
+  id,
+  config,
+}: Exclude<UnwrapRef<typeof editCardPlan>, null>): boolean {
+  if (editCard.value === null || !isCardPlanConfig(config)) {
+    alert('儲存失敗')
+    return false
+  }
+  const plan = editCard.value.config.plans.find((item) => item.id === id)
+  if (plan) {
+    plan.config = config
+  } else {
+    editCard.value.config.plans.push({ id, config })
+  }
+  return true
+}
+
+function generateEmptyCardPointExchangeConfig(): Exclude<
+  UnwrapRef<typeof editCardPointExchange>,
+  null
+> {
+  return {
+    id: generateUuid(),
+    config: {
+      name: '',
+      airlineCode: '',
+      milesPerUnit: 0,
+      pointsPerMile: 0,
+    },
+  }
+}
+
+function saveCardConfigPointExchange({
+  id,
+  config,
+}: Exclude<UnwrapRef<typeof editCardPointExchange>, null>): boolean {
+  if (
+    editCard.value === null ||
+    !isCardPointExchangeConfig(config) ||
+    config.milesPerUnit === 0 ||
+    config.pointsPerMile === 0
+  ) {
+    alert('儲存失敗')
+    return false
+  }
+  const pointExchange = editCard.value.config.pointExchanges.find((item) => item.id === id)
+  if (pointExchange) {
+    pointExchange.config = config
+  } else {
+    editCard.value.config.pointExchanges.push({ id, config })
+  }
   return true
 }
 

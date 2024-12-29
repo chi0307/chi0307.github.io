@@ -4,7 +4,6 @@
       <v-toolbar>
         <v-btn icon="mdi-close" @click="closeDialog" />
         <v-toolbar-title>{{ title ?? '' }}</v-toolbar-title>
-        <v-spacer />
         <v-toolbar-items>
           <v-btn
             :text="btnTitle"

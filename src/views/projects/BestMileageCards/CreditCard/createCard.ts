@@ -1,12 +1,15 @@
 import typia from 'typia'
 
 import type { UUID } from '@/types'
-import { PointExchangeStrategy } from '@/views/projects/BestMileageCards/CreditCard/modules/PointExchange'
+import {
+  PointExchangeStrategy,
+  type PointExchangeConfig,
+} from '@/views/projects/BestMileageCards/CreditCard/modules/PointExchange'
 
 import { CreditCard } from './modules/Card'
 import { Plan } from './modules/Plan'
 import { rewardStrategyFactory } from './modules/Reward'
-import type { CardConfig } from './modules/type'
+import type { CardConfig, PlanConfig } from './modules/type'
 
 export function createCard({
   name,
@@ -66,3 +69,5 @@ export function createCard({
 }
 
 export const isCardConfig = typia.createIs<CardConfig>()
+export const isCardPlanConfig = typia.createIs<PlanConfig>()
+export const isCardPointExchangeConfig = typia.createIs<PointExchangeConfig>()
