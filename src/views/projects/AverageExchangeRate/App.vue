@@ -111,10 +111,10 @@
       </template>
       <template #actions>
         <div class="flex items-center justify-between w-full">
-          <v-btn text="Delete" color="red" @click="deleteTabEvent(selectedTab)" />
+          <v-btn text="刪除" color="red" @click="deleteTabEvent(selectedTab)" />
           <div>
-            <v-btn text="Cancel" @click="showEditTabDialog = false" />
-            <v-btn text="Save" color="blue" @click="saveTabEvent" />
+            <v-btn text="取消" @click="showEditTabDialog = false" />
+            <v-btn text="儲存" color="blue" @click="saveTabEvent" />
           </div>
         </div>
       </template>
@@ -124,8 +124,8 @@
     <v-card class="mx-auto" max-width="320" title="Update Field">
       <template #text> {{ deleteData?.message ?? '' }} </template>
       <template #actions>
-        <v-btn class="ms-auto" text="Cancel" @click="deleteData = null" />
-        <v-btn class="ms-auto" color="red" text="Delete" @click="deleteData?.event" />
+        <v-btn class="ms-auto" text="取消" @click="deleteData = null" />
+        <v-btn class="ms-auto" color="red" text="刪除" @click="deleteData?.event" />
       </template>
     </v-card>
   </v-dialog>

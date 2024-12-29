@@ -34,7 +34,7 @@
   <FullscreenDialog
     v-model="editCard"
     title="編輯卡片"
-    btn-title="Save"
+    btn-title="儲存"
     :btn-event="saveCardConfig"
   >
     <template #default="{ data }">

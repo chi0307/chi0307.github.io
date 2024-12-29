@@ -17,7 +17,7 @@
       <div v-if="aliasType !== 'default'" class="flex justify-between items-center">
         <div class="flex gap-8px">
           <v-btn v-if="showUI" @click="editStoreAlias(null)"> Add </v-btn>
-          <v-btn v-else @click="saveStoreAliasesJson"> Save </v-btn>
+          <v-btn v-else @click="saveStoreAliasesJson"> 儲存 </v-btn>
         </div>
         <v-switch v-model="showUI" :disabled="lockShowUISwitch" hide-details label="圖示" />
       </div>
@@ -56,7 +56,7 @@
   <FullscreenDialog
     v-model="editStoreAliasData"
     title="編輯商店別名"
-    btn-title="Save"
+    btn-title="儲存"
     :btn-event="saveStoreAlias"
   >
     <template #default="{ data }">
