@@ -10,8 +10,10 @@
             :text="btnTitle"
             @click="
               async () => {
-                await btnEvent()
-                closeDialog()
+                const status = (await btnEvent()) ?? true
+                if (status) {
+                  closeDialog()
+                }
               }
             "
           />
@@ -28,7 +30,7 @@ const { modelValue, title, btnTitle, btnEvent } = defineProps<{
   modelValue: Data | null
   title?: string
   btnTitle: string
-  btnEvent: () => Promise<void> | void
+  btnEvent: (() => Promise<boolean> | boolean) | (() => Promise<void> | void)
 }>()
 
 const emits = defineEmits<{

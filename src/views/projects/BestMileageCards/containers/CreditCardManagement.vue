@@ -72,7 +72,7 @@
                   @click.stop="
                     () =>
                       store.openDialog({
-                        text: `確定要刪除'${plan.config.name ?? '預設'}'方案嗎？`,
+                        text: `確定要刪除'${plan.config.name ?? '此'}'方案嗎？`,
                         events: [
                           {
                             text: '取消',
@@ -116,7 +116,7 @@
                   @click.stop="
                     () =>
                       store.openDialog({
-                        text: `確定要刪除'${exchange.config.name ?? '預設'}'點數交換方式嗎？`,
+                        text: `確定要刪除'${exchange.config.name ?? '此'}'點數交換方式嗎？`,
                         events: [
                           {
                             text: '取消',
@@ -285,7 +285,7 @@ import { generateUuid } from '@/utils'
 import { cloneDeep } from '@/utils/cloneDeep'
 
 import { defaultCardConfigs } from '../configs/defaultCards'
-import { Payment, type CardConfig } from '../CreditCard'
+import { isCardConfig, Payment, type CardConfig } from '../CreditCard'
 import { useBestMileageCardsStore } from '../store'
 
 const store = useBestMileageCardsStore()
@@ -312,10 +312,13 @@ function importCardConfigs(): void {
   }
 }
 
-function saveCardConfig(): void {
-  if (editCard.value !== null) {
-    store.updateCardConfig(editCard.value.id, editCard.value.config)
+function saveCardConfig(): boolean {
+  if (!isCardConfig(editCard.value?.config)) {
+    alert('儲存失敗')
+    return false
   }
+  store.updateCardConfig(editCard.value.id, editCard.value.config)
+  return true
 }
 
 function deleteCardConfig(): void {
