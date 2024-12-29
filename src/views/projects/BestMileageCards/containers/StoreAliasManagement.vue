@@ -53,24 +53,17 @@
       />
     </div>
   </div>
-  <v-dialog
-    :model-value="Boolean(editStoreAliasData)"
-    fullscreen
-    @update:model-value="editStoreAliasData = null"
+  <FullscreenDialog
+    v-model="editStoreAliasData"
+    title="編輯商店別名"
+    btn-title="Save"
+    :btn-event="saveStoreAlias"
   >
-    <v-card v-if="editStoreAliasData">
-      <v-toolbar>
-        <v-btn icon="mdi-close" @click="editStoreAliasData = null"></v-btn>
-        <v-toolbar-title>編輯商店別名</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-toolbar-items>
-          <v-btn text="Save" variant="text" @click="saveStoreAlias"></v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
+    <template #default="{ data }">
       <div class="flex-col gap-24px m-8px">
         <v-autocomplete
           ref="storeList"
-          v-model="editStoreAliasData.title"
+          v-model="data.title"
           class="flex-grow-0"
           hide-details
           label="目標店家"
@@ -81,23 +74,24 @@
         <div class="flex-col gap-4px">
           <v-label text="自定義別名列表" />
           <v-text-field
-            v-for="(alias, index) of editStoreAliasData.aliases"
+            v-for="(alias, index) of data.aliases"
             :key="index"
             hide-details
             clearable
             :model-value="alias"
             @update:model-value="(text) => updateAliases(text, index)"
-            @click:clear="() => editStoreAliasData?.aliases.splice(index, 1)"
+            @click:clear="() => data.aliases.splice(index, 1)"
           />
         </div>
       </div>
-    </v-card>
-  </v-dialog>
+    </template>
+  </FullscreenDialog>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { computed, onActivated, ref, useTemplateRef, watch } from 'vue'
 
+import FullscreenDialog from '@/components/FullscreenDialog.vue'
 import { isTruthyString } from '@/utils'
 
 import { defaultStoreAliases, isStoreAliasesList } from '../configs/storeAliases'

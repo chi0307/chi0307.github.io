@@ -6,15 +6,7 @@
         <span class="mdi mdi-pencil mx-4px" />
         編輯卡片，點擊卡片切換方案
       </v-label>
-      <v-btn
-        text="匯入"
-        @click="
-          () => {
-            needImportCardConfigs = []
-            showDefaultCardDialog = true
-          }
-        "
-      />
+      <v-btn text="匯入" @click="() => (needImportCardConfigs = [])" />
     </div>
     <div class="flex-1 gap-8px flex-col overflow-y-auto py-8px">
       <v-card
@@ -39,50 +31,40 @@
       </v-card>
     </div>
   </div>
-  <v-dialog :model-value="Boolean(editCard)" fullscreen @update:model-value="editCard = null">
-    <v-card>
-      <v-toolbar>
-        <v-btn icon="mdi-close" @click="editCard = null" />
-        <v-toolbar-title>編輯卡片</v-toolbar-title>
-        <v-spacer />
-        <v-toolbar-items>
-          <v-btn text="Save" @click="saveCardConfig" />
-        </v-toolbar-items>
-      </v-toolbar>
-      <div v-if="editCard" class="flex-col overflow-y-auto gap-2 p-16px">
-        <TextField v-model="editCard.config.name" label="卡片名稱" required />
+  <FullscreenDialog
+    v-model="editCard"
+    title="編輯卡片"
+    btn-title="Save"
+    :btn-event="saveCardConfig"
+  >
+    <template #default="{ data }">
+      <div class="flex-col gap-2">
+        <TextField v-model="data.config.name" label="卡片名稱" required />
         <TextField
-          :model-value="editCard.config.description ?? ''"
+          :model-value="data.config.description ?? ''"
           label="卡片描述"
-          @update:model-value="
-            (description) =>
-              editCard === null ? null : (editCard.config.description = description)
-          "
+          @update:model-value="(description) => (data.config.description = description)"
         />
-        <TextField v-model="editCard.config.cardUrl" is-url label="信用卡網頁" />
+        <TextField v-model="data.config.cardUrl" is-url label="信用卡網頁" />
         <!-- TODO: 可以加上 Create XXX 顯示這樣最好了 -->
         <ClipList
           addable
           label="卡片不回饋清單"
-          :model-value="editCard.config.storeBlackList ?? []"
+          :model-value="data.config.storeBlackList ?? []"
           :list="store.storeList"
-          @update:model-value="
-            (list) => (editCard === null ? null : (editCard.config.storeBlackList = list))
-          "
+          @update:model-value="(list) => (data.config.storeBlackList = list)"
         />
         <ClipList
           label="卡片不回饋支付方式"
           show-selected
-          :model-value="editCard.config.paymentBlackList ?? []"
+          :model-value="data.config.paymentBlackList ?? []"
           :list="Payment"
-          @update:model-value="
-            (list) => (editCard === null ? null : (editCard.config.paymentBlackList = list))
-          "
+          @update:model-value="(list) => (data.config.paymentBlackList = list)"
         />
         <div class="flex-col gap-8px mb-8">
           <v-label class="flex-shrink-0 w-full" text="方案設定" />
           <v-card
-            v-for="(plan, index) of editCard.config.plans"
+            v-for="(plan, index) of data.config.plans"
             :key="index"
             density="compact"
             class="mx-auto w-full flex-shrink-0"
@@ -104,7 +86,7 @@
                           {
                             text: '刪除',
                             event: () => {
-                              editCard?.config.plans.splice(index, 1)
+                              data.config.plans.splice(index, 1)
                             },
                             class: 'text-red',
                           },
@@ -126,7 +108,7 @@
         <div class="flex-col gap-8px mb-8">
           <v-label class="flex-shrink-0 w-full" text="點數交換方式" />
           <v-card
-            v-for="(exchange, index) of editCard.config.pointExchanges"
+            v-for="(exchange, index) of data.config.pointExchanges"
             :key="index"
             density="compact"
             class="mx-auto w-full flex-shrink-0"
@@ -148,7 +130,7 @@
                           {
                             text: '刪除',
                             event: () => {
-                              editCard?.config.pointExchanges.splice(index, 1)
+                              data.config.pointExchanges.splice(index, 1)
                             },
                             class: 'text-red',
                           },
@@ -187,8 +169,8 @@
           "
         />
       </div>
-    </v-card>
-  </v-dialog>
+    </template>
+  </FullscreenDialog>
   <v-dialog
     :model-value="Boolean(switchPlanWithCardId)"
     @update:model-value="switchPlanWithCardId = null"
@@ -263,26 +245,24 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
-  <v-dialog v-model="showDefaultCardDialog" fullscreen>
-    <v-card>
-      <v-toolbar>
-        <v-btn icon="mdi-close" @click="showDefaultCardDialog = false" />
-        <v-toolbar-title>請選擇卡片</v-toolbar-title>
-        <v-spacer />
-        <v-toolbar-items>
-          <v-btn text="匯入" @click="importCardConfigs" />
-        </v-toolbar-items>
-      </v-toolbar>
-      <div class="flex-col gap-2 p-16px overflow-y-auto">
+  <FullscreenDialog
+    v-model="needImportCardConfigs"
+    title="請選擇卡片"
+    btn-title="匯入"
+    :btn-event="importCardConfigs"
+  >
+    <template #default="{ data, updateData }">
+      <div class="flex-col gap-2">
         <v-checkbox
           v-for="(item, index) of defaultCardConfigs"
           :key="index"
-          v-model="needImportCardConfigs"
+          :model-value="data"
           :value="item"
           hide-details
           color="blue"
           density="comfortable"
           class="import-card-checkbox"
+          @update:model-value="(newData) => newData && updateData(newData)"
         >
           <template #label>
             <div class="flex-col">
@@ -296,14 +276,15 @@
           </template>
         </v-checkbox>
       </div>
-    </v-card>
-  </v-dialog>
+    </template>
+  </FullscreenDialog>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref, computed } from 'vue'
 
 import ClipList from '@/components/ClipList.vue'
+import FullscreenDialog from '@/components/FullscreenDialog.vue'
 import TextField from '@/components/TextFiled.vue'
 import type { UUID } from '@/types'
 import { generateUuid } from '@/utils'
@@ -328,12 +309,14 @@ const currentCardWithSwitchPlan = computed(() => {
   return card
 })
 
-const showDefaultCardDialog = ref(false)
-const needImportCardConfigs = ref<CardConfig[]>([])
+const needImportCardConfigs = ref<CardConfig[] | null>(null)
 function importCardConfigs(): void {
+  if (needImportCardConfigs.value === null) {
+    return
+  }
   for (const item of needImportCardConfigs.value) {
     store.updateCardConfig(generateUuid(), item)
-    showDefaultCardDialog.value = false
+    needImportCardConfigs.value = null
   }
 }
 
