@@ -72,7 +72,7 @@
         />
         <ClipList
           label="卡片不回饋支付方式"
-          searchable
+          show-selected
           :model-value="editCard.config.paymentBlackList ?? []"
           :list="Payment"
           @update:model-value="
@@ -91,7 +91,27 @@
             <v-card-text>
               <div class="flex items-center justify-between gap-4px min-h-1rem">
                 {{ plan.config.name ?? '預設' }}
-                <span class="mdi mdi-delete text-24px" />
+                <span
+                  class="mdi mdi-delete text-24px"
+                  @click.stop="
+                    () =>
+                      store.openDialog({
+                        text: `確定要刪除'${plan.config.name ?? '預設'}'方案嗎？`,
+                        events: [
+                          {
+                            text: '取消',
+                          },
+                          {
+                            text: '刪除',
+                            event: () => {
+                              editCard?.config.plans.splice(index, 1)
+                            },
+                            class: 'text-red',
+                          },
+                        ],
+                      })
+                  "
+                />
               </div>
             </v-card-text>
           </v-card>
@@ -115,7 +135,27 @@
             <v-card-text>
               <div class="flex items-center justify-between gap-4px min-h-1rem">
                 {{ exchange.config.name }}
-                <span class="mdi mdi-delete text-24px" />
+                <span
+                  class="mdi mdi-delete text-24px"
+                  @click.stop="
+                    () =>
+                      store.openDialog({
+                        text: `確定要刪除'${exchange.config.name ?? '預設'}'點數交換方式嗎？`,
+                        events: [
+                          {
+                            text: '取消',
+                          },
+                          {
+                            text: '刪除',
+                            event: () => {
+                              editCard?.config.pointExchanges.splice(index, 1)
+                            },
+                            class: 'text-red',
+                          },
+                        ],
+                      })
+                  "
+                />
               </div>
             </v-card-text>
           </v-card>
