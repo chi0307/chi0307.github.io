@@ -68,7 +68,7 @@ const autocompleteComponent = useTemplateRef<HTMLElement>('autocompleteComponent
 const selectComponent = useTemplateRef<HTMLElement>('selectComponent')
 
 const {
-  modelValue,
+  modelValue = [],
   list,
   label,
   searchable = false,
@@ -76,7 +76,7 @@ const {
   showSelected = false,
   hideDetails = false,
 } = defineProps<{
-  modelValue: readonly Item[]
+  modelValue: readonly Item[] | undefined
   list: readonly Item[]
   label: string
   message?: string

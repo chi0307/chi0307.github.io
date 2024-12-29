@@ -51,7 +51,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
   const commonPaymentMethods = ref<Payment[]>(
     storageManager.get('commonPaymentMethods') ?? ['信用卡', 'Apple Pay', 'Line Pay', '街口支付'],
   )
-  function updateCommonPaymentMethods([...payments]: readonly Payment[]): void {
+  function updateCommonPaymentMethods(payments: Payment[]): void {
     payments = [...new Set(payments)]
     storageManager.set('commonPaymentMethods', payments)
     commonPaymentMethods.value = payments

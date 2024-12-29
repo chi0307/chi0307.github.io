@@ -40,26 +40,20 @@
     <template #default="{ data }">
       <div class="flex-col gap-2">
         <TextField v-model="data.config.name" label="卡片名稱" required />
-        <TextField
-          :model-value="data.config.description ?? ''"
-          label="卡片描述"
-          @update:model-value="(description) => (data.config.description = description)"
-        />
+        <TextField v-model="data.config.description" label="卡片描述" />
         <TextField v-model="data.config.cardUrl" is-url label="信用卡網頁" />
         <!-- TODO: 可以加上 Create XXX 顯示這樣最好了 -->
         <ClipList
+          v-model="data.config.storeBlackList"
           addable
           label="卡片不回饋清單"
-          :model-value="data.config.storeBlackList ?? []"
           :list="store.storeList"
-          @update:model-value="(list) => (data.config.storeBlackList = list)"
         />
         <ClipList
+          v-model="data.config.paymentBlackList"
           label="卡片不回饋支付方式"
           show-selected
-          :model-value="data.config.paymentBlackList ?? []"
           :list="Payment"
-          @update:model-value="(list) => (data.config.paymentBlackList = list)"
         />
         <div class="flex-col gap-8px mb-8">
           <v-label class="flex-shrink-0 w-full" text="方案設定" />

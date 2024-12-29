@@ -9,7 +9,7 @@
           <v-btn :text="btnTitle" @click="btnEvent" />
         </v-toolbar-items>
       </v-toolbar>
-      <div v-if="modelValue" class="overflow-y-auto p-16px">
+      <div v-if="modelValue" class="overflow-y-auto p-16px pb-40px">
         <slot :data="modelValue" :update-data="updateData" />
       </div>
     </v-card>

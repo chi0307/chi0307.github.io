@@ -18,16 +18,20 @@ import { computed } from 'vue'
 
 import { isTruthyString } from '@/utils'
 
-const modelValue = defineModel<string | null>({ required: true })
-
 const {
+  modelValue = null,
   required = false,
   label,
   isUrl = false,
 } = defineProps<{
+  modelValue: string | null | undefined
   required?: boolean
   label: string
   isUrl?: boolean
+}>()
+
+const emits = defineEmits<{
+  'update:model-value': [newValue: string | null]
 }>()
 
 type Rule = (value: string | null) => boolean | string
@@ -50,6 +54,6 @@ const rules = computed(() => {
 
 function updateModelValue(newValue: string | null): void {
   newValue = newValue?.trim() ?? null
-  modelValue.value = isTruthyString(newValue) ? newValue : null
+  emits('update:model-value', isTruthyString(newValue) ? newValue : null)
 }
 </script>

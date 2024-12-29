@@ -28,13 +28,11 @@
     </div>
     <ClipList
       label="使用中的付款方式"
-      :model-value="[...commonPaymentMethods]"
+      :model-value="commonPaymentMethods"
       :list="Payment"
       hide-details
       show-selected
-      @update:model-value="
-        (list) => list !== null && bestMileageCardsStore.updateCommonPaymentMethods(list)
-      "
+      @update:model-value="bestMileageCardsStore.updateCommonPaymentMethods"
     />
     <div>
       <v-label text="其他設定" />
