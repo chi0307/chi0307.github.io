@@ -189,9 +189,8 @@ function editStoreAlias(title: string | null): void {
 }
 
 /** 儲存自定義別名資料 */
-function saveStoreAlias(): void {
-  const { title: storeName, aliases } = editStoreAliasData.value ?? {}
-  if (storeName !== null && storeName !== undefined && aliases !== undefined) {
+function saveStoreAlias({ title: storeName, aliases }: AliasItem): void {
+  if (storeName !== null) {
     bestMileageCardsStore.updateCustomAliases(
       storeName,
       [...new Set(aliases)].filter(isTruthyString),
