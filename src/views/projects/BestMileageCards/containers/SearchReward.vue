@@ -1,17 +1,11 @@
 <template>
   <div class="gap-8px h-full flex-col">
-    <v-text-field
-      :model-value="amount"
+    <NumberField
+      v-model="amount"
+      label="交易金額"
       class="flex-grow-0"
       density="comfortable"
       hide-details
-      label="交易金額"
-      inputmode="decimal"
-      :clearable="amount !== 0"
-      @update:model-value="
-        (numberString: string) =>
-          (amount = isNaN(parseFloat(numberString)) ? 0 : parseFloat(numberString))
-      "
     />
     <v-autocomplete
       ref="storeAutoComplete"
@@ -137,6 +131,7 @@
 import { storeToRefs } from 'pinia'
 import { computed, ref, useTemplateRef } from 'vue'
 
+import NumberField from '@/components/NumberField.vue'
 import { roundByDigits, floorByDigits, isTruthyString } from '@/utils'
 import { sortListByField } from '@/utils/sorts'
 
