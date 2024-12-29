@@ -2,7 +2,7 @@ name: Auto Update Dependencies
 
 on:
   schedule:
-    - cron: '0 0 */14 * *'
+    - cron: '0 0 */7 * *'
   workflow_dispatch:
     branches:
       - master
