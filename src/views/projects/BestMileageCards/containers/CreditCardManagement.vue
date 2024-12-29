@@ -305,21 +305,17 @@ const currentCardWithSwitchPlan = computed(() => {
 
 const needImportCardConfigs = ref<CardConfig[] | null>(null)
 function importCardConfigs(): void {
-  if (needImportCardConfigs.value === null) {
-    return
-  }
-  for (const item of needImportCardConfigs.value) {
-    store.updateCardConfig(generateUuid(), item)
-    needImportCardConfigs.value = null
+  if (needImportCardConfigs.value !== null) {
+    for (const item of needImportCardConfigs.value) {
+      store.updateCardConfig(generateUuid(), item)
+    }
   }
 }
 
 function saveCardConfig(): void {
-  if (editCard.value === null) {
-    return
+  if (editCard.value !== null) {
+    store.updateCardConfig(editCard.value.id, editCard.value.config)
   }
-  store.updateCardConfig(editCard.value.id, editCard.value.config)
-  editCard.value = null
 }
 
 function deleteCardConfig(): void {

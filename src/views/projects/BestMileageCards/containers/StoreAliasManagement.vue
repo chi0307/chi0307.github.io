@@ -191,11 +191,12 @@ function editStoreAlias(title: string | null): void {
 /** 儲存自定義別名資料 */
 function saveStoreAlias(): void {
   const { title: storeName, aliases } = editStoreAliasData.value ?? {}
-  if (storeName === null || storeName === undefined || aliases === undefined) {
-    return
+  if (storeName !== null && storeName !== undefined && aliases !== undefined) {
+    bestMileageCardsStore.updateCustomAliases(
+      storeName,
+      [...new Set(aliases)].filter(isTruthyString),
+    )
   }
-  bestMileageCardsStore.updateCustomAliases(storeName, [...new Set(aliases)].filter(isTruthyString))
-  editStoreAliasData.value = null
 }
 
 function checkAndUpdateCustomAliasesJson(str: string): void {

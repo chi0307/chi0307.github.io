@@ -6,7 +6,15 @@
         <v-toolbar-title>{{ title ?? '' }}</v-toolbar-title>
         <v-spacer />
         <v-toolbar-items>
-          <v-btn :text="btnTitle" @click="btnEvent" />
+          <v-btn
+            :text="btnTitle"
+            @click="
+              async () => {
+                await btnEvent()
+                closeDialog()
+              }
+            "
+          />
         </v-toolbar-items>
       </v-toolbar>
       <div v-if="modelValue" class="overflow-y-auto p-16px pb-40px">
