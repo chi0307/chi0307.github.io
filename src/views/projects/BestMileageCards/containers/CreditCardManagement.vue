@@ -56,7 +56,7 @@
           :list="Payment"
         />
         <div class="flex-col gap-8px mb-8">
-          <v-label class="flex-shrink-0 w-full" text="方案設定" />
+          <v-label class="flex-shrink-0 w-full" text="方案設定 (點擊卡片進行編輯)" />
           <v-card
             v-for="(plan, index) of data.config.plans"
             :key="index"
@@ -106,7 +106,7 @@
           </v-card>
         </div>
         <div class="flex-col gap-8px mb-8">
-          <v-label class="flex-shrink-0 w-full" text="點數交換方式" />
+          <v-label class="flex-shrink-0 w-full" text="點數交換方式 (點擊卡片進行編輯)" />
           <v-card
             v-for="(exchange, index) of data.config.pointExchanges"
             :key="index"
@@ -185,7 +185,15 @@
   >
     <template #default="{ data }">
       <TextField v-model="data.config.name" label="方案名稱" />
-      <TextField v-model="data.config.description" label="方案描述" />
+      <v-textarea
+        label="方案描述"
+        :model-value="data.config.description"
+        auto-grow
+        clearable
+        @update:model-value="
+          (value) => (data.config.description = isTruthyString(value) ? value : null)
+        "
+      />
       TODO...
     </template>
   </FullscreenDialog>
@@ -330,7 +338,7 @@ import FullscreenDialog from '@/components/FullscreenDialog.vue'
 import NumberField from '@/components/NumberField.vue'
 import TextField from '@/components/TextFiled.vue'
 import type { UUID } from '@/types'
-import { generateUuid } from '@/utils'
+import { generateUuid, isTruthyString } from '@/utils'
 import { cloneDeep } from '@/utils/cloneDeep'
 
 import { defaultCardConfigs } from '../configs/defaultCards'

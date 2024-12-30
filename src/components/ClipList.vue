@@ -7,6 +7,8 @@
     :messages="message ?? ''"
     :label="label"
     multiple
+    hint="可新增內容"
+    persistent-hint
     :hide-details="hideDetails"
     :hide-selected="!showSelected"
     @update:model-value="updateModelValue"

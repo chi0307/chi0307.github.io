@@ -42,7 +42,7 @@
     <div v-else class="flex-grow-1">
       <v-textarea
         :model-value="tempCustomAliases"
-        :clearable="tempCustomAliases !== ''"
+        clearable
         auto-grow
         :disabled="aliasType === 'default'"
         :max-rows="15"
