@@ -67,7 +67,7 @@
           >
             <v-card-text>
               <div class="flex items-center justify-between gap-4px min-h-1rem">
-                {{ plan.config.name ?? '預設' }}
+                {{ plan.config.name ?? '(空)' }}
                 <span
                   class="mdi mdi-delete text-24px"
                   @click.stop="
@@ -194,7 +194,55 @@
           (value) => (data.config.description = isTruthyString(value) ? value : null)
         "
       />
-      TODO...
+      <div class="flex-col gap-8px">
+        <!-- TODO: 這邊抽出去變成 component 吧，畢竟還需要實作拖曳事件 -->
+        <v-label class="flex-shrink-0 w-full">
+          <p class="flex-col">
+            回饋清單 (點擊卡片進行編輯)
+            <span class="text-0.75em"> 依回饋排序檢查規則，符合即計算回饋，不再檢查後續項目 </span>
+          </p>
+        </v-label>
+        TODO...
+        <v-card
+          v-for="(reward, index) of data.config.rewards"
+          :key="index"
+          density="compact"
+          class="mx-auto w-full flex-shrink-0"
+          variant="outlined"
+        >
+          <v-card-text>
+            <div class="flex items-center justify-between gap-4px min-h-1rem">
+              <p class="flex-col gap-4px">
+                {{ reward.rewardStrategy.name ?? '(空)' }}
+                <span class="text-0.9em">
+                  {{ rewardStrategyFactory(reward.rewardStrategy).description }}
+                </span>
+              </p>
+              <span
+                class="mdi mdi-delete text-24px"
+                @click.stop="
+                  () =>
+                    store.openDialog({
+                      text: '確定要刪除嗎？',
+                      events: [
+                        {
+                          text: '取消',
+                        },
+                        {
+                          text: '刪除',
+                          event: () => {
+                            data.config.rewards.splice(index, 1)
+                          },
+                          class: 'text-red',
+                        },
+                      ],
+                    })
+                "
+              />
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
     </template>
   </FullscreenDialog>
   <FullscreenDialog
@@ -247,7 +295,7 @@
               <v-card-text>
                 <div class="flex items-center justify-between gap-4px min-h-1rem">
                   <p class="flex-col gap-1">
-                    {{ plan.name ?? '預設' }}
+                    {{ plan.name ?? '(空)' }}
                     <span v-if="plan.description" class="opacity-50 text-0.75rem">
                       {{ plan.description }}
                     </span>
@@ -342,7 +390,7 @@ import { generateUuid, isTruthyString } from '@/utils'
 import { cloneDeep } from '@/utils/cloneDeep'
 
 import { defaultCardConfigs } from '../configs/defaultCards'
-import { isCardConfig, Payment, type CardConfig } from '../CreditCard'
+import { isCardConfig, Payment, rewardStrategyFactory, type CardConfig } from '../CreditCard'
 import { isCardPlanConfig, isCardPointExchangeConfig } from '../CreditCard/createCard'
 import { useBestMileageCardsStore } from '../store'
 
