@@ -61,6 +61,6 @@ export function isTruthyString<T extends string>(text: T | null | undefined): te
   return isNotNullishValue(text) && text !== ''
 }
 
-export function removeDuplicates<T>(list: T[]): T[] {
+export function removeDuplicates<T extends string | number>(list: T[]): T[] {
   return [...new Set(list)]
 }

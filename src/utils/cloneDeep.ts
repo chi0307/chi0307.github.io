@@ -11,9 +11,11 @@ type DeepWritable<T> = T extends Function
           ? { -readonly [K in keyof T]: DeepWritable<T[K]> }
           : T
 
+/** 複製內容的同時清除掉 readonly 元素 */
 export function cloneDeep<T>(item: T): DeepWritable<T> {
   if (item === null || typeof item !== 'object') {
-    return item as DeepWritable<T> // 基本類型直接返回
+    // 基本類型直接返回
+    return item as DeepWritable<T>
   }
 
   if (Array.isArray(item)) {
