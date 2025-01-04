@@ -55,106 +55,68 @@
           show-selected
           :list="Payment"
         />
-        <div class="flex-col gap-8px mb-8">
-          <v-label class="flex-shrink-0 w-full" text="方案設定 (點擊卡片進行編輯)" />
-          <v-card
-            v-for="(plan, index) of data.config.plans"
-            :key="index"
-            density="compact"
-            class="mx-auto w-full flex-shrink-0"
-            variant="outlined"
-            @click="() => (editCardPlan = cloneDeep(plan))"
-          >
-            <v-card-text>
-              <div class="flex items-center justify-between gap-4px min-h-1rem">
-                {{ plan.config.name ?? '(空)' }}
-                <span
-                  class="mdi mdi-delete text-24px"
-                  @click.stop="
-                    () =>
-                      store.openDialog({
-                        text: `確定要刪除'${plan.config.name ?? '此'}'方案嗎？`,
-                        events: [
-                          {
-                            text: '取消',
-                          },
-                          {
-                            text: '刪除',
-                            event: () => {
-                              data.config.plans.splice(index, 1)
-                            },
-                            class: 'text-red',
-                          },
-                        ],
-                      })
-                  "
-                />
-              </div>
-            </v-card-text>
-          </v-card>
-          <v-card
-            density="compact"
-            class="mx-auto w-full flex-shrink-0"
-            variant="outlined"
-            @click="() => (editCardPlan = generateEmptyCardPlanConfig())"
-          >
-            <v-card-text>
-              <div class="flex items-center justify-center min-h-1rem">
-                <span class="mdi text-24px mdi-plus" />
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
-        <div class="flex-col gap-8px mb-8">
-          <v-label class="flex-shrink-0 w-full" text="點數交換方式 (點擊卡片進行編輯)" />
-          <v-card
-            v-for="(exchange, index) of data.config.pointExchanges"
-            :key="index"
-            density="compact"
-            class="mx-auto w-full flex-shrink-0"
-            variant="outlined"
-            @click="() => (editCardPointExchange = cloneDeep(exchange))"
-          >
-            <v-card-text>
-              <div class="flex items-center justify-between gap-4px min-h-1rem">
-                {{ exchange.config.name }}
-                <span
-                  class="mdi mdi-delete text-24px"
-                  @click.stop="
-                    () =>
-                      store.openDialog({
-                        text: `確定要刪除'${exchange.config.name ?? '此'}'點數交換方式嗎？`,
-                        events: [
-                          {
-                            text: '取消',
-                          },
-                          {
-                            text: '刪除',
-                            event: () => {
-                              data.config.pointExchanges.splice(index, 1)
-                            },
-                            class: 'text-red',
-                          },
-                        ],
-                      })
-                  "
-                />
-              </div>
-            </v-card-text>
-          </v-card>
-          <v-card
-            density="compact"
-            class="mx-auto w-full flex-shrink-0"
-            variant="outlined"
-            @click="() => (editCardPointExchange = generateEmptyCardPointExchangeConfig())"
-          >
-            <v-card-text>
-              <div class="flex items-center justify-center min-h-1rem">
-                <span class="mdi mdi-plus text-24px" />
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
+        <CardList
+          :list="data.config.plans"
+          class="mb-8"
+          label="方案設定 (點擊卡片進行編輯)"
+          addable
+          deletable
+          @click-item="(item) => (editCardPlan = cloneDeep(item))"
+          @add-item="editCardPlan = generateEmptyCardPlanConfig()"
+          @delete-item="
+            (item, index) =>
+              store.openDialog({
+                text: `確定要刪除'${item.config.name ?? '此'}'方案嗎？`,
+                events: [
+                  {
+                    text: '取消',
+                  },
+                  {
+                    text: '刪除',
+                    event: () => {
+                      data.config.plans.splice(index, 1)
+                    },
+                    class: 'text-red',
+                  },
+                ],
+              })
+          "
+        >
+          <template #default="item">
+            {{ item.config.name ?? '(空)' }}
+          </template>
+        </CardList>
+        <CardList
+          :list="data.config.pointExchanges"
+          class="mb-8"
+          addable
+          deletable
+          label="點數交換方式 (點擊卡片進行編輯)"
+          @click-item="(item) => (editCardPointExchange = cloneDeep(item))"
+          @add-item="editCardPointExchange = generateEmptyCardPointExchangeConfig()"
+          @delete-item="
+            (item, index) =>
+              store.openDialog({
+                text: `確定要刪除'${item.config.name ?? '此'}'點數交換方式嗎？`,
+                events: [
+                  {
+                    text: '取消',
+                  },
+                  {
+                    text: '刪除',
+                    event: () => {
+                      data.config.pointExchanges.splice(index, 1)
+                    },
+                    class: 'text-red',
+                  },
+                ],
+              })
+          "
+        >
+          <template #default="item">
+            {{ item.config.name ?? '(空)' }}
+          </template>
+        </CardList>
         <v-btn
           class="text-red"
           text="刪除"
@@ -194,55 +156,44 @@
           (value) => (data.config.description = isTruthyString(value) ? value : null)
         "
       />
-      <div class="flex-col gap-8px">
-        <!-- TODO: 這邊抽出去變成 component 吧，畢竟還需要實作拖曳事件 -->
-        <v-label class="flex-shrink-0 w-full">
+      <CardList
+        :list="data.config.rewards"
+        addable
+        deletable
+        @delete-item="
+          (_item, index) =>
+            store.openDialog({
+              text: '確定要刪除嗎？',
+              events: [
+                {
+                  text: '取消',
+                },
+                {
+                  text: '刪除',
+                  event: () => {
+                    data.config.rewards.splice(index, 1)
+                  },
+                  class: 'text-red',
+                },
+              ],
+            })
+        "
+      >
+        <template #label>
           <p class="flex-col">
             回饋清單 (點擊卡片進行編輯)
             <span class="text-0.75em"> 依回饋排序檢查規則，符合即計算回饋，不再檢查後續項目 </span>
           </p>
-        </v-label>
-        TODO...
-        <v-card
-          v-for="(reward, index) of data.config.rewards"
-          :key="index"
-          density="compact"
-          class="mx-auto w-full flex-shrink-0"
-          variant="outlined"
-        >
-          <v-card-text>
-            <div class="flex items-center justify-between gap-4px min-h-1rem">
-              <p class="flex-col gap-4px">
-                {{ reward.rewardStrategy.name ?? '(空)' }}
-                <span class="text-0.9em">
-                  {{ rewardStrategyFactory(reward.rewardStrategy).description }}
-                </span>
-              </p>
-              <span
-                class="mdi mdi-delete text-24px"
-                @click.stop="
-                  () =>
-                    store.openDialog({
-                      text: '確定要刪除嗎？',
-                      events: [
-                        {
-                          text: '取消',
-                        },
-                        {
-                          text: '刪除',
-                          event: () => {
-                            data.config.rewards.splice(index, 1)
-                          },
-                          class: 'text-red',
-                        },
-                      ],
-                    })
-                "
-              />
-            </div>
-          </v-card-text>
-        </v-card>
-      </div>
+        </template>
+        <template #default="item">
+          <p class="flex-col gap-4px">
+            {{ item.rewardStrategy.name ?? '(空)' }}
+            <span class="text-0.9em">
+              {{ rewardStrategyFactory(item.rewardStrategy).description }}
+            </span>
+          </p>
+        </template>
+      </CardList>
     </template>
   </FullscreenDialog>
   <FullscreenDialog
@@ -381,6 +332,7 @@
 import { storeToRefs } from 'pinia'
 import { ref, computed, type UnwrapRef } from 'vue'
 
+import CardList from '@/components/CardList.vue'
 import ClipList from '@/components/ClipList.vue'
 import FullscreenDialog from '@/components/FullscreenDialog.vue'
 import NumberField from '@/components/NumberField.vue'
