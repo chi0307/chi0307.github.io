@@ -6,53 +6,53 @@
     </v-label>
 
     <div ref="cardListContainer" class="flex-col gap-8px" @dragleave="handleDragLeave">
-      <v-card
-        v-for="(item, index) in cacheList"
-        :key="index"
-        density="compact"
-        class="mx-auto w-full flex-shrink-0 card-item"
-        :class="{
-          'drag-over': dragOverIndex === index || touchStartIndex === index,
-        }"
-        variant="outlined"
-      >
-        <v-card-text class="!p-0">
-          <div class="flex min-h-1rem items-stretch">
-            <!-- 拖曳區域 -->
-            <div
-              v-if="draggable"
-              draggable="true"
-              class="flex-center pl-0.5rem pr-0.25rem cursor-ns-resize"
-              @dragover.prevent="handleDragOver($event, index)"
-              @dragstart="handleDragStart($event, index)"
-              @dragend="handleDragEnd"
-              @touchstart="handleTouchStart($event, index)"
-              @touchmove.prevent="handleTouchMove($event)"
-              @touchend="handleTouchEnd"
-            >
-              <span class="mdi text-24px mdi-drag" />
-            </div>
+      <div v-for="(item, index) in cacheList" ref="cardItem" :key="index">
+        <v-card
+          density="compact"
+          class="mx-auto w-full flex-shrink-0 card-item"
+          :class="{
+            'drag-over': dragOverIndex === index || touchStartIndex === index,
+          }"
+          variant="outlined"
+        >
+          <v-card-text class="!p-0">
+            <div class="flex min-h-1rem items-stretch">
+              <!-- 拖曳區域 -->
+              <div
+                v-if="draggable"
+                draggable="true"
+                class="flex-center pl-0.5rem pr-0.25rem cursor-ns-resize"
+                @dragover.prevent="handleDragOver($event, index)"
+                @dragstart="handleDragStart($event, index)"
+                @dragend="handleDragEnd"
+                @touchstart="handleTouchStart($event, index)"
+                @touchmove.prevent="handleTouchMove($event)"
+                @touchend="handleTouchEnd"
+              >
+                <span class="mdi text-24px mdi-drag" />
+              </div>
 
-            <!-- 內容區域 -->
-            <div
-              class="flex-grow my-1rem min-h-20px flex items-center"
-              :class="{ 'ml-1rem': !draggable, 'mr-1rem': !deletable }"
-              @click="emitClickItem(item, index)"
-            >
-              <slot v-bind="item" />
-            </div>
+              <!-- 內容區域 -->
+              <div
+                class="flex-grow min-h-20px flex items-center py-1rem cursor-pointer"
+                :class="{ 'pl-1rem': !draggable, 'pr-1rem': !deletable }"
+                @click="emitClickItem(item, index)"
+              >
+                <slot v-bind="item" />
+              </div>
 
-            <!-- 刪除按鈕 -->
-            <p
-              v-if="deletable"
-              class="flex-center pl-0.25rem pr-0.5rem"
-              @click="emitDeleteItem(item, index)"
-            >
-              <span class="mdi mdi-delete text-24px" />
-            </p>
-          </div>
-        </v-card-text>
-      </v-card>
+              <!-- 刪除按鈕 -->
+              <p
+                v-if="deletable"
+                class="flex-center pl-0.25rem pr-0.5rem cursor-pointer"
+                @click="emitDeleteItem(item, index)"
+              >
+                <span class="mdi mdi-delete text-24px" />
+              </p>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
     </div>
 
     <!-- 新增按鈕 -->
@@ -93,6 +93,7 @@ const emits = defineEmits<{
 }>()
 
 const cardListContainer = useTemplateRef<HTMLElement>('cardListContainer')
+const cardItemElements = useTemplateRef<HTMLElement[]>('cardItem')
 const cacheList = shallowRef<Item[]>([])
 const draggedIndex = shallowRef<number | null>(null)
 const dragOverIndex = shallowRef<number | null>(null)
@@ -144,8 +145,8 @@ function handleTouchMove(event: TouchEvent): void {
 
   const deltaY = touch.clientY - touchStartY.value
 
-  if (Math.abs(deltaY) > 56) {
-    // 限制一定距離後開始判斷移動
+  const changeItem = checkTouchOver(touchStartIndex.value, deltaY)
+  if (changeItem) {
     const targetIndex = touchStartIndex.value + (deltaY > 0 ? 1 : -1)
     if (targetIndex < 0 || targetIndex >= cacheList.value.length) {
       return
@@ -214,11 +215,33 @@ function clearSelection(): void {
     selection.removeAllRanges() // 移除所有選取範圍
   }
 }
+
+function checkTouchOver(touchStartIndex: number, deltaY: number): boolean {
+  // 這邊故意省去 gap 8px 的高度，至少讓他不需要位移那麼遠就可以交換元素，另外這邊計算是模糊計算，所以並不一定準確 QQ，要在想看看怎麼計算比較實際
+  const calculateCardItemHeight =
+    cardItemElements.value?.map((item) => item.getBoundingClientRect().height) ?? []
+  const currentItemHeight = calculateCardItemHeight[touchStartIndex]
+  if (deltaY > 0) {
+    const nextItemHeight = calculateCardItemHeight[touchStartIndex + 1]
+    if (currentItemHeight === undefined || nextItemHeight === undefined) {
+      return false
+    }
+    const targetHeight = currentItemHeight / 2 + nextItemHeight / 2
+    return deltaY >= targetHeight
+  } else {
+    const previousItemHeight = calculateCardItemHeight[touchStartIndex - 1]
+    if (currentItemHeight === undefined || previousItemHeight === undefined) {
+      return false
+    }
+    const targetHeight = currentItemHeight / 2 + previousItemHeight / 2
+    return Math.abs(deltaY) >= targetHeight
+  }
+}
 </script>
 
 <style scoped>
 .drag-over {
-  border: 2px dashed #007bff;
+  border: 1px dashed #007bff;
   background-color: #f0f8ff;
 }
 
