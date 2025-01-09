@@ -1,7 +1,7 @@
 <template>
   <div class="flex-col gap-8px">
-    <v-label v-if="$slots.label || label" class="flex-shrink-0 w-full">
-      <slot v-if="$slots.label" name="label" />
+    <v-label v-if="$slots['label'] || label" class="flex-shrink-0 w-full">
+      <slot v-if="$slots['label']" name="label" />
       <p v-else>{{ label }}</p>
     </v-label>
 
