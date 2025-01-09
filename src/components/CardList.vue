@@ -10,15 +10,12 @@
         v-for="(item, index) in cacheList"
         :key="index"
         density="compact"
-        class="mx-auto w-full flex-shrink-0 drag-item"
+        class="mx-auto w-full flex-shrink-0 card-item"
         :class="{
-          'drag-over': dragOverIndex === index,
+          'drag-over': dragOverIndex === index || touchStartIndex === index,
         }"
         variant="outlined"
         @click="emitClickItem(item, index)"
-        @dragover.prevent="handleDragOver($event, index)"
-        @dragstart="handleDragStart($event, index)"
-        @dragend="handleDragEnd"
       >
         <v-card-text class="!p-0">
           <div class="flex min-h-1rem items-stretch">
@@ -27,6 +24,12 @@
               v-if="draggable"
               draggable="true"
               class="flex-center pl-0.5rem pr-0.25rem cursor-ns-resize"
+              @dragover.prevent="handleDragOver($event, index)"
+              @dragstart="handleDragStart($event, index)"
+              @dragend="handleDragEnd"
+              @touchstart="handleTouchStart($event, index)"
+              @touchmove.prevent="handleTouchMove($event)"
+              @touchend="handleTouchEnd"
             >
               <span class="mdi text-24px mdi-drag" />
             </div>
@@ -93,6 +96,8 @@ const cardListContainer = useTemplateRef<HTMLElement>('cardListContainer')
 const cacheList = shallowRef<Item[]>([])
 const draggedIndex = shallowRef<number | null>(null)
 const dragOverIndex = shallowRef<number | null>(null)
+const touchStartIndex = shallowRef<number | null>(null)
+const touchStartY = shallowRef<number | null>(null)
 
 onMounted((): void => {
   updateList()
@@ -105,7 +110,7 @@ function updateList(): void {
 }
 
 function handleDragStart(event: DragEvent, index: number): void {
-  if (event.dataTransfer === null) {
+  if (!event.dataTransfer) {
     return // 如果 dataTransfer 為 null，提前 return 避免錯誤
   }
   draggedIndex.value = index
@@ -116,18 +121,66 @@ function handleDragStart(event: DragEvent, index: number): void {
   event.dataTransfer.setDragImage(emptyImg, 0, 0)
 }
 
+function handleTouchStart(event: TouchEvent, index: number): void {
+  const touch = event.touches[0] ?? null
+  if (!touch) {
+    return // 如果沒有觸控點，提前 return
+  }
+  touchStartIndex.value = index
+  touchStartY.value = touch.clientY
+}
+
+function handleTouchMove(event: TouchEvent): void {
+  if (touchStartIndex.value === null || touchStartY.value === null) {
+    return
+  }
+
+  const touch = event.touches[0] ?? null
+  if (!touch) {
+    return
+  }
+
+  const deltaY = touch.clientY - touchStartY.value
+
+  if (Math.abs(deltaY) > 56) {
+    // 限制一定距離後開始判斷移動
+    const targetIndex = touchStartIndex.value + (deltaY > 0 ? 1 : -1)
+    if (targetIndex < 0 || targetIndex >= cacheList.value.length) {
+      return
+    }
+
+    const draggedItem = cacheList.value[touchStartIndex.value]
+    if (!draggedItem) {
+      return
+    }
+
+    cacheList.value.splice(touchStartIndex.value, 1)
+    cacheList.value.splice(targetIndex, 0, draggedItem)
+    touchStartIndex.value = targetIndex
+    touchStartY.value = touch.clientY // 更新起始 Y 位置，避免快速連續移動錯位
+  }
+}
+
+function handleTouchEnd(): void {
+  touchStartIndex.value = null
+  touchStartY.value = null
+  emits('update:list', cacheList.value)
+}
+
 function handleDragOver(event: DragEvent, index: number): void {
   event.preventDefault()
   if (draggedIndex.value === index || draggedIndex.value === null) {
     return
   }
 
-  dragOverIndex.value = index
-  const draggedItem = cacheList.value.splice(draggedIndex.value, 1)[0]
-  if (draggedItem === undefined) {
+  const draggedItem = cacheList.value[draggedIndex.value]
+  if (!draggedItem) {
     return
   }
+
+  cacheList.value.splice(draggedIndex.value, 1)
   cacheList.value.splice(index, 0, draggedItem)
+  dragOverIndex.value = index
   draggedIndex.value = index
 }
 
@@ -158,5 +211,10 @@ function emitDeleteItem(item: Item, index: number): void {
 .drag-over {
   border: 2px dashed #007bff;
   background-color: #f0f8ff;
+}
+
+/** 隱藏掉 vuetify card hover 的事件，因為搭配上拖曳事件，會變得很奇怪，拖曳中底色會影響到不該影響的內容 */
+.card-item :deep(.v-ripple__container) {
+  display: none !important;
 }
 </style>

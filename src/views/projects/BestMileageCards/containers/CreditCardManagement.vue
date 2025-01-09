@@ -92,6 +92,7 @@
           :list="data.config.pointExchanges"
           class="mb-8"
           addable
+          draggable
           deletable
           label="點數交換方式 (點擊卡片進行編輯)"
           @click-item="(item) => (editCardPointExchange = cloneDeep(item))"
@@ -161,6 +162,7 @@
       <CardList
         :list="data.config.rewards"
         addable
+        draggable
         deletable
         @delete-item="
           (_item, index) =>
