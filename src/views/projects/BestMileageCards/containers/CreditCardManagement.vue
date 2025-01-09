@@ -60,7 +60,9 @@
           class="mb-8"
           label="方案設定 (點擊卡片進行編輯)"
           addable
+          draggable
           deletable
+          @update:list="(list) => (data.config.plans = list)"
           @click-item="(item) => (editCardPlan = cloneDeep(item))"
           @add-item="editCardPlan = generateEmptyCardPlanConfig()"
           @delete-item="
