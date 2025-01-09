@@ -26,3 +26,9 @@ export const vuetify = createVuetify({
     },
   },
 })
+
+// vuetify 亂加東西，以後要想看看能換什麼套件，把 vuetify 換掉
+const htmlElement = document.querySelector('html')
+if (htmlElement !== null) {
+  htmlElement.style.overflowY = 'auto'
+}
