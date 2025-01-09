@@ -12,37 +12,38 @@ type DeepWritable<T> = T extends Function
           : T
 
 /** 複製內容的同時清除掉 readonly 元素 */
-export function cloneDeep<T>(item: T): DeepWritable<T> {
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+export function cloneDeep<Input, Output = DeepWritable<Input>>(item: Input): Output {
   if (item === null || typeof item !== 'object') {
     // 基本類型直接返回
-    return item as DeepWritable<T>
+    return item as unknown as Output
   }
 
   if (Array.isArray(item)) {
     // 處理 ReadonlyArray 或 Array 型別
-    return item.map((i) => cloneDeep(i)) as DeepWritable<T>
+    return item.map((i) => cloneDeep(i)) as Output
   }
 
   if (item instanceof Map) {
     // 處理 ReadonlyMap 或 Map 型別
     return new Map(
       Array.from(item.entries()).map(([key, value]) => [cloneDeep(key), cloneDeep(value)]),
-    ) as DeepWritable<T>
+    ) as Output
   }
 
   if (item instanceof Set) {
     // 處理 ReadonlySet 或 Set 型別
-    return new Set(Array.from(item.values()).map((value) => cloneDeep(value))) as DeepWritable<T>
+    return new Set(Array.from(item.values()).map((value) => cloneDeep(value))) as Output
   }
 
   if (item instanceof Date) {
     // 處理 Date 型別
-    return new Date(item.getTime()) as DeepWritable<T>
+    return new Date(item.getTime()) as Output
   }
 
   if (item instanceof RegExp) {
     // 處理 RegExp 型別
-    return new RegExp(item.source, item.flags) as DeepWritable<T>
+    return new RegExp(item.source, item.flags) as Output
   }
 
   // 處理普通物件，遞迴拷貝每個屬性
@@ -51,5 +52,5 @@ export function cloneDeep<T>(item: T): DeepWritable<T> {
     result[key] = cloneDeep((item as any)[key])
   })
 
-  return result as DeepWritable<T>
+  return result as Output
 }
