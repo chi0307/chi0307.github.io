@@ -15,7 +15,6 @@
           'drag-over': dragOverIndex === index || touchStartIndex === index,
         }"
         variant="outlined"
-        @click="emitClickItem(item, index)"
       >
         <v-card-text class="!p-0">
           <div class="flex min-h-1rem items-stretch">
@@ -38,6 +37,7 @@
             <div
               class="flex-grow my-1rem min-h-20px flex items-center"
               :class="{ 'ml-1rem': !draggable, 'mr-1rem': !deletable }"
+              @click="emitClickItem(item, index)"
             >
               <slot v-bind="item" />
             </div>
@@ -46,7 +46,7 @@
             <p
               v-if="deletable"
               class="flex-center pl-0.25rem pr-0.5rem"
-              @click.stop="emitDeleteItem(item, index)"
+              @click="emitDeleteItem(item, index)"
             >
               <span class="mdi mdi-delete text-24px" />
             </p>
@@ -113,6 +113,7 @@ function handleDragStart(event: DragEvent, index: number): void {
   if (!event.dataTransfer) {
     return // 如果 dataTransfer 為 null，提前 return 避免錯誤
   }
+  clearSelection()
   draggedIndex.value = index
   event.dataTransfer.setData('text/plain', index.toString())
   event.dataTransfer.effectAllowed = 'move'
@@ -126,6 +127,7 @@ function handleTouchStart(event: TouchEvent, index: number): void {
   if (!touch) {
     return // 如果沒有觸控點，提前 return
   }
+  clearSelection()
   touchStartIndex.value = index
   touchStartY.value = touch.clientY
 }
@@ -204,6 +206,13 @@ function emitClickItem(item: Item, index: number): void {
 
 function emitDeleteItem(item: Item, index: number): void {
   emits('deleteItem', item, index)
+}
+
+function clearSelection(): void {
+  const selection = window.getSelection() // 取得目前選取的內容
+  if (selection) {
+    selection.removeAllRanges() // 移除所有選取範圍
+  }
 }
 </script>
 
