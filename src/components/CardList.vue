@@ -11,7 +11,7 @@
           density="compact"
           class="mx-auto w-full flex-shrink-0 card-item"
           :class="{
-            'drag-over': dragOverIndex === index || touchStartIndex === index,
+            'drag-over': dragOverIndex === index || (touchStartIndex === index && isLongPress),
           }"
           variant="outlined"
         >
@@ -99,6 +99,8 @@ const draggedIndex = shallowRef<number | null>(null)
 const dragOverIndex = shallowRef<number | null>(null)
 const touchStartIndex = shallowRef<number | null>(null)
 const touchStartY = shallowRef<number | null>(null)
+const isLongPress = shallowRef<boolean>(false)
+let longPressTimer: number | null = null
 
 onMounted((): void => {
   updateList()
@@ -114,7 +116,6 @@ function handleDragStart(event: DragEvent, index: number): void {
   if (!event.dataTransfer) {
     return // 如果 dataTransfer 為 null，提前 return 避免錯誤
   }
-  clearSelection()
   draggedIndex.value = index
   event.dataTransfer.setData('text/plain', index.toString())
   event.dataTransfer.effectAllowed = 'move'
@@ -128,13 +129,19 @@ function handleTouchStart(event: TouchEvent, index: number): void {
   if (!touch) {
     return // 如果沒有觸控點，提前 return
   }
-  clearSelection()
+
   touchStartIndex.value = index
   touchStartY.value = touch.clientY
+  isLongPress.value = false
+
+  // 設置長按事件，為了觸發拖曳事件
+  longPressTimer = window.setTimeout(() => {
+    isLongPress.value = true
+  }, 750)
 }
 
 function handleTouchMove(event: TouchEvent): void {
-  if (touchStartIndex.value === null || touchStartY.value === null) {
+  if (!isLongPress.value || touchStartIndex.value === null || touchStartY.value === null) {
     return
   }
 
@@ -165,8 +172,15 @@ function handleTouchMove(event: TouchEvent): void {
 }
 
 function handleTouchEnd(): void {
+  // 清除長按計時器
+  if (longPressTimer !== null) {
+    clearTimeout(longPressTimer)
+    longPressTimer = null
+  }
+
   touchStartIndex.value = null
   touchStartY.value = null
+  isLongPress.value = false
   emits('update:list', cacheList.value)
 }
 
@@ -209,13 +223,6 @@ function emitDeleteItem(item: Item, index: number): void {
   emits('deleteItem', item, index)
 }
 
-function clearSelection(): void {
-  const selection = window.getSelection() // 取得目前選取的內容
-  if (selection) {
-    selection.removeAllRanges() // 移除所有選取範圍
-  }
-}
-
 function checkTouchOver(touchStartIndex: number, deltaY: number): boolean {
   // 這邊故意省去 gap 8px 的高度，至少讓他不需要位移那麼遠就可以交換元素，另外這邊計算是模糊計算，所以並不一定準確 QQ，要在想看看怎麼計算比較實際
   const calculateCardItemHeight =
@@ -240,6 +247,11 @@ function checkTouchOver(touchStartIndex: number, deltaY: number): boolean {
 </script>
 
 <style scoped>
+* {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .drag-over {
   border: 1px dashed #007bff;
   background-color: #f0f8ff;
