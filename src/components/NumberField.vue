@@ -1,18 +1,20 @@
 <template>
-  <v-text-field
-    :rules="rules"
-    inputmode="decimal"
-    :model-value="modelValue"
-    :clearable="modelValue !== 0"
-    @update:model-value="updateModelValue"
-  >
-    <template v-if="label !== null" #label>
-      <p class="relative">
-        {{ label }}
-        <span v-if="required" class="text-red ml-2px">*</span>
-      </p>
-    </template>
-  </v-text-field>
+  <div>
+    <v-text-field
+      :rules="rules"
+      inputmode="decimal"
+      :model-value="modelValue"
+      :clearable="clearable && modelValue !== 0"
+      @update:model-value="updateModelValue"
+    >
+      <template v-if="label !== null" #label>
+        <p class="relative">
+          {{ label }}
+          <span v-if="required" class="text-red ml-2px">*</span>
+        </p>
+      </template>
+    </v-text-field>
+  </div>
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue'
@@ -22,11 +24,13 @@ const {
   required = false,
   label = null,
   isFloat = false,
+  clearable = false,
 } = defineProps<{
   modelValue: number | undefined
   required?: boolean
   label?: string | null
   isFloat?: boolean
+  clearable?: boolean
 }>()
 
 const emits = defineEmits<{

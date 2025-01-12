@@ -210,17 +210,21 @@
       <TextField v-model="data.config.name" label="名稱" required />
       <TextField v-model="data.config.airlineCode" label="目標里程" required />
       <div class="flex gap-4px items-center justify-center">
-        <div class="flex-1">
-          <NumberField v-model="data.config.pointsPerMile" label="points" required />
-        </div>
+        <NumberField
+          v-model="data.config.pointsPerMile"
+          class="flex-1"
+          label="points"
+          required
+          clearable
+        />
         <span class="mdi mdi-arrow-right-thick text-24px mb-16px" />
-        <div class="flex-1">
-          <NumberField
-            v-model="data.config.milesPerUnit"
-            :label="`${data.config.airlineCode} 哩程`"
-            required
-          />
-        </div>
+        <NumberField
+          v-model="data.config.milesPerUnit"
+          class="flex-1"
+          :label="`${data.config.airlineCode} 哩程`"
+          required
+          clearable
+        />
       </div>
     </template>
   </FullscreenDialog>
