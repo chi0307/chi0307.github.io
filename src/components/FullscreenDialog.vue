@@ -6,17 +6,11 @@
         <v-toolbar-title>{{ title ?? '' }}</v-toolbar-title>
         <v-toolbar-items>
           <v-btn
+            :class="{
+              'text-red': warningSaveText,
+            }"
             :text="btnTitle"
-            @click="
-              async () => {
-                if (modelValue !== null) {
-                  const status = (await btnEvent(modelValue)) ?? true
-                  if (status) {
-                    closeDialog()
-                  }
-                }
-              }
-            "
+            @click="saveAndCloneDialog"
           />
         </v-toolbar-items>
       </v-toolbar>
@@ -27,6 +21,8 @@
   </v-dialog>
 </template>
 <script lang="ts" generic="Data extends Object" setup>
+import { ref } from 'vue'
+
 const { modelValue, title, btnTitle, btnEvent } = defineProps<{
   modelValue: Data | null
   title?: string
@@ -44,5 +40,21 @@ function closeDialog(): void {
 
 function updateData(newData: Data): void {
   emits('update:model-value', newData)
+}
+
+const warningSaveText = ref(false)
+async function saveAndCloneDialog(): Promise<void> {
+  if (modelValue === null) {
+    return
+  }
+  const status = await btnEvent(modelValue)
+  if (status !== false) {
+    closeDialog()
+  } else {
+    warningSaveText.value = true
+    window.setTimeout(() => {
+      warningSaveText.value = false
+    }, 3000)
+  }
 }
 </script>
