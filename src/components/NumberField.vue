@@ -9,6 +9,7 @@
       :suffix="suffix"
       :messages="messages"
       @update:model-value="updateModelValue"
+      @click:control="setFocusIndex"
     >
       <template v-if="label !== null" #label>
         <p class="relative">
@@ -64,5 +65,13 @@ const rules = computed(() => {
 function updateModelValue(newValue: string): void {
   const newNumber = checkNumber(newValue)
   emits('update:model-value', newNumber ?? 0)
+}
+
+/** 為了讓每次指標都從後面開始，每次 focus 的時候就觸發這邊 */
+function setFocusIndex(event: MouseEvent): void {
+  if (event.target instanceof HTMLInputElement) {
+    const currentValue = event.target.defaultValue
+    event.target.setSelectionRange(currentValue.length, currentValue.length)
+  }
 }
 </script>
