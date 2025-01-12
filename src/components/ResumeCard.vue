@@ -30,15 +30,23 @@
         </div>
       </div>
     </div>
-    <p class="opacity-50 text-0.8rem" :class="{ 'mb-16px': isDesktop }">
-      技術組合: <br />{{ techStacks.join(', ') }}
-    </p>
+    <div
+      v-if="techStacks.length > 0"
+      class="w-full flex flex-wrap opacity-50 text-0.8rem gap-x-8px gap-y-4px"
+      :class="{ 'mb-16px': isDesktop }"
+    >
+      <p class="w-full">技術組合:</p>
+      <p v-for="(item, index) of techStacks" :key="index">
+        {{ item }}{{ index !== techStacks.length - 1 ? ',' : '' }}
+      </p>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
 import { useLayoutStore } from '@/stores/layoutStore'
+import type { TechStack } from '@/types/website'
 
 const { startMonth, endMonth, title, subTitle, descriptions, techStacks } = defineProps<{
   startMonth: `${number}/${number}`
@@ -46,7 +54,7 @@ const { startMonth, endMonth, title, subTitle, descriptions, techStacks } = defi
   title: string
   subTitle: string
   descriptions: { title: string; text: string }[]
-  techStacks: string[]
+  techStacks: TechStack[]
 }>()
 
 const { isDesktop, isMobile } = storeToRefs(useLayoutStore())

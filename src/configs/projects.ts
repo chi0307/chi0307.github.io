@@ -7,6 +7,18 @@ export const projects: ProjectItem[] = [
     image: '/website/best-mileage-cards-preview.webp',
     demo: '/projects/bestMileageCards',
     repo: 'https://github.com/chi0307/chi0307.github.io/tree/master/src/views/projects/BestMileageCards',
+    techStacks: [
+      'Vue3',
+      'Pinia',
+      'Vuetify',
+      'Typia',
+      'TypeScript',
+      'PWA',
+      'Service Worker',
+      'Vite',
+      'UnoCSS',
+      'date-fns',
+    ],
   },
   {
     description:
@@ -14,6 +26,17 @@ export const projects: ProjectItem[] = [
     image: '/website/average-exchange-rate-preview.webp',
     demo: '/projects/averageExchangeRate',
     repo: 'https://github.com/chi0307/chi0307.github.io/tree/master/src/views/projects/AverageExchangeRate',
+    techStacks: [
+      'Vue3',
+      'Vuetify',
+      'Typia',
+      'TypeScript',
+      'PWA',
+      'Service Worker',
+      'Vite',
+      'UnoCSS',
+      'date-fns',
+    ],
   },
   {
     description: '整合 FB, Line, Slack 訊息開發共用的介面跟轉換套件，並且提供簡單易用的介面',

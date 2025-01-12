@@ -7,7 +7,7 @@ export const workExperiences: ResumeItem[] = [
     title: '後端工程師',
     subTitle: '凱茂股份有限公司',
     techStacks: [
-      'vue2',
+      'Vue2',
       'Adonis.js',
       'Nuxt.js',
       'Vuex',
@@ -78,7 +78,7 @@ export const workExperiences: ResumeItem[] = [
     title: '資深工程師',
     subTitle: '愛進化科技股份有限公司',
     techStacks: [
-      'vue3',
+      'Vue3',
       'TypeScript',
       'Pinia',
       'UnoCSS',

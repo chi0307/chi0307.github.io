@@ -15,14 +15,29 @@
         </a>
       </template>
     </div>
+    <div
+      v-if="techStacks.length > 0"
+      class="w-full flex flex-wrap opacity-50 text-0.8rem gap-x-8px gap-y-4px"
+      :class="{ 'mb-16px': isDesktop }"
+    >
+      <p class="w-full">技術組合:</p>
+      <p v-for="(item, index) of techStacks" :key="index">
+        {{ item }}{{ index !== techStacks.length - 1 ? ',' : '' }}
+      </p>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
+import { useLayoutStore } from '@/stores/layoutStore'
 import type { URL } from '@/types'
+import type { TechStack } from '@/types/website'
 
-const { description, demo, links, repo, image, deprecated } = defineProps<{
+const { isDesktop } = storeToRefs(useLayoutStore())
+
+const { description, demo, links, repo, image, deprecated, techStacks } = defineProps<{
   description: string
   image: string
   demo: string | null
@@ -32,6 +47,7 @@ const { description, demo, links, repo, image, deprecated } = defineProps<{
   }[]
   deprecated: boolean
   repo: URL | null
+  techStacks: TechStack[]
 }>()
 
 function convertUrl(urlString: string): string {

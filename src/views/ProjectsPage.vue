@@ -10,6 +10,7 @@
       :repo="item.repo ?? null"
       :links="item.links ?? []"
       :deprecated="item.deprecated ?? false"
+      :tech-stacks="item.techStacks ?? []"
     />
   </section>
 </template>

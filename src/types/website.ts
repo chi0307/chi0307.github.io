@@ -1,12 +1,60 @@
 import { type URL } from '@/types'
 
+export const TechStack = [
+  'Adobe After Effects',
+  'Adobe Illustrator',
+  'Adobe InDesign',
+  'Adobe Photoshop',
+  'Adonis.js',
+  'Ansible',
+  'Apollo GraphQL',
+  'CouchDB',
+  'Docker',
+  'Ejs',
+  'Eslint',
+  'Express.js',
+  'HTML',
+  'JavaScript',
+  'MQTT',
+  'MongoDB',
+  'MySQL',
+  'NestJS',
+  'Nginx',
+  'Node.js',
+  'Nuxt.js',
+  'PWA',
+  'Pinia',
+  'PostgreSQL',
+  'Prisma',
+  'Pug',
+  'RESTful',
+  'React Native',
+  'Redis',
+  'Service Worker',
+  'Socket.io',
+  'TypeScript',
+  'Typia',
+  'UnoCSS',
+  'Vite',
+  'Vue2',
+  'Vue3',
+  'Vuetify',
+  'Vuex',
+  'WebSocket',
+  'Webpack',
+  'date-fns',
+  'gulp.js',
+  'villus',
+] as const
+export type TechStack = (typeof TechStack)[number]
+
 export interface ResumeItem {
   startMonth: `${number}/${number}`
   endMonth: `${number}/${number}` | null
   title: string
   subTitle: string
   descriptions: { title: string; text: string }[]
-  techStacks: string[]
+  techStacks: TechStack[]
 }
 
 export interface SkillGroup {
@@ -25,4 +73,5 @@ export interface ProjectItem {
     title: string
     url: URL
   }[]
+  techStacks?: TechStack[]
 }
