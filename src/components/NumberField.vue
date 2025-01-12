@@ -5,6 +5,9 @@
       inputmode="decimal"
       :model-value="modelValue"
       :clearable="clearable && modelValue !== 0"
+      :prefix="prefix"
+      :suffix="suffix"
+      :messages="messages"
       @update:model-value="updateModelValue"
     >
       <template v-if="label !== null" #label>
@@ -24,13 +27,19 @@ const {
   required = false,
   label = null,
   isFloat = false,
+  prefix,
+  suffix,
   clearable = false,
+  messages = '',
 } = defineProps<{
   modelValue: number | undefined
   required?: boolean
   label?: string | null
   isFloat?: boolean
+  prefix?: string
+  suffix?: string
   clearable?: boolean
+  messages?: string
 }>()
 
 const emits = defineEmits<{

@@ -95,6 +95,7 @@
           draggable
           deletable
           label="點數交換方式 (點擊卡片進行編輯)"
+          @update:list="(list) => (data.config.pointExchanges = list)"
           @click-item="(item) => (editCardPointExchange = cloneDeep(item))"
           @add-item="editCardPointExchange = generateEmptyCardPointExchangeConfig()"
           @delete-item="
@@ -164,6 +165,19 @@
         addable
         draggable
         deletable
+        @update:list="(list) => (data.config.rewards = list)"
+        @add-item="
+          () => {
+            editRewardWithCardPlan = generateEmptyCardPlanRewardConfig()
+            editRewardWithCardPlanIndex = data.config.rewards.length
+          }
+        "
+        @click-item="
+          (item, index) => {
+            editRewardWithCardPlan = cloneDeep(item)
+            editRewardWithCardPlanIndex = index
+          }
+        "
         @delete-item="
           (_item, index) =>
             store.openDialog({
@@ -224,6 +238,105 @@
           :label="`${data.config.airlineCode} 哩程`"
           required
           clearable
+        />
+      </div>
+    </template>
+  </FullscreenDialog>
+  <FullscreenDialog
+    v-model="editRewardWithCardPlan"
+    title="編輯回饋"
+    btn-title="儲存"
+    :btn-event="saveRewardWithCardPlan"
+  >
+    <template #default="{ data }">
+      <div class="flex-col gap-8px">
+        <TextField v-model="data.rewardStrategy.name" label="回饋名稱" />
+        <v-select
+          label="回饋方式"
+          :items="rewardStrategyType"
+          :model-value="data.rewardStrategy.type"
+          @update:model-value="(type) => (data.rewardStrategy.type = type)"
+        />
+        <template
+          v-if="
+            data.rewardStrategy.type === 'RoundedPercentageReward' ||
+            data.rewardStrategy.type === 'TruncatedPercentageReward'
+          "
+        >
+          <div
+            v-for="(item, index) of data.rewardStrategy.pointBackRates"
+            :key="index"
+            class="flex gap-4px"
+          >
+            <!-- TODO: 有空要想想 vuetify css 要怎麼比較漂亮的設定 padding 小一點 -->
+            <NumberField
+              v-model="item.rate"
+              :messages="item.rate === 0 ? '0% 回饋儲存時會移除' : ''"
+              class="flex-1"
+              prefix="消費"
+              suffix="%回饋"
+            />
+            <NumberField
+              :model-value="item.limit ?? 0"
+              class="flex-1"
+              prefix="上限"
+              suffix="點"
+              messages="0 表示沒回饋上限"
+              @update:model-value="(data) => (item.limit = data === 0 ? null : data)"
+            />
+          </div>
+          <v-btn @click="data.rewardStrategy.pointBackRates.push({ rate: 0 })">
+            <span class="mdi mdi-plus text-24px" />
+          </v-btn>
+        </template>
+        <template
+          v-else-if="
+            data.rewardStrategy.type === 'FixedRatePointsReward' ||
+            data.rewardStrategy.type === 'AccumulatedPointsReward'
+          "
+        >
+          <NumberField
+            v-model="data.rewardStrategy.spendingPerPoint"
+            prefix="每消費"
+            suffix="元累積一點"
+          />
+        </template>
+        <v-label text="回饋規則" />
+        <div class="gap-8px flex-center">
+          <v-label text="交易類型" />
+          <v-radio-group
+            :model-value="data.transactionType ?? null"
+            hide-details
+            inline
+            @update:model-value="(type) => (data.transactionType = type)"
+          >
+            <v-radio density="compact" label="國內交易" value="Domestic" />
+            <v-radio density="compact" label="國外交易" value="Foreign" />
+            <v-radio density="compact" label="不限" :value="null" />
+          </v-radio-group>
+        </div>
+        <ClipList v-model="data.payments" label="限制回饋支付方式" show-selected :list="Payment" />
+        <ClipList
+          v-model="data.paymentBlackList"
+          label="不回饋支付方式"
+          show-selected
+          :list="Payment"
+        />
+        <ClipList v-model="data.stores" addable label="限制回饋清單/商店" :list="store.storeList" />
+        <ClipList
+          v-model="data.storeBlackList"
+          addable
+          label="不回饋清單"
+          :list="store.storeList"
+        />
+        <v-label text="其他設定" />
+        <v-switch
+          :model-value="data.condition ?? null"
+          label="生日中"
+          value="Birthday"
+          hide-details
+          color="blue"
+          @update:model-value="(item) => (data.condition = item ?? null)"
         />
       </div>
     </template>
@@ -354,11 +467,33 @@ import { isCardConfig, Payment, rewardStrategyFactory, type CardConfig } from '.
 import { isCardPlanConfig, isCardPointExchangeConfig } from '../CreditCard/createCard'
 import { useBestMileageCardsStore } from '../store'
 
+const rewardStrategyType = [
+  {
+    title: '消費N%回饋點數(四捨五入)',
+    value: 'RoundedPercentageReward',
+  },
+  {
+    title: '消費N%回饋點數(無條件捨去)',
+    value: 'TruncatedPercentageReward',
+  },
+  {
+    title: '每消費N元累積1點 (小數不累計)',
+    value: 'FixedRatePointsReward',
+  },
+  {
+    title: '每消費N元累積1點 (小數會累計)',
+    value: 'AccumulatedPointsReward',
+  },
+]
 const store = useBestMileageCardsStore()
 const { cardConfigs, cards } = storeToRefs(store)
 const editCard = ref<{ id: UUID; config: CardConfig } | null>(null)
 const editCardPlan = ref<CardConfig['plans'][number] | null>(null)
 const editCardPointExchange = ref<CardConfig['pointExchanges'][number] | null>(null)
+const editRewardWithCardPlan = ref<CardConfig['plans'][number]['config']['rewards'][number] | null>(
+  null,
+)
+const editRewardWithCardPlanIndex = ref<number | null>(null)
 const switchPlanWithCardId = ref<UUID | null>(null)
 const currentCardWithSwitchPlan = computed(() => {
   const card =
@@ -396,6 +531,36 @@ function generateEmptyCardPlanConfig(): Exclude<UnwrapRef<typeof editCardPlan>, 
       rewards: [],
     },
   }
+}
+
+function generateEmptyCardPlanRewardConfig(): Exclude<
+  UnwrapRef<typeof editRewardWithCardPlan>,
+  null
+> {
+  return {
+    rewardStrategy: {
+      name: '',
+      type: 'RoundedPercentageReward',
+      pointBackRates: [],
+    },
+  }
+}
+
+function saveRewardWithCardPlan(
+  config: Exclude<UnwrapRef<typeof editRewardWithCardPlan>, null>,
+): void {
+  if (
+    config.rewardStrategy.type === 'RoundedPercentageReward' ||
+    config.rewardStrategy.type === 'TruncatedPercentageReward'
+  ) {
+    config.rewardStrategy.pointBackRates = config.rewardStrategy.pointBackRates.filter(
+      ({ rate }) => rate !== 0,
+    )
+  }
+  if (editRewardWithCardPlanIndex.value !== null && editCardPlan.value !== null) {
+    editCardPlan.value.config.rewards[editRewardWithCardPlanIndex.value] = config
+  }
+  editRewardWithCardPlanIndex.value = null
 }
 
 function saveCardConfigPlan({

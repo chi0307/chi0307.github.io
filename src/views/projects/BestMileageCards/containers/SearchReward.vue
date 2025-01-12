@@ -6,6 +6,7 @@
       class="flex-grow-0"
       density="comfortable"
       hide-details
+      clearable
     />
     <v-autocomplete
       ref="storeAutoComplete"
