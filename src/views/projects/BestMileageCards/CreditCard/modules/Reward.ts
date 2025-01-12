@@ -6,7 +6,7 @@ const roundBy2 = roundByDigits(2)
 
 interface RateItem {
   rate: number
-  limit?: number
+  limit?: number | null
 }
 
 interface BaseRewardStrategyParams<Type extends RewardType> {
@@ -103,8 +103,8 @@ export class RoundedPercentageReward<
 
   public calculatePoints(amount: number): number {
     let points = 0
-    for (const { rate, limit = Infinity } of this._pointBackRates) {
-      points += Math.min(roundBy0(amount * (rate / 100)), limit)
+    for (const { rate, limit } of this._pointBackRates) {
+      points += Math.min(roundBy0(amount * (rate / 100)), limit ?? Infinity)
     }
     return points
   }
@@ -147,8 +147,8 @@ export class TruncatedPercentageReward<
 
   public calculatePoints(amount: number): number {
     let points = 0
-    for (const { rate, limit = Infinity } of this._pointBackRates) {
-      points += Math.min(floorBy0(amount * (rate / 100)), limit)
+    for (const { rate, limit } of this._pointBackRates) {
+      points += Math.min(floorBy0(amount * (rate / 100)), limit ?? Infinity)
     }
     return points
   }
