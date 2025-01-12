@@ -140,6 +140,10 @@ export class Plan {
       acceptedPayments === undefined
         ? [...reward.payments.values()]
         : acceptedPayments.filter((item) => reward.payments.has(item))
+    const rewardPoints = reward.rewardStrategy.calculatePoints(amount)
+    if (rewardPoints === 0) {
+      return null
+    }
     return {
       rewardName: reward.rewardStrategy.name,
       rewardPoints: reward.rewardStrategy.calculatePoints(amount),
