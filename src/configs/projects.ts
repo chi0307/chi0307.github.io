@@ -3,7 +3,7 @@ import type { ProjectItem } from '@/types/website'
 export const projects: ProjectItem[] = [
   {
     description:
-      '(未完成) 一個信用卡哩程回饋比對工具，可快速查詢各卡的哩程轉換率，並根據消費金額、店家、付款方式，選擇最佳回饋方案',
+      '一個信用卡哩程回饋比對工具，可快速查詢各卡的哩程轉換率，並根據消費金額、店家、付款方式，選擇最佳回饋方案',
     image: '/website/best-mileage-cards-preview.webp',
     demo: '/projects/bestMileageCards',
     repo: 'https://github.com/chi0307/chi0307.github.io/tree/master/src/views/projects/BestMileageCards',
