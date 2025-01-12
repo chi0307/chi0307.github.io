@@ -4,10 +4,9 @@
     ref="comboboxComponent"
     :model-value="modelValue"
     :items="itemList"
-    :messages="message ?? ''"
     :label="label"
-    multiple
     hint="可新增內容"
+    multiple
     persistent-hint
     :hide-details="hideDetails"
     :hide-selected="!showSelected"
@@ -19,13 +18,15 @@
         {{ item.value }}
       </v-chip>
     </template>
+    <template v-if="modelValue.length !== 0" #details>
+      <p class="cursor-pointer text-red" @click="clearList">全部刪除</p>
+    </template>
   </v-combobox>
   <v-autocomplete
     v-else-if="searchable"
     ref="autocompleteComponent"
     :model-value="modelValue"
     :items="itemList"
-    :messages="message ?? ''"
     :hide-details="hideDetails"
     :label="label"
     multiple
@@ -39,13 +40,15 @@
         {{ item.value }}
       </v-chip>
     </template>
+    <template v-if="modelValue.length !== 0" #details>
+      <p class="cursor-pointer text-red" @click="clearList">全部刪除</p>
+    </template>
   </v-autocomplete>
   <v-select
     v-else
     ref="selectComponent"
     :model-value="modelValue"
     :items="itemList"
-    :messages="message ?? ''"
     :hide-details="hideDetails"
     :label="label"
     multiple
@@ -57,6 +60,9 @@
       <v-chip closable @click:close="remove(item.value)">
         {{ item.value }}
       </v-chip>
+    </template>
+    <template v-if="modelValue.length !== 0" #details>
+      <p class="cursor-pointer text-red" @click="clearList">全部刪除</p>
     </template>
   </v-select>
 </template>
@@ -110,5 +116,9 @@ function closeKeyboard(element: HTMLElement | null): (status: boolean) => void {
       element.blur()
     }
   }
+}
+
+function clearList(): void {
+  updateModelValue([])
 }
 </script>
