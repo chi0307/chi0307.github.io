@@ -137,7 +137,7 @@ function handleTouchStart(event: TouchEvent, index: number): void {
   // 設置長按事件，為了觸發拖曳事件
   longPressTimer = window.setTimeout(() => {
     isLongPress.value = true
-  }, 750)
+  }, 400)
 }
 
 function handleTouchMove(event: TouchEvent): void {
