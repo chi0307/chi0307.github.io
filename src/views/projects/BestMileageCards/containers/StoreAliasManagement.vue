@@ -11,7 +11,10 @@
         @update:model-value="updateAliasType"
       >
         <v-btn v-for="(item, index) of aliasTypeList" :key="index" class="flex-1" :value="item">
-          {{ aliasTypeTranslation[item] }}
+          <div class="flex-center gap-4px">
+            <span v-if="aliasType === item" class="mdi mdi-check-circle" />
+            {{ aliasTypeTranslation[item] }}
+          </div>
         </v-btn>
       </v-btn-toggle>
       <div v-if="aliasType !== 'default'" class="flex justify-between items-center">
