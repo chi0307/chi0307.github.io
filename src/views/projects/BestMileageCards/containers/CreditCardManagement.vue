@@ -285,6 +285,7 @@
               class="flex-1"
               prefix="消費"
               suffix="%回饋"
+              is-float
             />
             <NumberField
               :model-value="item.limit ?? 0"

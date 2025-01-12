@@ -2,7 +2,7 @@
   <div>
     <v-text-field
       :rules="rules"
-      inputmode="decimal"
+      :inputmode="isFloat ? 'decimal' : 'numeric'"
       :model-value="modelValue"
       :clearable="clearable && modelValue !== 0"
       :prefix="prefix"
