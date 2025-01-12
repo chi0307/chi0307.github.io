@@ -122,6 +122,16 @@
           </template>
         </CardList>
         <v-btn
+          text="更新設定檔"
+          @click="
+            () => {
+              if (editCard !== null) {
+                importCurrentCardConfig = JSON.stringify(editCard.config, null, 2)
+              }
+            }
+          "
+        />
+        <v-btn
           class="text-red"
           text="刪除"
           @click="
@@ -448,10 +458,36 @@
       </div>
     </template>
   </FullscreenDialog>
+  <FullscreenDialog
+    v-model="importCurrentCardConfig"
+    title="匯入設定檔"
+    btn-title="匯入"
+    :btn-event="
+      (configString) => {
+        const config = checkConfig(configString)
+        if (editCard !== null && config !== null) {
+          editCard.config = config
+          configIsValid = false
+          return true
+        }
+        return false
+      }
+    "
+  >
+    <template #default="{ data, updateData }">
+      <v-textarea
+        :model-value="data"
+        :error-messages="configIsValid ? '' : 'json 無效'"
+        label="設定檔"
+        :rows="20"
+        @update:model-value="updateData"
+      />
+    </template>
+  </FullscreenDialog>
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { ref, computed, type UnwrapRef } from 'vue'
+import { ref, computed, type UnwrapRef, watch } from 'vue'
 
 import CardList from '@/components/CardList.vue'
 import ClipList from '@/components/ClipList.vue'
@@ -505,6 +541,7 @@ const currentCardWithSwitchPlan = computed(() => {
   }
   return card
 })
+const importCurrentCardConfig = ref<string | null>(null)
 
 const needImportCardConfigs = ref<CardConfig[] | null>(null)
 function importCardConfigs(list: CardConfig[]): void {
@@ -623,6 +660,28 @@ function deleteCardConfig(): void {
   }
   store.deleteCardConfig(editCard.value.id)
   editCard.value = null
+}
+
+// TODO: 有空再整理 import config 相關的 code 吧～～，現在有點不想理他
+const configIsValid = ref(true)
+watch(
+  () => importCurrentCardConfig.value,
+  (data) => {
+    configIsValid.value = Boolean(checkConfig(data))
+  },
+)
+
+function checkConfig(data: string | null): CardConfig | null {
+  if (data === null) {
+    return null
+  }
+  let jsonData: unknown
+  try {
+    jsonData = JSON.parse(data)
+  } catch {
+    return null
+  }
+  return isCardConfig(jsonData) ? jsonData : null
 }
 </script>
 <style scoped>
