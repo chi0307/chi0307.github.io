@@ -2,8 +2,7 @@ import { format } from 'date-fns'
 
 import type { DateString } from '@/types/date'
 
-export const oldCardDescription = getRewardDescription('2024/12/31')
-export const cardDescription = getRewardDescription('2025/6/30', '2025/1/1')
+export const cardDescription = getRewardDescription('2025/6/30')
 
 export function getRewardDescription(end: DateString, start?: DateString): string {
   if (start === undefined) {

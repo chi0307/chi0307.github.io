@@ -1,7 +1,7 @@
 import { generateUuid } from '@/utils'
 
-import type { CardConfig, Payment } from '../../CreditCard'
-import { oldCardDescription } from './utils'
+import { Payment, type CardConfig } from '../../CreditCard'
+import { getRewardDescription, cardDescription } from './utils'
 
 const storeBlackList: string[] = [
   '政府稅款',
@@ -14,10 +14,29 @@ const storeBlackList: string[] = [
 ]
 const paymentBlackList: Payment[] = []
 
+function getStarLuxSpecifyReward(
+  spendingPerPoint: number,
+): CardConfig['plans'][number]['config']['rewards'][number] {
+  return {
+    rewardStrategy: {
+      type: 'FixedRatePointsReward',
+      name: '指定通路里程加速',
+      spendingPerPoint,
+    },
+    transactionType: 'Domestic',
+    stores: [
+      '星宇航空官方網站/App購票',
+      '星宇航空形象門市',
+      'béshopping',
+      '星宇航空國際航線機上免稅品',
+    ],
+  }
+}
+
 export const starLuxConfigs: CardConfig[] = [
   {
     name: '星宇世界卡',
-    description: oldCardDescription,
+    description: getRewardDescription('2025/2/28'),
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -48,6 +67,7 @@ export const starLuxConfigs: CardConfig[] = [
               transactionType: 'Foreign',
               condition: 'Birthday',
             },
+            getStarLuxSpecifyReward(5),
             {
               rewardStrategy: {
                 type: 'FixedRatePointsReward',
@@ -68,11 +88,11 @@ export const starLuxConfigs: CardConfig[] = [
         },
       },
     ],
-    updateAt: new Date('2024/12/01 00:00:00').toISOString(),
+    updateAt: new Date('2025/01/12 22:00:00').toISOString(),
   },
   {
     name: '星宇商務鈦金卡',
-    description: oldCardDescription,
+    description: getRewardDescription('2025/2/28'),
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -103,6 +123,7 @@ export const starLuxConfigs: CardConfig[] = [
               transactionType: 'Foreign',
               condition: 'Birthday',
             },
+            getStarLuxSpecifyReward(7.5),
             {
               rewardStrategy: {
                 type: 'FixedRatePointsReward',
@@ -123,11 +144,11 @@ export const starLuxConfigs: CardConfig[] = [
         },
       },
     ],
-    updateAt: new Date('2024/12/01 00:00:00').toISOString(),
+    updateAt: new Date('2025/01/12 22:00:00').toISOString(),
   },
   {
     name: '星宇鈦金卡',
-    description: oldCardDescription,
+    description: getRewardDescription('2025/2/28'),
     cardUrl:
       'https://www.esunbank.com/zh-tw/personal/credit-card/intro/co-branded-card/starlux-card',
     storeBlackList,
@@ -149,6 +170,7 @@ export const starLuxConfigs: CardConfig[] = [
         config: {
           name: null,
           rewards: [
+            getStarLuxSpecifyReward(10),
             {
               rewardStrategy: {
                 type: 'FixedRatePointsReward',
@@ -169,52 +191,48 @@ export const starLuxConfigs: CardConfig[] = [
         },
       },
     ],
-    updateAt: new Date('2024/12/01 00:00:00').toISOString(),
+    updateAt: new Date('2025/01/12 22:00:00').toISOString(),
   },
 ]
 
 const uniCardStoreList = [
-  '台灣中油-直營',
+  '台灣中油',
   '台灣大車隊',
   '台鐵',
   '台灣高鐵',
   'UBER',
   'Yoxi',
-  'LINEGO',
+  '桃園機場捷運',
   '新光三越',
   '遠東百貨',
   '遠東SOGO百貨',
-  '誠品生活',
+  'Big City遠東巨城購物中心',
   '漢神百貨',
   '微風廣場',
   '微風信義',
   '微風南京',
   '微風南山',
   '微風台北車站',
-  '環球購物中心',
   '台北101',
   '華泰名品城',
   'MITSUI OUTLET PARK 林口',
   'MITSUI OUTLET PARK 台中港',
   'MITSUI OUTLET PARK 台南',
-  'Big City遠東巨城購物中心',
-  '昇恆昌',
-  '夢時代購物中心',
   '京站',
   '美麗華',
-  '南紡購物中心',
+  '誠品生活',
   '秀泰生活',
-  '台茂購物中心',
   'Mitsui Shopping Park LaLaport 台中',
   '統領廣場',
+  '太平洋百貨',
+  '統一時代百貨(台北店)',
+  '昇恆昌',
   '采盟',
   'Uber Eats',
   'foodpanda',
-  '星巴克',
   'EZTABLE',
   '王品瘋美食',
   '摩斯漢堡',
-  'foodomo',
   '漢來美食',
   '饗Joy',
   '饗食天堂',
@@ -241,7 +259,7 @@ const uniCardStoreList = [
   '酷航',
   '立榮航空',
   '華信航空',
-  'Agoda',
+  'Trip.com',
   'booking.com',
   'Hotels.com',
   'AsiaYo',
@@ -256,9 +274,9 @@ const uniCardStoreList = [
   '全國電子',
   '燦坤',
   '迪卡儂',
+  '寵物公園',
+  '家家樂',
   '屈臣氏',
-  '康是美',
-  'IKEA',
   '特力屋',
   '特力和樂',
   'UNIQLO',
@@ -270,26 +288,37 @@ const uniCardStoreList = [
   '淘寶網',
   'Coupang酷澎',
   '東森購物',
-  '雅虎奇摩購物中心',
   '博客來',
-  '玉山Wallet愛心捐款-單筆捐款',
-  '玉山Wallet愛心捐款-定期定額',
-  '特斯拉',
-  'Gogoro電池資費',
-  'YouBike 2.0',
   '日本實體店',
   '韓國實體店',
   '泰國實體店',
   '越南實體店',
   '新加坡實體店',
+  '馬來西亞實體店',
+  '菲律賓實體店',
   '中國實體店',
   '香港實體店',
   '澳門實體店',
   '美國實體店',
+  '加拿大實體店',
   '英國實體店',
   '法國實體店',
   '德國實體店',
   '義大利實體店',
+  '澳洲實體店',
+  '玉山Wallet愛心捐款-單筆捐款',
+  '玉山Wallet愛心捐款-定期定額',
+  '特斯拉',
+  'Gogoro電池資費',
+  'YouBike 2.0',
+]
+const uniCardSpecifyPayment: Payment[] = [
+  'Line Pay',
+  '街口支付',
+  '悠遊付',
+  '全盈+PAY',
+  '全支付',
+  '橘子支付',
 ]
 const uniCardBaseReward: CardConfig['plans'][number]['config']['rewards'][number] = {
   rewardStrategy: {
@@ -301,7 +330,7 @@ const uniCardBaseReward: CardConfig['plans'][number]['config']['rewards'][number
 export const uniCardConfigs: CardConfig[] = [
   {
     name: 'UniCard 卡',
-    description: oldCardDescription,
+    description: cardDescription,
     cardUrl: 'https://www.esunbank.com/zh-tw/personal/credit-card/intro/bank-card/unicard',
     storeBlackList,
     paymentBlackList,
@@ -338,7 +367,7 @@ export const uniCardConfigs: CardConfig[] = [
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2.5, limit: 500 }],
               },
-              payments: ['Line Pay', '街口支付', '悠遊付', '橘子支付', 'icash pay'],
+              payments: uniCardSpecifyPayment,
             },
             uniCardBaseReward,
           ],
@@ -364,7 +393,7 @@ export const uniCardConfigs: CardConfig[] = [
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2, limit: 500 }],
               },
-              payments: ['Line Pay', '街口支付', '悠遊付', '橘子支付', 'icash pay'],
+              payments: uniCardSpecifyPayment,
             },
             uniCardBaseReward,
           ],
@@ -391,14 +420,14 @@ export const uniCardConfigs: CardConfig[] = [
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 3.5, limit: 2000 }],
               },
-              payments: ['Line Pay', '街口支付', '悠遊付', '橘子支付', 'icash pay'],
+              payments: uniCardSpecifyPayment,
             },
             uniCardBaseReward,
           ],
         },
       },
     ],
-    updateAt: new Date('2024/12/01 00:00:00').toISOString(),
+    updateAt: new Date('2025/01/12 22:00:00').toISOString(),
   },
 ]
 

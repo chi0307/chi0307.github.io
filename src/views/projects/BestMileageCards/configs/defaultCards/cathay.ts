@@ -502,7 +502,7 @@ const evaPointExchanges: CardConfig['pointExchanges'] = [
   },
 ]
 
-const evaCardDescription = getRewardDescription('2025/3/31', '2025/1/1')
+const evaCardDescription = getRewardDescription('2025/3/31')
 export const evaConfigs: CardConfig[] = [
   {
     name: '長榮極致無限卡',
