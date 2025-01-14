@@ -13,6 +13,7 @@ export const storageManager = new CustomStorageManager<{
   conditionTypes: ConditionType[]
   aliasType: AliasType
   customAliases: StoreAliases[]
+  acceptedPaymentsWithStore: [string, Payment[]][]
 }>(
   localStorage,
   {
@@ -23,6 +24,7 @@ export const storageManager = new CustomStorageManager<{
     conditionTypes: typia.createIs<ConditionType[]>(),
     aliasType: typia.createIs<AliasType>(),
     customAliases: isStoreAliasesList,
+    acceptedPaymentsWithStore: typia.createIs<[string, Payment[]][]>(),
   },
   'bestMileageCards',
 )

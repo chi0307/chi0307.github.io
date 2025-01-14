@@ -32,6 +32,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
   onMounted(() => {
     const configs = storageManager.get('cardConfigs') ?? []
     cardConfigs.value = new Map(configs.map((config) => [generateUuid(), config]))
+    acceptedPaymentsWithStore.value = new Map(storageManager.get('acceptedPaymentsWithStore'))
   })
 
   const onlyShowCurrentPlan = ref<boolean>(storageManager.get('onlyShowCurrentPlan') ?? false)
@@ -114,6 +115,16 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     storageManager.set('conditionTypes', types)
   }
 
+  const acceptedPaymentsWithStore = ref(new Map<string, Payment[]>())
+  function updateAcceptedPaymentsWithStore(store: string, payments: Payment[]): void {
+    if (payments.length === 0) {
+      acceptedPaymentsWithStore.value.delete(store)
+    } else {
+      acceptedPaymentsWithStore.value.set(store, payments)
+    }
+    storageManager.set('acceptedPaymentsWithStore', [...acceptedPaymentsWithStore.value.entries()])
+  }
+
   const aliasType = ref<AliasType>(storageManager.get('aliasType') ?? 'default')
   function updateAliasType(type: AliasType): void {
     if (aliasTypeList.includes(type)) {
@@ -182,5 +193,7 @@ export const useBestMileageCardsStore = defineStore('BestMileageCards', () => {
     customAliases: readonly(customAliases),
     updateCustomAliases,
     updateAllCustomAliases,
+    acceptedPaymentsWithStore: readonly(acceptedPaymentsWithStore),
+    updateAcceptedPaymentsWithStore,
   }
 })

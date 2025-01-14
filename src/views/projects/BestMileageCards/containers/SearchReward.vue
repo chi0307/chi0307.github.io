@@ -130,7 +130,7 @@
 </template>
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
-import { computed, ref, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef, watch } from 'vue'
 
 import NumberField from '@/components/NumberField.vue'
 import { roundByDigits, floorByDigits, isTruthyString } from '@/utils'
@@ -165,6 +165,7 @@ interface RewardItem {
   pointExchangeName: string
 }
 
+const store = useBestMileageCardsStore()
 const {
   onlyShowCurrentPlan,
   onlyShowCurrentPointExchange,
@@ -173,7 +174,8 @@ const {
   conditionTypes,
   storeAliases,
   storeList,
-} = storeToRefs(useBestMileageCardsStore())
+  acceptedPaymentsWithStore,
+} = storeToRefs(store)
 
 const amount = ref<number>(0)
 const transactionStore = ref<string | null>(null)
@@ -204,6 +206,20 @@ function customSearchStore(
   const list = [value, ...(item?.raw.aliases ?? [])].map((item) => item.toLowerCase())
   return list.some((item) => item.includes(searchQuery))
 }
+
+watch(transactionStore, () => {
+  if (transactionStore.value !== null) {
+    acceptedPayments.value = [
+      ...(acceptedPaymentsWithStore.value.get(transactionStore.value) ?? []),
+    ]
+  }
+})
+
+watch(acceptedPayments, () => {
+  if (transactionStore.value !== null && transactionStore.value !== otherStore) {
+    store.updateAcceptedPaymentsWithStore(transactionStore.value, acceptedPayments.value)
+  }
+})
 
 const rewardMilesList = computed((): RewardItem[] => {
   const paymentInfo: TransactionInfo = {
