@@ -322,7 +322,7 @@ const uniCardSpecifyPayment: Payment[] = [
 ]
 const uniCardBaseReward: CardConfig['plans'][number]['config']['rewards'][number] = {
   rewardStrategy: {
-    type: 'TruncatedPercentageReward',
+    type: 'RoundedPercentageReward',
     name: null,
     pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }],
   },
@@ -354,7 +354,7 @@ export const uniCardConfigs: CardConfig[] = [
           rewards: [
             {
               rewardStrategy: {
-                type: 'TruncatedPercentageReward',
+                type: 'RoundedPercentageReward',
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2.5, limit: 500 }],
               },
@@ -363,7 +363,7 @@ export const uniCardConfigs: CardConfig[] = [
             },
             {
               rewardStrategy: {
-                type: 'TruncatedPercentageReward',
+                type: 'RoundedPercentageReward',
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2.5, limit: 500 }],
               },
@@ -380,7 +380,7 @@ export const uniCardConfigs: CardConfig[] = [
           rewards: [
             {
               rewardStrategy: {
-                type: 'TruncatedPercentageReward',
+                type: 'RoundedPercentageReward',
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2, limit: 500 }],
               },
@@ -389,7 +389,7 @@ export const uniCardConfigs: CardConfig[] = [
             },
             {
               rewardStrategy: {
-                type: 'TruncatedPercentageReward',
+                type: 'RoundedPercentageReward',
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 2, limit: 500 }],
               },
@@ -407,7 +407,7 @@ export const uniCardConfigs: CardConfig[] = [
           rewards: [
             {
               rewardStrategy: {
-                type: 'TruncatedPercentageReward',
+                type: 'RoundedPercentageReward',
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 3.5, limit: 2000 }],
               },
@@ -416,7 +416,7 @@ export const uniCardConfigs: CardConfig[] = [
             },
             {
               rewardStrategy: {
-                type: 'TruncatedPercentageReward',
+                type: 'RoundedPercentageReward',
                 name: null,
                 pointBackRates: [{ rate: 0.3 }, { rate: 0.7 }, { rate: 3.5, limit: 2000 }],
               },
