@@ -39,7 +39,8 @@ export const projects: ProjectItem[] = [
     ],
   },
   {
-    description: '整合 FB, Line, Slack 訊息開發共用的介面跟轉換套件，並且提供簡單易用的介面',
+    description:
+      '(Legacy) 整合 FB, Line, Slack 訊息開發共用的介面跟轉換套件，並且提供簡單易用的介面',
     image: '/website/chatbot-json-toolbox-preview.webp',
     demo: 'https://chi0307.github.io/website-legacy-by-2024-10/side/chatbot-json-toolbox/',
     repo: 'https://github.com/chi0307/website-legacy-by-2024-10/blob/master/pages/side/chatbot-json-toolbox.vue',
