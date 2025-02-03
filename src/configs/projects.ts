@@ -3,6 +3,19 @@ import type { ProjectItem } from '@/types/website'
 export const projects: ProjectItem[] = [
   {
     description:
+      '希望在呼叫 api 的時候，有完善的型別檢查，避免使用 as T 強制轉型，所編寫的套件，同時善用範型進行 api 封裝，也可以搭配 typia 協助實作型別檢查。另外也想嘗試在套件中盡量做到完整的測試檢查。',
+    image: '/website/axios-wrapper-example.webp',
+    repo: 'https://github.com/chi0307/axios-wrapper',
+    links: [
+      {
+        title: '套件',
+        url: 'https://www.npmjs.com/package/@chi0307/axios-wrapper',
+      },
+    ],
+    techStacks: ['Typia', 'TypeScript', 'Axios', 'Jest'],
+  },
+  {
+    description:
       '一個信用卡哩程回饋比對工具，可快速查詢各卡的哩程轉換率，並根據消費金額、店家、付款方式，選擇最佳回饋方案',
     image: '/website/best-mileage-cards-preview.webp',
     demo: '/projects/bestMileageCards',
@@ -17,7 +30,6 @@ export const projects: ProjectItem[] = [
       'Service Worker',
       'Vite',
       'UnoCSS',
-      'date-fns',
     ],
   },
   {
@@ -35,7 +47,6 @@ export const projects: ProjectItem[] = [
       'Service Worker',
       'Vite',
       'UnoCSS',
-      'date-fns',
     ],
   },
   {

@@ -8,6 +8,7 @@ export const TechStack = [
   'Adonis.js',
   'Ansible',
   'Apollo GraphQL',
+  'Axios',
   'CouchDB',
   'Docker',
   'Ejs',
@@ -15,6 +16,7 @@ export const TechStack = [
   'Express.js',
   'HTML',
   'JavaScript',
+  'Jest',
   'MQTT',
   'MongoDB',
   'MySQL',
@@ -42,7 +44,6 @@ export const TechStack = [
   'Vuex',
   'WebSocket',
   'Webpack',
-  'date-fns',
   'gulp.js',
   'villus',
 ] as const
