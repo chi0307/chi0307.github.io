@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@chi0307/axios-wrapper": "^1.0.2",
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@unocss/reset": "^65.4.3",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
@@ -41,6 +42,7 @@
     "@ryoppippi/unplugin-typia": "npm:@jsr/ryoppippi__unplugin-typia@^1.2.0",
     "@tsconfig/node22": "^22.0.0",
     "@tsconfig/strictest": "^2.0.5",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^22.13.0",
     "@types/uuid": "^10.0.0",
     "@unocss/eslint-plugin": "^65.4.3",
