@@ -20,6 +20,7 @@
     "deploy": "gh-pages -d dist -m \"deploy($(git rev-parse --abbrev-ref HEAD)): $(git rev-parse HEAD)\""
   },
   "dependencies": {
+    "@chi0307/axios-wrapper": "^1.0.2",
     "@unocss/reset": "^65.4.3",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
