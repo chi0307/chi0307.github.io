@@ -21,7 +21,6 @@ export default tsEslint.config(
   {
     plugins: {
       '@typescript-eslint': tsEslint.plugin,
-      'import-x': importX,
       perfectionist,
     },
     settings: {
@@ -92,6 +91,19 @@ export default tsEslint.config(
     languageOptions: {
       parserOptions: {
         project: './tsconfig.node.json',
+      },
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.vue'],
+    languageOptions: {
+      globals: {
+        window: 'readonly',
+        alert: 'readonly',
+        console: 'readonly',
+        Image: 'readonly',
+        clearTimeout: 'readonly',
+        setTimeout: 'readonly',
       },
     },
   },
