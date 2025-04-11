@@ -11,7 +11,7 @@
     "dev": "vite",
     "clear": "sh clear.sh",
     "generate-pages": "pnpm run clear && sh ./generate-pages.sh",
-    "build": "pnpm run generate-pages && run-p check \"build-only {@}\" -- && pnpm run postbuild",
+    "build": "pnpm run generate-pages && run-p check test \"build-only {@}\" -- && pnpm run postbuild",
     "postbuild": "mkdir dist/.github && mkdir dist/.github/workflows && cp .github/workflows/update-dependencies.yml ./dist/.github/workflows/",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -22,7 +22,8 @@
     "check:build": "vue-tsc --build --force",
     "check:lint": "eslint .",
     "deploy": "gh-pages -d dist -m \"deploy($(git rev-parse --abbrev-ref HEAD)): $(git rev-parse HEAD)\"",
-    "upgrade-packages": "ncu --doctor -u --doctorInstall \"pnpm install\" --doctorTest \"pnpm run check\" --peer --target semver"
+    "test": "vitest --run",
+    "upgrade-packages": "ncu --doctor -u --doctorInstall \"pnpm install\" --doctorTest \"pnpm run-p check test\" --peer --target semver"
   },
   "dependencies": {
     "@chi0307/axios-wrapper": "^1.0.2",
@@ -69,6 +70,7 @@
     "unocss": "^66.0.0",
     "vite": "^6.2.6",
     "vite-plugin-pwa": "^1.0.0",
+    "vitest": "^3.1.1",
     "vue-tsc": "^2.2.8"
   }
 }

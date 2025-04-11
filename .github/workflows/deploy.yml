@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: test
-        run: pnpm run check
+      - name: test & check
+        run: pnpm run-p check test
 
   deploy:
     runs-on: ubuntu-latest

@@ -87,10 +87,18 @@ export default tsEslint.config(
     },
   },
   {
-    files: ['vite.config.ts', 'uno.config.ts'],
+    files: ['*.config.ts'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.node.json',
+      },
+    },
+  },
+  {
+    files: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.test.json',
       },
     },
   },
@@ -108,6 +116,12 @@ export default tsEslint.config(
     },
   },
   {
-    ignores: ['**/dist/*', '**/dist-generate-html/*', 'eslint.config.js', '*.timestamp-*.mjs'],
+    ignores: [
+      '**/dist/*',
+      '**/dist-generate-html/*',
+      'eslint.config.js',
+      '*.timestamp-*.mjs',
+      '**/coverage/*',
+    ],
   },
 )

@@ -1,15 +1,6 @@
 {
   "extends": ["@tsconfig/node22/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
-  "include": [
-    "vite.config.*",
-    "vitest.config.*",
-    "cypress.config.*",
-    "nightwatch.conf.*",
-    "playwright.config.*",
-    "uno.config.ts",
-    "src/router/route.ts",
-    "themes/*"
-  ],
+  "include": ["*.config.ts", "src/router/route.ts", "themes/*"],
   "exclude": ["*.timestamp-*.mjs"],
   "compilerOptions": {
     "composite": true,
