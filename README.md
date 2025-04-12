@@ -11,7 +11,7 @@
 
 寫一個 ts 檢查 router enum 在路徑中有沒有存在 html file 沒有的話就複製一份給他，最終會讓有設定的 router 都有一個 html 但複製出來的都是取用同一個 vue router。
 
-### Gh Pages
+### Github Page
 
 用 gh-pages 當作 default branch，在每次 push commit 就觸發 lint, test 最終執行 build 跟 deploy 去自動更新[個人網站](https://chi0307.github.io)。
 
