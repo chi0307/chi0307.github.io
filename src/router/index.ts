@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
-import { GA_MEASUREMENT_ID } from '@/configs/ga'
+import { useGtag } from '@/composables/useGtag'
 import { Route } from '@/router/route'
 
 const routes: (RouteRecordRaw & { name: Route; path: Route })[] = [
@@ -37,17 +37,14 @@ const router = createRouter({
   ],
 })
 
+const gtag = useGtag()
 router.afterEach((to) => {
   if (window.isFirstPageViewSent) {
     window.isFirstPageViewSent = false
     return
   }
 
-  if (typeof window.gtag === 'function') {
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_path: to.fullPath,
-    })
-  }
+  gtag.sendPageView(to.fullPath)
 })
 
 export default router
