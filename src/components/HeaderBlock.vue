@@ -19,7 +19,12 @@
         :class="{
           'text-emphasis': checkIsParentPage(item.route),
         }"
-        @click="pushRoute(item.route)"
+        @click="
+          () => {
+            gtag.sendEvent('click', { text: item.title, location: 'header' })
+            pushRoute(item.route)
+          }
+        "
       >
         {{ item.title }}
       </p>
@@ -33,9 +38,11 @@
 import { storeToRefs } from 'pinia'
 import { computed } from 'vue'
 
+import { useGtag } from '@/composables/useGtag'
 import { useLayoutStore } from '@/stores/layoutStore'
 import { pageList } from '@/utils/pageList'
 
+const gtag = useGtag()
 const layoutStore = useLayoutStore()
 const { pushRoute, checkIsParentPage } = layoutStore
 const { isDesktop, isMobile, showMenu, headerShadow } = storeToRefs(layoutStore)

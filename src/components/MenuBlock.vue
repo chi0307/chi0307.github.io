@@ -9,7 +9,12 @@
       v-for="(item, index) of pageList"
       :key="index"
       class="h-64px w-full flex-center cursor-pointer border-b-1px px-16px"
-      @click="pushRoute(item.route)"
+      @click="
+        () => {
+          gtag.sendEvent('click', { text: item.title, location: 'menu' })
+          pushRoute(item.route)
+        }
+      "
     >
       <p
         class="text-1.3rem"
@@ -25,9 +30,11 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 
+import { useGtag } from '@/composables/useGtag'
 import { useLayoutStore } from '@/stores/layoutStore'
 import { pageList } from '@/utils/pageList'
 
+const gtag = useGtag()
 const layoutStore = useLayoutStore()
 const { checkIsParentPage, pushRoute } = layoutStore
 const { showMenu } = storeToRefs(layoutStore)

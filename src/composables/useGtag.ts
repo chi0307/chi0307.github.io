@@ -1,8 +1,19 @@
 import { GA_MEASUREMENT_ID } from '@/configs/ga'
+import type { ValueOf } from '@/types'
+
+interface GaEvent {
+  click: {
+    text: string
+    location: 'header' | 'menu'
+  }
+}
 
 interface UseGtag {
   readonly sendPageView: (path: string) => void
-  readonly sendEvent: (action: string, params?: Record<string, unknown>) => void
+  readonly sendEvent: <Action extends keyof GaEvent>(
+    action: Action,
+    params: ValueOf<GaEvent, Action>,
+  ) => void
 }
 
 // composables/useGtag.ts
@@ -18,7 +29,10 @@ export function useGtag(): UseGtag {
     })
   }
 
-  const sendEvent = (action: string, params?: Record<string, unknown>): void => {
+  const sendEvent = <Action extends keyof GaEvent>(
+    action: Action,
+    params: ValueOf<GaEvent, Action>,
+  ): void => {
     gtag('event', action, params)
   }
 
