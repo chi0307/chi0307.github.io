@@ -101,6 +101,14 @@ export const workExperiences: ResumeItem[] = [
         title: '跨部門需求整合',
         text: '主動協調設計、工程、營運等部門，釐清需求並提供技術解決方案，確保各部門目標一致，推動專案順利進行',
       },
+      {
+        title: '負責開發 Design System Component',
+        text: '負責使用 TypeScript 開發部門內部使用的 Design System Component，設計泛型架構並忠實還原設計師設計稿，提升開發效率與界面一致性，加速產品交付流程',
+      },
+      {
+        title: '推廣 API 型別檢查機制並維護 API 文件',
+        text: '推廣 API 型別驗證機制，建立從設計到執行階段的型別安全流程，並負責維護 OpenAPI 文件，清晰呈現 API 結構與商業邏輯，提升系統一致性與防錯能力',
+      },
     ],
   },
 ]
