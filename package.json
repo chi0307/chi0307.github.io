@@ -26,9 +26,9 @@
     "upgrade-packages": "ncu --doctor -u --doctorInstall \"pnpm install\" --doctorTest \"pnpm run-p check test\" --peer --target semver"
   },
   "dependencies": {
-    "@chi0307/axios-wrapper": "^1.0.2",
+    "@chi0307/axios-wrapper": "^2.0.0",
     "@unocss/reset": "^66.0.0",
-    "axios": "^1.8.4",
+    "axios": "^1.9.0",
     "date-fns": "^4.1.0",
     "pinia": "^3.0.2",
     "typia": "^9.1.1",
