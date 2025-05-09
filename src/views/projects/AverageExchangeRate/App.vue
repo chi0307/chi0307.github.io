@@ -315,6 +315,7 @@ function addItemEvent(): void {
   const date = new Date(addItem.value.date).toISOString()
   const id = generateUuid()
   update('list', [{ buy, sell, date, id }, ...currentList.value])
+  update('amount', currentAmount.value + buy)
   showAddItemDialog.value = false
 }
 
